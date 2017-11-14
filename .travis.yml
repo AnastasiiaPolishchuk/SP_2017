@@ -23,6 +23,10 @@ android:
     # if you need to run emulator(s) during your tests
     # - sys-img-armeabi-v7a-android-24
 
+install:
+    - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
+    - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
+
 script: 
     - ./gradlew build test
 
