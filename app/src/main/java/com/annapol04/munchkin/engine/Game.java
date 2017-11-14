@@ -11,6 +11,7 @@ public class Game {
     private final List<Player> players;
     private Player currentPlayer;
 
+
     public Game(List<Player> players) {
         this.players = players;
         this.currentPlayer = players.get(0);
@@ -27,4 +28,5 @@ public class Game {
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
+
 }
