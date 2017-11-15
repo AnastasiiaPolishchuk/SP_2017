@@ -1,9 +1,6 @@
 package com.annapol04.munchkin.logic;
 
 import java.util.ArrayList;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  * Created by Falco on 26.10.2017.
  */
@@ -30,8 +27,8 @@ public class Game {
         //player IDs erstellen
         //start player auswählen
 
-        while(checkWin(player.playerList)){
-            for (player currentplayer: player.playerList) {
+        while(checkWin(Player.playerList)){
+            for (Player currentplayer: Player.playerList) {
                 move(currentplayer);
             }
             return;
@@ -612,7 +609,7 @@ public class Game {
     private Special playerChoosesCard(Player player) {
         //TODO: karte aus der Hand des Sielers entfernen (hand.remove())
         //TODO: parameter adden, dass ich auswählen kann, welche art von karten ich dem player zur auswahl geben will
-        throw new NotImplementedException();
+        throw new RuntimeException();
     }
 
 
@@ -621,15 +618,15 @@ public class Game {
         //Filzläuse
         if(currentMonster.id == 1){
             //0 = nichts, 1 = 1 Hand, 2 = 2 Hände, 3 = Rüstung, 4 = Kopf, 5 = Schuhe
-            player.discardTableOfplayerOnlyBonusWearBlocking(3);
-            player.discardTableOfplayerOnlyBonusWearBlocking(5);
+            player.discardTableOfPlayerOnlyBonusWearBlocking(3);
+            player.discardTableOfPlayerOnlyBonusWearBlocking(5);
             return;
         }
 
         //Sabbernder Schleim
         if(currentMonster.id == 2){
             if(player.hasShoes()){
-                player.discardTableOfplayerOnlyBonusWearBlocking(5);
+                player.discardTableOfPlayerOnlyBonusWearBlocking(5);
                 return;
             }
             else {
@@ -665,7 +662,7 @@ public class Game {
 
         //Gallert-Oktaeder
         if(currentMonster.id == 7){
-            player.discardTableOfplayerOnlyBonusWearSize(1);
+            player.discardTableOfPlayerOnlyBonusWearSize(1);
             return;
         }
 
@@ -723,7 +720,7 @@ public class Game {
 
         //Anwalt
         if(currentMonster.id == 15){
-            for(int i = 0; i < player.numberOfplayers; i++){
+            for(int i = 0; i < Player.numberOfPlayers; i++){
                 //TODO: input, welche Karten der player ablegen will
             }
             return;
@@ -775,7 +772,7 @@ public class Game {
 
         //Gesichtssauger
         if(currentMonster.id == 20){
-            player.discardTableOfplayerOnlyBonusWearBlocking(4);
+            player.discardTableOfPlayerOnlyBonusWearBlocking(4);
             player.levelDown();
 
             return;
@@ -792,7 +789,7 @@ public class Game {
 
         //Gemeine Ghoule
         if(currentMonster.id == 22){
-            player.setLevel(player.getLowestLevelOfAllplayers());
+            player.setLevel(Player.getLowestLevelOfAllPlayers());
             return;
         }
 
@@ -844,7 +841,7 @@ public class Game {
         //Netz-Troll: Er klammert sich an deinem Haupt fest. Verliere deine Kopfbedeckung und zwei Stufen.
         if(currentMonster.id == 25){
             if(player.hasShoes()){
-                player.discardTableOfplayerOnlyBonusWearBlocking(4);
+                player.discardTableOfPlayerOnlyBonusWearBlocking(4);
                 player.levelDown();
 
                 return;
@@ -853,7 +850,7 @@ public class Game {
 
         //Big Foot
         if(currentMonster.id == 26){
-            player.discardTableOfplayerOnlyBonusWearBlocking(4);
+            player.discardTableOfPlayerOnlyBonusWearBlocking(4);
             return;
         }
 
@@ -982,15 +979,15 @@ public class Game {
                 case 38: player.searchAndDiscardBiggestBonus(); break;
                 case 39: player.levelDown(); break;
                 case 40: player.levelDown(); break;
-                case 41: player.discardTableOfplayerOnlyBonusWearBlocking(3); break;
-                case 42: player.discardTableOfplayerOnlyBonusWearBlocking(5); break;
-                case 43: player.discardTableOfplayerOnlyBonusWearBlocking(4); break;
+                case 41: player.discardTableOfPlayerOnlyBonusWearBlocking(3); break;
+                case 42: player.discardTableOfPlayerOnlyBonusWearBlocking(5); break;
+                case 43: player.discardTableOfPlayerOnlyBonusWearBlocking(4); break;
                 case 44: player.getRaceCardFormTableAndDiscard(); break;
                 case 45: player.getRaceCardFormTableAndDiscard(); break;
                 case 49: player.levelDown(); player.levelDown(); break;
-                case 50: player.discardTableOfplayerOnlyBonusWearSize(1); break;
-                case 51: player.discardTableOfplayerOnlyBonusWearSize(0); break;
-                case 52: player.discardTableOfplayerOnlyBonusWearSize(0); break;
+                case 50: player.discardTableOfPlayerOnlyBonusWearSize(1); break;
+                case 51: player.discardTableOfPlayerOnlyBonusWearSize(0); break;
+                case 52: player.discardTableOfPlayerOnlyBonusWearSize(0); break;
                 case 53: if(player.race != 0){
                     player.getRaceCardFormTableAndDiscard();
                 }
@@ -1010,7 +1007,7 @@ public class Game {
 
 
     private void handOutCardsForAllplayers() {
-        for (player currentplayer: player.playerList) {
+        for (Player currentplayer: Player.playerList) {
             currentplayer.handOutCards();
         }
     }
@@ -1060,8 +1057,8 @@ public class Game {
      * @param liste
      * @return false, wenn ein player level 10 ist; ansonsten true
      */
-    private boolean checkWin(ArrayList<player> liste) {
-        for (player currentplayer: liste) {
+    private boolean checkWin(ArrayList<Player> liste) {
+        for (Player currentplayer: liste) {
             if(currentplayer.level == 10){
                 return false;
             }
