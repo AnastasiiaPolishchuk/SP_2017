@@ -2,6 +2,8 @@ package com.annapol04.munchkin.logic;
 
 import java.util.ArrayList;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 /**
  * Created by Falco on 26.10.2017.
  */
@@ -11,7 +13,7 @@ public class Game {
     ////~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ F I E L D S ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public int session;
     public ArrayList<Card> fightDeck = new ArrayList<Card>();
-    //Alle aktiven an dieser Session spielenden Player: In der Playerklasse die ArrayList: playerList
+    //Alle aktiven an dieser Session spielenden player: In der playerklasse die ArrayList: playerList
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ M E T H O D S ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -19,18 +21,18 @@ public class Game {
      * Initialisiere Spiel
      */
     public void startGame(){
-        //Player objekte Erzeugen
+        //player objekte Erzeugen
         createCards();
 
         //Karten austeilen
-        handOutCardsForAllPlayers();
+        handOutCardsForAllplayers();
 
-        //Player IDs erstellen
-        //start Player auswählen
+        //player IDs erstellen
+        //start player auswählen
 
-        while(checkWin(Player.playerList)){
-            for (Player currentPlayer: Player.playerList) {
-                move(currentPlayer);
+        while(checkWin(player.playerList)){
+            for (player currentplayer: player.playerList) {
+                move(currentplayer);
             }
             return;
         }
@@ -40,7 +42,7 @@ public class Game {
 
     /**
      * Repräsentiert ein move
-     * @param player aktueller Player
+     * @param player aktueller player
      */
     public void move(Player player){
         phase1(player);
@@ -53,53 +55,53 @@ public class Game {
 
     /**
      * Repräsentiert die Phase1 aus dem Automaten
-     * @param Player
+     * @param player
      */
-    public void phase1(Player Player){
+    public void phase1(Player player){
 
-        //TODO: Einfügen, dass der Player Karten von seiner Hand auf den Tisch legen kann
+        //TODO: Einfügen, dass der player Karten von seiner Hand auf den Tisch legen kann
 
         Card currentCard = DoorDeck.draw();
         fightDeck.add(currentCard);
 
         if(currentCard instanceof Monster){ //Entspricht im Automaten dem Zustand 1a
-            if(checkIfFight(Player, (Monster)currentCard)){
-                fight(Player, (Monster)currentCard);
-                phase4(Player);
+            if(checkIfFight(player, (Monster)currentCard)){
+                fight(player, (Monster)currentCard);
+                phase4(player);
                 return;
             }
         }
 
         else if(currentCard instanceof Curse){ //Entspricht im Automaten dem Zustand 1b
-            fluch(Player, (Curse)currentCard);
-            //TODO: Player fragen, wie er fortfahren möchte: Phase 2 oder 3
-            if(){
-                phase2(Player);
+            fluch(player, (Curse)currentCard);
+            //TODO: player fragen, wie er fortfahren möchte: Phase 2 oder 3
+            if(false){
+                phase2(player);
             }
             else{
-                phase3(Player);
+                phase3(player);
             }
         }
 
         else { // TODO: Monsterlevel, race: --> entweder auf die Hand nehmen, auf den Tisch legen oder ablegen //Entspricht im Automaten dem Zustand 1c
-            if(){ //Hand nehmen
-                Player.hand.add(currentCard);
+            if(false){ //Hand nehmen
+                player.hand.add(currentCard);
                 fightDeck.remove(currentCard);
             }
-            else if(){
-                Player.table.add(currentCard);
+            else if(false){
+                player.table.add(currentCard);
                 fightDeck.remove(currentCard);
             }
             else{
                 discardDoor(currentCard);
             }
 
-            //TODO: Player fragen, wie er fortfahren möchte: Phase 2 oder 3
-            if(){
-                phase2(Player);
+            //TODO: player fragen, wie er fortfahren möchte: Phase 2 oder 3
+            if(false){
+                phase2(player);
             }
             else{
-                phase3(Player);
+                phase3(player);
             }
         }
     }
@@ -107,74 +109,75 @@ public class Game {
 
     /**
      * Repräsentiert die Phase2 aus dem Automaten
-     * @param Player
+     * @param player
      */
-    public void phase2(Player Player){
-        Monster monsterToFight = PlayerWaehltMonsterAus(Player);
-        fight(Player, monsterToFight);
-        phase4(Player);
+    public void phase2(Player player){
+        //TODO: player Monster auswaehlen lassen
+        Monster monsterToFight = null;//playerWaehltMonsterAus(player);
+        fight(player, monsterToFight);
+        phase4(player);
     }
 
 
 
     /**
      * Repräsentiert die Phase3 aus dem Automaten
-     * @param Player
+     * @param player
      */
-    public void phase3(Player Player){
-        Player.hand.add(DoorDeck.draw());
-        phase4(Player);
+    public void phase3(Player player){
+        player.hand.add(DoorDeck.draw());
+        phase4(player);
     }
 
 
 
     /**
      * Repräsentiert die Phase4 aus dem Automaten
-     * @param Player
+     * @param player
      */
-    public void phase4(Player Player){
-        if(Player.race == 2 && Player.hand.size() > 6){ //zwerg
-            //TODO: Player fragen, welche Karten er ablegen möchte und dann ablegen
+    public void phase4(Player player){
+        if(player.race == 2 && player.hand.size() > 6){ //zwerg
+            //TODO: player fragen, welche Karten er ablegen möchte und dann ablegen
 
         }
-        else if(Player.hand.size() > 5){
-            //TODO: Player fragen, welche Karten er ablegen möchte und dann ablegen
+        else if(player.hand.size() > 5){
+            //TODO: player fragen, welche Karten er ablegen möchte und dann ablegen
         }
     }
 
 
 
     /**
-     * Checkt ob der Player aufgrund seines leveln (nicht kampfstufe) gegen das monster kämpfen muss
-     * @param Player
+     * Checkt ob der player aufgrund seines leveln (nicht kampfstufe) gegen das monster kämpfen muss
+     * @param player
      * @param currentCard
-     * @return true wenn der Player kämpfen muss
+     * @return true wenn der player kämpfen muss
      */
-    private boolean checkIfFight(Player Player, Monster currentCard) {
+    private boolean checkIfFight(Player player, Monster currentCard) {
         //hippogreif, könig tut, gruftige gebrüder
         if(currentCard.id == 32 || currentCard.id == 33 || currentCard.id == 34){
-            if(Player.level <= 3){
+            if(player.level <= 3){
                 return false;
             }
         }
         //krakzilla
         else if(currentCard.id == 35){
-            if(Player.race == 1){ //wenn Player ein Elf ist, muss er kämpfen
+            if(player.race == 1){ //wenn player ein Elf ist, muss er kämpfen
                 return true;
             }
-            else if(Player.level <= 4) {
+            else if(player.level <= 4) {
                 return false;
             }
         }
         //bullrog
         else if(currentCard.id == 36){
-            if(Player.level <= 4){
+            if(player.level <= 4){
                 return false;
             }
         }
         //plutoniumdrache
         else if (currentCard.id == 37){
-            if(Player.level <= 5){
+            if(player.level <= 5){
                 return false;
             }
         }
@@ -184,26 +187,26 @@ public class Game {
 
     /**
      * Repräsentiert den Kampf
-     * @param Player der den Kampf durchführen muss
-     * @param currentCard Card, also in diesem Fall immer das Monster, dass gegen den Player kämpft
+     * @param player der den Kampf durchführen muss
+     * @param currentCard Card, also in diesem Fall immer das Monster, dass gegen den player kämpft
      */
-    private void fight(Player Player, Monster currentCard) {
+    private void fight(Player player, Monster currentCard) {
 
-        //In diese ArrayListen kommen die Karten rein, die der Player für sich oder das Monster einspielt
-        ArrayList<Card> forThePlayer = new ArrayList<Card>();
+        //In diese ArrayListen kommen die Karten rein, die der player für sich oder das Monster einspielt
+        ArrayList<Card> forTheplayer = new ArrayList<Card>();
         ArrayList<Card> forTheMonster = new ArrayList<Card>();
 
 
 
         //hier werden erstmal die ausgangsstufen der beiden Kontrahenten berechnet
-        int playerTotal = Player.fightLevel;
+        int playerTotal = player.fightLevel;
         int monsterTotal = currentCard.level;
 
         //TODO: log ausgeben
 
         //TODO: elfen oder zwergen bonus/malus berechnen
         // Monster die einen bonus gegenüber Elfen haben
-        if(Player.race == 1){
+        if(player.race == 1){
             if (currentCard.id == 2){ //sabbernder schleim
                 monsterTotal = monsterTotal + 4;
             }
@@ -221,7 +224,7 @@ public class Game {
             }
         }
         //MOnster, die einen Bonus gegenüber Zwergen haben
-        if(Player.race == 2){
+        if(player.race == 2){
             if (currentCard.id == 14){
                 monsterTotal = monsterTotal + 5;
             }
@@ -237,100 +240,100 @@ public class Game {
         //Anwalt: Würfle. Bei einer 1 kannst du, anstatt ihn zu bekämpfen, 2 Schätze ablegen und verdeckt 2 neue draw." Ansonsten normal kämpfen
         if(currentCard.id == 15){
             if(Dice.throwDice() == 1){
-//                Card karte1 = playerChoosesCard(Player);
-//                Card karte2 = playerChoosesCard(Player);
+//                Card karte1 = playerChoosesCard(player);
+//                Card karte2 = playerChoosesCard(player);
 //                discardTreasure(karte1);
 //                discardTreasure(karte2);
 
-                discardTreasure(playerChoosesCard(Player));
-                discardTreasure(playerChoosesCard(Player));
+                discardTreasure(playerChoosesCard(player));
+                discardTreasure(playerChoosesCard(player));
 
-                Player.hand.add(TreasureDeck.draw());
-                Player.hand.add(TreasureDeck.draw());
+                player.hand.add(TreasureDeck.draw());
+                player.hand.add(TreasureDeck.draw());
                 return;
             }
         }
         //Pikotzu: extrastufe, wenn du es ohne hilfe und boni besiegst
         if (currentCard.id == 17){
-            if(Player.level > currentCard.level){ // Player gewinnt gegen pikotzu. ANsonsten geht es normal weiter
+            if(player.level > currentCard.level){ // player gewinnt gegen pikotzu. ANsonsten geht es normal weiter
                 int treasuresToDraw = currentCard.treasure;
-                drawTresures(Player, treasuresToDraw);
+                drawTresures(player, treasuresToDraw);
                 discardDoor(currentCard);
                 return;
             }
         }
         //Pavillon: Boni können dir nicht helfen. Du musst dich dem Pavillon allein stellen.
         if(currentCard.id == 21){
-            if (Player.level > currentCard.level){
+            if (player.level > currentCard.level){
                 int treasuresToDraw = currentCard.treasure;
-                drawTresures(Player, treasuresToDraw);
+                drawTresures(player, treasuresToDraw);
                 discardDoor(currentCard);
                 return;
             }
-            else if(Player.level == currentCard.level){
-                draw(Player, currentCard);
+            else if(player.level == currentCard.level){
+                draw(player, currentCard);
                 discardDoor(currentCard);
                 return;
             }
             else {
-                lose(Player, currentCard);
+                lose(player, currentCard);
                 discardDoor(currentCard);
                 return;
             }
         }
         //Gemeine Ghoule: Gegen sie dürfen keine Gegenstände oder andere Boni eingesetzt werden - kämpfe nur mit deiner Charakterstufe
         if(currentCard.id == 22){
-            if (Player.level > currentCard.level){
+            if (player.level > currentCard.level){
                 int treasuresToDraw = currentCard.treasure;
-                drawTresures(Player, treasuresToDraw);
+                drawTresures(player, treasuresToDraw);
                 discardDoor(currentCard);
                 return;
             }
-            else if(Player.level == currentCard.level){
-                draw(Player, currentCard);
+            else if(player.level == currentCard.level){
+                draw(player, currentCard);
                 discardDoor(currentCard);
                 return;
             }
             else {
-                lose(Player, currentCard);
+                lose(player, currentCard);
                 discardDoor(currentCard);
                 return;
             }
         }
         //Zungendämon: Höllenkreatur. Lege einen Gegenstand deiner Wahl vor dem Kapf ab
         if(currentCard.id == 27){
-            //TODO: fertig machen, in KOmbination, dass ich bei der Methode playerChoosesCard() einen Parameter übergeben lassen kann, der bestimmt, aus welchen karten der Player auswählen kann
-            playerChoosesCard(Player);
+            //TODO: fertig machen, in KOmbination, dass ich bei der Methode playerChoosesCard() einen Parameter übergeben lassen kann, der bestimmt, aus welchen karten der player auswählen kann
+            playerChoosesCard(player);
         }
         //Versicherungsvertreter
         if(currentCard.id == 29){
-            if (Player.fightLevel > currentCard.level){
+            if (player.fightLevel > currentCard.level){
                 int treasuresToDraw = currentCard.treasure;
-                drawTresures(Player, treasuresToDraw);
+                drawTresures(player, treasuresToDraw);
                 discardDoor(currentCard);
                 return;
             }
-            else if(Player.fightLevel == currentCard.level){
-                draw(Player, currentCard);
+            else if(player.fightLevel == currentCard.level){
+                draw(player, currentCard);
                 discardDoor(currentCard);
                 return;
             }
             else {
-                lose(Player, currentCard);
+                lose(player, currentCard);
                 discardDoor(currentCard);
                 return;
             }
         }
         //Bekiffter Golem: Wähle aus: kämpfen oder einfach vorbeigehen lassen.
         if (currentCard.id == 30){
-            askPlayerIfHeWantsToFight();
+            // askplayerIfHeWantsToFight();
             //TODO: fertig machen
         }
 
 
-        //Jetzt muss der Player die Möglichkeit bekommen, alle Karten einzuspielen, auf die er Lust hat (& und die möglich sind)
-        //BEDENKE: es können theoretisch alle Handkarten des Players in den Kampf eingespielt werden! Also muss fünf Mal überprüft werden, ob der Player eine Card noch einspielen will
-        //Dieser Einspielprozess wird in Player und Monster unterteilt. Also zuerst wird der Player gefragt, welche Karten er alle für sich einspielen will, und dann kann er alle Karten für/gegen das Monster einspielen.
+        //Jetzt muss der player die Möglichkeit bekommen, alle Karten einzuspielen, auf die er Lust hat (& und die möglich sind)
+        //BEDENKE: es können theoretisch alle Handkarten des players in den Kampf eingespielt werden! Also muss fünf Mal überprüft werden, ob der player eine Card noch einspielen will
+        //Dieser Einspielprozess wird in player und Monster unterteilt. Also zuerst wird der player gefragt, welche Karten er alle für sich einspielen will, und dann kann er alle Karten für/gegen das Monster einspielen.
 
 
         //  a) "Nur einmal einsetzbar" karte (Doppelgänger, Freundschaftstrank, Polly)
@@ -338,23 +341,23 @@ public class Game {
 
 
 
-        // ~~~~~~~~~~~~~~~~~~~ Player ~~~~~~~~~~~~~~~~~~~
-        //TODO: log augeben, dass der Player nun für sich karten einspielt & dass die karten in der eingegebenen Reihenfolge abgearbeitet werden
-        //Karten für Player: Klassenoptionen: BonusSide, Special
+        // ~~~~~~~~~~~~~~~~~~~ player ~~~~~~~~~~~~~~~~~~~
+        //TODO: log augeben, dass der player nun für sich karten einspielt & dass die karten in der eingegebenen Reihenfolge abgearbeitet werden
+        //Karten für player: Klassenoptionen: BonusSide, Special
         for (int i = 0; i < 5; i++){
-            //TODO: einfügen, wenn der Player nichts (mehr) einspielen will. Muss eventuell mit der playerChoosesCard() Methode verknüpft werden
-            Card playedCard = playerChoosesCard(Player);
-            forThePlayer.add(playedCard);
+            //TODO: einfügen, wenn der player nichts (mehr) einspielen will. Muss eventuell mit der playerChoosesCard() Methode verknüpft werden
+            Card playedCard = playerChoosesCard(player);
+            forTheplayer.add(playedCard);
             fightDeck.add(playedCard);
         }
-        for (Card current: forThePlayer) {
+        for (Card current: forTheplayer) {
             if(current instanceof BonusSide){ //Card wird im falle "true" automatisch gecastet
                 playerTotal = playerTotal + ((BonusSide) current).bonus;
             }
             if(current instanceof Special){
                 //Magische Lampe: (112,"Nur in der Runde spielbar. Sie beschwört einen Geist, der ein Monster verschwinden lässt, selbst wenn dein Weglaufenwurf verpatzt wurde und es dich fangen würde. War es das einzige Monster, erhälst du seinen treasure, aber keine level. Nur einmal einsetzbar.");
                 if (current.id == 112){
-                    drawTresures(Player, currentCard.treasure);
+                    drawTresures(player, currentCard.treasure);
                     return;
                 }
 
@@ -365,28 +368,28 @@ public class Game {
 
                 //Freunschaftstrank: den raum durchsuchen: eine türkarte verdeckt draw
                 if (current.id == 119){
-                    Player.hand.add(DoorDeck.draw());
+                    player.hand.add(DoorDeck.draw());
                     return;
                 }
 
                 //polly
                 if(current.id == 120){
-                    drawTresures(Player, 1);
+                    drawTresures(player, 1);
                     return;
                 }
             }
         }
-        //TODO: log ausgeben: So in der Art: "Player hat nun die Stärke...."
+        //TODO: log ausgeben: So in der Art: "player hat nun die Stärke...."
 
 
 
         // ~~~~~~~~~~~~~~~~~~~ MONSTER ~~~~~~~~~~~~~~~~~~~
-        //TODO: log augeben, dass der Player nun für das Monster karten einspielt & dass die karten in der eingegebenen Reihenfolge abgearbeitet werden
+        //TODO: log augeben, dass der player nun für das Monster karten einspielt & dass die karten in der eingegebenen Reihenfolge abgearbeitet werden
         //Karten für Monster: Klassenoptionen: BonusSide, Special(ist hier theoretisch möglich, macht praktisch aber keinen Sinn), Monsterlevel
         for (int i = 0; i < 5; i++){
-            //TODO: einfügen, wenn der Player nichts (mehr) einspielen will. Muss eventuell mit der playerChoosesCard() Methode verknüpft werden
-            Card playedCard = playerChoosesCard(Player);
-            forThePlayer.add(playedCard);
+            //TODO: einfügen, wenn der player nichts (mehr) einspielen will. Muss eventuell mit der playerChoosesCard() Methode verknüpft werden
+            Card playedCard = playerChoosesCard(player);
+            forTheplayer.add(playedCard);
             fightDeck.add(playedCard);
         }
         for (Card current: forTheMonster) {
@@ -406,21 +409,21 @@ public class Game {
             //TODO: log ausgeben
 
             int treasuresToDraw = currentCard.treasure; //TODO: zusätzliches dazuzählen
-            if(currentCard.id == 5 && Player.race == 1){ //Topfpflanze + Player ist ein Elf
+            if(currentCard.id == 5 && player.race == 1){ //Topfpflanze + player ist ein Elf
                 treasuresToDraw++;
             }
 
-            drawTresures(Player, treasuresToDraw);
+            drawTresures(player, treasuresToDraw);
             discardDoor(currentCard);
         }
         if(playerTotal == monsterTotal){
             //TODO: log ausgeben
-            draw(Player, currentCard);
+            draw(player, currentCard);
             discardDoor(currentCard);
         }
         if(playerTotal < monsterTotal){
             //TODO: log ausgeben
-            lose(Player, currentCard);
+            lose(player, currentCard);
             discardDoor(currentCard);
         }
     }
@@ -429,21 +432,21 @@ public class Game {
 
 
     /**
-     * Berechnet das runaway: erst wird überprüft, ob der Player eine Spezialkarte gespielt hat, die ihn rettet oder hilft, dann wird das eigentliche runaway berechnet (in eigener Methode)
+     * Berechnet das runaway: erst wird überprüft, ob der player eine Spezialkarte gespielt hat, die ihn rettet oder hilft, dann wird das eigentliche runaway berechnet (in eigener Methode)
      * Auch wird mit einberechnet, ob das Monster spezielle Eigenschaften, das runaway betreffend, hat
-     * @param Player
+     * @param player
      * @param currentCard
      */
-    private void lose(Player Player, Monster currentCard) {
+    private void lose(Player player, Monster currentCard) {
 
         //Laufende Nase: super spezialfall
         if(currentCard.id == 24){
-            Player.levelDown();
-            Player.levelDown();
-            Player.levelDown();
+            player.levelDown();
+            player.levelDown();
+            player.levelDown();
         }
 
-        int currentRunaway = Player.runAway;
+        int currentRunaway = player.runAway;
 
         //Überprüfen, ob das Monster spezielle Eigenschaften, das runaway betreffend, hat
         if(currentCard.id == 3){ //Lahmer Goblin
@@ -465,45 +468,45 @@ public class Game {
         //Pit Bull: keine schätze
         if(currentCard.id == 10){
             //hammer, scharferStreitkolben, hellebarde, napalstab, stange, rapier
-            if(Player.searchBoth(64)){
-                fightDeck.add(Player.getAndRemoveBoth(64));
+            if(player.searchBoth(64)){
+                fightDeck.add(player.getAndRemoveBoth(64));
                 return;
             }
 
-            if(Player.searchBoth(65)){
-                fightDeck.add(Player.getAndRemoveBoth(65));
+            if(player.searchBoth(65)){
+                fightDeck.add(player.getAndRemoveBoth(65));
                 return;
             }
 
-            if(Player.searchBoth(67)){
-                fightDeck.add(Player.getAndRemoveBoth(67));
+            if(player.searchBoth(67)){
+                fightDeck.add(player.getAndRemoveBoth(67));
                 return;
             }
 
-            if(Player.searchBoth(69)){
-                fightDeck.add(Player.getAndRemoveBoth(69));
+            if(player.searchBoth(69)){
+                fightDeck.add(player.getAndRemoveBoth(69));
                 return;
             }
 
-            if(Player.searchBoth(75)){
-                fightDeck.add(Player.getAndRemoveBoth(75));
+            if(player.searchBoth(75)){
+                fightDeck.add(player.getAndRemoveBoth(75));
                 return;
             }
 
-            if(Player.searchBoth(99)){
-                fightDeck.add(Player.getAndRemoveBoth(99));
+            if(player.searchBoth(99)){
+                fightDeck.add(player.getAndRemoveBoth(99));
                 return;
             }
         }
 
 
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTRAKARTEN (von der Hand des Players) ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        Special playedCard = playerChoosesCard(Player);
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTRAKARTEN (von der Hand des players) ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Special playedCard = playerChoosesCard(player);
         if(playedCard.id == 112){ // Magische Lampe: Nur in der Runde spielbar. Sie beschwört einen Geist, der ein Monster verschwinden lässt, selbst wenn dein Weglaufenwurf verpatzt wurde und es dich fangen würde. War es das einzige Monster, erhälst du seinen treasure, aber keine level. Nur einmal einsetzbar.
-            //TODO: log ausgeben, dass der Player nochmal davon gekommen ist...
+            //TODO: log ausgeben, dass der player nochmal davon gekommen ist...
             fightDeck.add(playedCard);
-            drawTresures(Player, currentCard.treasure);
+            drawTresures(player, currentCard.treasure);
             discardTreasure(playedCard); //magische lampe ablegen
             return;
         }
@@ -524,125 +527,126 @@ public class Game {
             fightDeck.add(playedCard);
             discardTreasure(playedCard);
 
-            boolean escaped = runaway(Player, currentRunaway, currentCard); //muss hier gemacht werden, da man durch die tuba extra einen treasure draw darf
+            boolean escaped = runaway(player, currentRunaway, currentCard); //muss hier gemacht werden, da man durch die tuba extra einen treasure draw darf
             if(escaped){
-                drawTresures(Player, 1);
+                drawTresures(player, 1);
             }
             else {
-                //Gezinkter wuerfel oder unsichtsbarkeittrank kann einen nochmal retten. man muss abfragen, ob der Player diesen spielen will (falls er ihn hat)
-                Special extraCard2 = playerChoosesCard(Player);
+                //Gezinkter wuerfel oder unsichtsbarkeittrank kann einen nochmal retten. man muss abfragen, ob der player diesen spielen will (falls er ihn hat)
+                Special extraCard2 = playerChoosesCard(player);
                 if (extraCard2.id == 115){
-                    //TODO: ausgeben, dass der Player glueck gehabt hat
+                    //TODO: ausgeben, dass der player glueck gehabt hat
                     fightDeck.add(playedCard);
                     return;
                 }
                 else if (extraCard2.id == 118){ // unsichtsbarkeitstrank
-                    //TODO: ausgeben, dass der Player glueck gehabt hat
+                    //TODO: ausgeben, dass der player glueck gehabt hat
                     fightDeck.add(playedCard);
                     return;
                 }
 
-                badThings(Player, currentCard);
+                badThings(player, currentCard);
             }
         }//tuba ende
 
 
-        boolean escaped = runaway(Player, currentRunaway, currentCard); //true wenn er es geschafft hat
+        boolean escaped = runaway(player, currentRunaway, currentCard); //true wenn er es geschafft hat
 
         //wenn er es geschafft hat
         if(escaped){
-            //TODO: phase 1 ist beendet und der Player muss gefragt werden, was er nun machen will
+            //TODO: phase 1 ist beendet und der player muss gefragt werden, was er nun machen will
             return;
 
         }
         //wenn er es nicht geschafft hat
         else{
 
-            //Gezinkter wuerfel oder unsichtsbarkeittrank kann einen nochmal retten. man muss abfragen, ob der Player diesen spielen will (falls er ihn hat)
-            Special extraCard2 = playerChoosesCard(Player);
+            //Gezinkter wuerfel oder unsichtsbarkeittrank kann einen nochmal retten. man muss abfragen, ob der player diesen spielen will (falls er ihn hat)
+            Special extraCard2 = playerChoosesCard(player);
             if (extraCard2.id == 115){
-                //TODO: ausgeben, dass der Player glueck gehabt hat
+                //TODO: ausgeben, dass der player glueck gehabt hat
                 fightDeck.add(playedCard);
                 return;
             }
             else if (extraCard2.id == 118){ // unsichtsbarkeitstrank
-                //TODO: ausgeben, dass der Player glueck gehabt hat
+                //TODO: ausgeben, dass der player glueck gehabt hat
                 fightDeck.add(playedCard);
                 return;
             }
-            badThings(Player, currentCard);
+            badThings(player, currentCard);
         }
     }
 
 
     /**
-     * Berechnet das runaway eine Players. (random zahl + currentRunaway) muss mindestens 5 sein, um weg zu laufen
-     * @param Player der runaway muss
-     * @param currentRunaway der bonus, mit dem der Player versucht weg zu laufen: immer größer als 0
-     * @return true wenn der Player erfolreich escaped ist
+     * Berechnet das runaway eine players. (random zahl + currentRunaway) muss mindestens 5 sein, um weg zu laufen
+     * @param player der runaway muss
+     * @param currentRunaway der bonus, mit dem der player versucht weg zu laufen: immer größer als 0
+     * @return true wenn der player erfolreich escaped ist
      *          false ansonsten
      */
-    private boolean runaway(Player Player, int currentRunaway, Monster currentMonster) {
+    private boolean runaway(Player player, int currentRunaway, Monster currentMonster) {
 
         int result = Dice.getRandom(1,6) + currentRunaway;
-        if (result >= 5){ //positiv für Player; Zustand: "escaped" & "Entkommen"
+        if (result >= 5){ //positiv für player; Zustand: "escaped" & "Entkommen"
 
             //Mr. Bones Monster. Man verliert auch beim erfolgreichen runaway eine level
             if(currentMonster.id == 9){
-                Player.levelDown();
+                player.levelDown();
             }
             //König Tut: man verliert 2 Stufen, auch wenn man entkommen ist
             if(currentMonster.id == 33){
-                Player.levelDown();
-                Player.levelDown();
+                player.levelDown();
+                player.levelDown();
             }
 
             return true;
 
-        }//negativ für Player
+        }//negativ für player
         else {
             return false;
         }
     }
 
 
-    private Special playerChoosesCard(Player Player) {
+    private Special playerChoosesCard(Player player) {
         //TODO: karte aus der Hand des Sielers entfernen (hand.remove())
-        //TODO: parameter adden, dass ich auswählen kann, welche art von karten ich dem Player zur auswahl geben will
+        //TODO: parameter adden, dass ich auswählen kann, welche art von karten ich dem player zur auswahl geben will
+        throw new NotImplementedException();
     }
 
 
-    private void badThings(Player Player, Monster currentMonster) {
+    private void badThings(Player player, Monster currentMonster) {
 
         //Filzläuse
         if(currentMonster.id == 1){
             //0 = nichts, 1 = 1 Hand, 2 = 2 Hände, 3 = Rüstung, 4 = Kopf, 5 = Schuhe
-            Player.discardTableOfPlayerOnlyBonusWearBlocking(3);
-            Player.discardTableOfPlayerOnlyBonusWearBlocking(5);
+            player.discardTableOfplayerOnlyBonusWearBlocking(3);
+            player.discardTableOfplayerOnlyBonusWearBlocking(5);
             return;
         }
 
         //Sabbernder Schleim
         if(currentMonster.id == 2){
-            if(Player.hasShoes()){
-                Player.discardTableOfPlayerOnlyBonusWearBlocking(5);
+            if(player.hasShoes()){
+                player.discardTableOfplayerOnlyBonusWearBlocking(5);
                 return;
             }
             else {
-                Player.levelDown();
+                player.levelDown();
             }
             return;
         }
 
         //Lahmer Goblin
         if(currentMonster.id == 3){
-            Player.levelDown();
+            player.levelDown();
             return;
         }
 
         //Hammer-Ratte
         if(currentMonster.id == 4){
-            Player.levelDown();
+            player.levelDown();
             return;
         }
 
@@ -654,49 +658,49 @@ public class Game {
 
         //Fliegende Frösche
         if(currentMonster.id == 6){
-            Player.levelDown();
-            Player.levelDown();
+            player.levelDown();
+            player.levelDown();
             return;
         }
 
         //Gallert-Oktaeder
         if(currentMonster.id == 7){
-            Player.discardTableOfPlayerOnlyBonusWearSize(1);
+            player.discardTableOfplayerOnlyBonusWearSize(1);
             return;
         }
 
         //Großes wüntendes Huhn
         if(currentMonster.id == 8){
-            Player.levelDown();
+            player.levelDown();
             return;
         }
 
         //mr. bones
         if(currentMonster.id == 9){
-            Player.levelDown();
-            Player.levelDown();
+            player.levelDown();
+            player.levelDown();
             return;
         }
 
         //Pit Bull
         if(currentMonster.id == 10){
-            Player.levelDown();
-            Player.levelDown();
+            player.levelDown();
+            player.levelDown();
             return;
         }
 
         //Harfien
         if(currentMonster.id == 11){
-            Player.levelDown();
-            Player.levelDown();
+            player.levelDown();
+            player.levelDown();
             return;
         }
 
         //Leprachaun
         if(currentMonster.id == 12){
-            //TODO: Ordentlich die Card des Players einlsen, die er ablegen will
-            Card cardToDiscard1 = Game.playerChoosesCard();
-            Card cardToDiscard2 = Game.playerChoosesCard();
+            //TODO: Ordentlich die Card des players einlsen, die er ablegen will
+            Card cardToDiscard1 = playerChoosesCard(null);
+            Card cardToDiscard2 = playerChoosesCard(null);
             return;
         }
 
@@ -704,7 +708,7 @@ public class Game {
         if(currentMonster.id == 13){
             int diced = Dice.throwDice();
             for(int i = 0; i < diced; i++){
-                //TODO: input, welche Karten der Player ablegen will
+                //TODO: input, welche Karten der player ablegen will
             }
 
             return;
@@ -712,83 +716,83 @@ public class Game {
 
         //Untotes Pferd
         if(currentMonster.id == 14){
-            Player.levelDown();
-            Player.levelDown();
+            player.levelDown();
+            player.levelDown();
             return;
         }
 
         //Anwalt
         if(currentMonster.id == 15){
-            for(int i = 0; i < Player.numberOfPlayers; i++){
-                //TODO: input, welche Karten der Player ablegen will
+            for(int i = 0; i < player.numberOfplayers; i++){
+                //TODO: input, welche Karten der player ablegen will
             }
             return;
         }
 
         //Entikore
         if(currentMonster.id == 16){
-            //TODO: Player durch die GUI fragen, was er machen will
-            int inputPlayer = Playerfragen();
-            if(inputPlayer == 1){
-                Player.discardHand();
+            //TODO: player durch die GUI fragen, was er machen will
+            int inputplayer = 0; //playerfragen();
+            if(inputplayer == 1){
+                player.discardHand();
             }
             else{
-                Player.levelDown();;
-                Player.levelDown();
+                player.levelDown();;
+                player.levelDown();
             }
             return;
         }
 
         //Pikotzu
         if(currentMonster.id == 17){
-            Player.discardHand();
+            player.discardHand();
             return;
         }
 
         //Kreischender Depp
         if(currentMonster.id == 18){ //0 = keine race, 1 = elf, 2 = zwerg
-            if(Player.race != 0){
-                Player.race = 0;
-                Player.getRaceCardFormTableAndDiscard();
+            if(player.race != 0){
+                player.race = 0;
+                player.getRaceCardFormTableAndDiscard();
             }
             return;
         }
 
         //Amazone: Dir wird von einer Frau in den Arsch getreten. Dein Macho Munchkin-Stolz ist dahin. Du verlierst alle racen. Wenn du keine hast, verliere 3 Stufen.
         if(currentMonster.id == 19){
-            if(Player.race != 0){
-                Player.race = 0;
-                Player.getRaceCardFormTableAndDiscard();
+            if(player.race != 0){
+                player.race = 0;
+                player.getRaceCardFormTableAndDiscard();
 
                 return;
             }
             else {
-                Player.levelDown();
-                Player.levelDown();
+                player.levelDown();
+                player.levelDown();
                 return;
             }
         }
 
         //Gesichtssauger
         if(currentMonster.id == 20){
-            Player.discardTableOfPlayerOnlyBonusWearBlocking(4);
-            Player.levelDown();
+            player.discardTableOfplayerOnlyBonusWearBlocking(4);
+            player.levelDown();
 
             return;
         }
 
         //Pavillon
         if(currentMonster.id == 21){
-            Player.levelDown();
-            Player.levelDown();
-            Player.levelDown();
+            player.levelDown();
+            player.levelDown();
+            player.levelDown();
 
             return;
         }
 
         //Gemeine Ghoule
         if(currentMonster.id == 22){
-            Player.setLevel(Player.getLowestLevelOfAllPlayers());
+            player.setLevel(player.getLowestLevelOfAllplayers());
             return;
         }
 
@@ -796,37 +800,37 @@ public class Game {
         if(currentMonster.id == 23){
             int diced = Dice.throwDice();
             if(diced == 1 || diced == 2){
-                Player.death();
+                player.death();
                 return;
             }
             else if(diced == 3){
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
                 return;
             }
             else if(diced == 4){
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
                 return;
             }
             else if(diced == 5){
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
                 return;
             }
             else if(diced == 6){
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
-                Player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
+                player.levelDown();
                 return;
             }
         }
@@ -839,9 +843,9 @@ public class Game {
 
         //Netz-Troll: Er klammert sich an deinem Haupt fest. Verliere deine Kopfbedeckung und zwei Stufen.
         if(currentMonster.id == 25){
-            if(Player.hasShoes()){
-                Player.discardTableOfPlayerOnlyBonusWearBlocking(4);
-                Player.levelDown();
+            if(player.hasShoes()){
+                player.discardTableOfplayerOnlyBonusWearBlocking(4);
+                player.levelDown();
 
                 return;
             }
@@ -849,25 +853,25 @@ public class Game {
 
         //Big Foot
         if(currentMonster.id == 26){
-            Player.discardTableOfPlayerOnlyBonusWearBlocking(4);
+            player.discardTableOfplayerOnlyBonusWearBlocking(4);
             return;
         }
 
         //Zungendämon
         if(currentMonster.id == 27){
-            Player.levelDown();
-            Player.levelDown();
-            if(Player.race == 1){
-                Player.levelDown();
+            player.levelDown();
+            player.levelDown();
+            if(player.race == 1){
+                player.levelDown();
             }
             return;
         }
 
         //vampir
         if(currentMonster.id == 28){
-            Player.levelDown();
-            Player.levelDown();
-            Player.levelDown();
+            player.levelDown();
+            player.levelDown();
+            player.levelDown();
             return;
         }
 
@@ -879,123 +883,123 @@ public class Game {
 
         //bekiffterGolem
         if(currentMonster.id == 30){
-            Player.death();
+            player.death();
             return;
         }
 
         //Schrecken: Unaussprechlich schrecklicher Tod für jeden.
         if(currentMonster.id == 31){
-            Player.death();
+            player.death();
             return;
         }
 
         //hippogreif
         if(currentMonster.id == 32){
-            Player.setLevel(5);
-            Player.loseHand();
+            player.setLevel(5);
+            player.loseHand();
             return;
         }
 
         //König Tut
         if(currentMonster.id == 33){
-            Player.loseHand();
+            player.loseHand();
             return;
         }
 
         //Gruftige Gebrüder
         if(currentMonster.id == 34){
-            Player.setLevel(1);
+            player.setLevel(1);
             return;
         }
 
         //Krakzilla
         if(currentMonster.id == 35){
-            Player.death();
+            player.death();
             return;
         }
 
         //bullrog
         if(currentMonster.id == 36){
-            Player.death();
+            player.death();
             return;
         }
 
         //Plutoniumdrache
         if(currentMonster.id == 37){
-            Player.death();
+            player.death();
             return;
         }
 
     }
 
     /**
-     * Repräsentiert den Zustand gleichstand. Bei Gleichstand zischen MonsterStugeGesamt und PlayerStufeGesamt, wird gewürfelt. Der Player gewinnt, falls der Wurf KEINE 1 ist.
+     * Repräsentiert den Zustand gleichstand. Bei Gleichstand zischen MonsterStugeGesamt und playerStufeGesamt, wird gewürfelt. Der player gewinnt, falls der Wurf KEINE 1 ist.
      * Also zu einer Wahrscheinlichkeit von 5/6
-     * @param Player der kurz vor dem gewinnen/lose ist
-     * @param currentMonster gegen das der Player gewinnen musst
+     * @param player der kurz vor dem gewinnen/lose ist
+     * @param currentMonster gegen das der player gewinnen musst
      */
-    private void draw(Player Player, Monster currentMonster) { // 5/6 dass man gewinnt
+    private void draw(Player player, Monster currentMonster) { // 5/6 dass man gewinnt
         int diced = Dice.getRandom(1, 6);
         if (diced != 1){
-            drawTresures(Player, currentMonster.treasure);
+            drawTresures(player, currentMonster.treasure);
         }
         else{
-            badThings(Player, currentMonster);
+            badThings(player, currentMonster);
         }
     }
 
     /**
      * Repräsentiert den Zustand gewinnen. Hier komme ich nur rein, wenn schon alle Stufen ausgewertet wurde und alle Boni (Egal für welche Seite, Monsterdtufe) eingespielt wurden.
-     * Also wenn der Kampf eindeutig zu Gunsten des Players entschieden ist.
-     * @param Player
+     * Also wenn der Kampf eindeutig zu Gunsten des players entschieden ist.
+     * @param player
      * @param treasuresToDraw Ich bekomme für diese Methode bereits die fertig addierte Zahl der zu drawden Schätze. Muss also vor dem Aufruf fertig berechnet werden.
      */
-    private void drawTresures(Player Player, int treasuresToDraw) {
+    private void drawTresures(Player player, int treasuresToDraw) {
 
         //richtige Anzahl an Schätzen draw
         for(int i=0; i < treasuresToDraw; i++){
-            Player.hand.add(TreasureDeck.draw());
+            player.hand.add(TreasureDeck.draw());
         }
         //TODO: log ausgeben, WIE VIELE karten gezogen wurden
 
-        Player.levelUp();
+        player.levelUp();
     }
 
 
     /**
      * Repräsentiert das draw einer Card
-     * @param Player der verflucht wird
-     * @param currentCard Card, Curse, der auf den Player wirkt
+     * @param player der verflucht wird
+     * @param currentCard Card, Curse, der auf den player wirkt
      */
-    private void fluch(Player Player, Curse currentCard) {
-        if (hatWunschring(Player)){
-            //Wunschring des Players wird falls er einen hat in der Methode hatWunschring abgelegt
+    private void fluch(Player player, Curse currentCard) {
+        if (hatWunschring(player)){
+            //Wunschring des players wird falls er einen hat in der Methode hatWunschring abgelegt
             discardDoor(currentCard);
             fightDeck.remove(currentCard);
         }
         else {
             switch (currentCard.id){
-                case 38: Player.searchAndDiscardBiggestBonus(); break;
-                case 39: Player.levelDown(); break;
-                case 40: Player.levelDown(); break;
-                case 41: Player.discardTableOfPlayerOnlyBonusWearBlocking(3); break;
-                case 42: Player.discardTableOfPlayerOnlyBonusWearBlocking(5); break;
-                case 43: Player.discardTableOfPlayerOnlyBonusWearBlocking(4); break;
-                case 44: Player.getRaceCardFormTableAndDiscard(); break;
-                case 45: Player.getRaceCardFormTableAndDiscard(); break;
-                case 49: Player.levelDown(); Player.levelDown(); break;
-                case 50: Player.discardTableOfPlayerOnlyBonusWearSize(1); break;
-                case 51: Player.discardTableOfPlayerOnlyBonusWearSize(0); break;
-                case 52: Player.discardTableOfPlayerOnlyBonusWearSize(0); break;
-                case 53: if(Player.race != 0){
-                    Player.getRaceCardFormTableAndDiscard();
+                case 38: player.searchAndDiscardBiggestBonus(); break;
+                case 39: player.levelDown(); break;
+                case 40: player.levelDown(); break;
+                case 41: player.discardTableOfplayerOnlyBonusWearBlocking(3); break;
+                case 42: player.discardTableOfplayerOnlyBonusWearBlocking(5); break;
+                case 43: player.discardTableOfplayerOnlyBonusWearBlocking(4); break;
+                case 44: player.getRaceCardFormTableAndDiscard(); break;
+                case 45: player.getRaceCardFormTableAndDiscard(); break;
+                case 49: player.levelDown(); player.levelDown(); break;
+                case 50: player.discardTableOfplayerOnlyBonusWearSize(1); break;
+                case 51: player.discardTableOfplayerOnlyBonusWearSize(0); break;
+                case 52: player.discardTableOfplayerOnlyBonusWearSize(0); break;
+                case 53: if(player.race != 0){
+                    player.getRaceCardFormTableAndDiscard();
                 }
                 else {
-                    Player.levelDown();
+                    player.levelDown();
                 }
                 break;
-                case 54: if(Player.race != 0){
-                    Player.getRaceCardFormTableAndDiscard();
+                case 54: if(player.race != 0){
+                    player.getRaceCardFormTableAndDiscard();
                 }
                 break;
                 default: //TODO: error ausgeben
@@ -1005,20 +1009,20 @@ public class Game {
     }
 
 
-    private void handOutCardsForAllPlayers() {
-        for (Player currentPlayer: Player.playerList) {
-            currentPlayer.handOutCards();
+    private void handOutCardsForAllplayers() {
+        for (player currentplayer: player.playerList) {
+            currentplayer.handOutCards();
         }
     }
 
 
-    private boolean hatWunschring(Player Player){
+    private boolean hatWunschring(Player player){
         boolean hasWunschring = false; //nur der Wunschring entfernt den Curse sofort
 
-        //Wunschring in der Hand des Players suchen
-        for (Card searchCard: Player.hand) {
+        //Wunschring in der Hand des players suchen
+        for (Card searchCard: player.hand) {
             if (0 == searchCard.name.compareTo("Wunschring"))
-                Player.hand.remove(searchCard);
+                player.hand.remove(searchCard);
                 discardTreasure(searchCard);
                 hasWunschring = true;
         }
@@ -1032,7 +1036,7 @@ public class Game {
      */
     public void discardTreasure(Card currentCard){
         fightDeck.remove(currentCard);
-        //TODO: überprügen, dass ich überall wo discardTreasure aufgerufen wurde auch die Card vom Player antfernen, da dies in der Methode nicht geschieht
+        //TODO: überprügen, dass ich überall wo discardTreasure aufgerufen wurde auch die Card vom player antfernen, da dies in der Methode nicht geschieht
         TreasureDeck.discardDeck.add(currentCard);
     }
 
@@ -1054,11 +1058,11 @@ public class Game {
     /**
      * Check, ob es bereits einen Sieger gibts
      * @param liste
-     * @return false, wenn ein Player level 10 ist; ansonsten true
+     * @return false, wenn ein player level 10 ist; ansonsten true
      */
-    private boolean checkWin(ArrayList<Player> liste) {
-        for (Player currentPlayer: liste) {
-            if(currentPlayer.level == 10){
+    private boolean checkWin(ArrayList<player> liste) {
+        for (player currentplayer: liste) {
+            if(currentplayer.level == 10){
                 return false;
             }
         }
@@ -1086,7 +1090,7 @@ public class Game {
         Monster leprachaun = new Monster(12, 0, "Leprachaun", "Widerlich! +5 gegen Elfen.", 4, 2, "Er nimmt von dir 2 Gegenstände.");
         Monster schnecken = new Monster(13, 0, "Schnecken auf Speed", "Du hast -2 auf runaway.", 4, 2, "Sie stehlen deinen treasure. Würfle und verliere entsprechend viele Gegenstände oder Karten von deiner Hand - deine Wahl.");
         Monster untotessPferd = new Monster(14, 0, "Untotes Pferd", "+5 gegen Zwerge", 4, 2, "Tritt, beißt und riecht furchtbar.");
-        Monster anwalt = new Monster(15, 0, "Anwalt", "Würfle. Bei einer 1 kannst du, anstatt ihn zu bekämpfen, 2 Schätze ablegen und verdeckt 2 neue draw.", 6, 2, "Er überzieht dich mit einer Unterlassungsklage. Lege so viele Karten von deiner Hand ab, die der Anzahl der MitPlayer entspricht.");
+        Monster anwalt = new Monster(15, 0, "Anwalt", "Würfle. Bei einer 1 kannst du, anstatt ihn zu bekämpfen, 2 Schätze ablegen und verdeckt 2 neue draw.", 6, 2, "Er überzieht dich mit einer Unterlassungsklage. Lege so viele Karten von deiner Hand ab, die der Anzahl der Mitplayer entspricht.");
         Monster entikore = new Monster(16, 0, "Entikore", "Magisches Wesen.", 6, 2, "Lege entweder deine ganze Hand ab oder verliere 2 Stufen.");
         Monster pikotzu = new Monster(17, 0, "Pikotzu","Du erhälst eine Extrastufe, wenn du es ohne Boni besiegst.", 6, 2, "Kostzestrahl-Angriff! Lege deine ganze Hand ab.");
         Monster kreischenderDepp = new Monster(18, 0, "Kreischender Depp","Heller, schriller Schrei!", 6, 2, "Du wirst zu einem normalen, langweiligen Menschen. Lege deine race ab, wenn du eine hast.");

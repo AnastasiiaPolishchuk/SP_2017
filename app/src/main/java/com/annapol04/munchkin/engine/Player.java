@@ -1,7 +1,5 @@
 package com.annapol04.munchkin.engine;
 
-import com.annapol04.munchkin.PlayDesk;
-
 /**
  * Created by anastasiiapolishchuk on 13.11.17.
  */
