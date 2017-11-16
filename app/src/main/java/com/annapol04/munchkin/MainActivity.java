@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> playerNames = new ArrayList<>(6);
         playerNames.add("Anna");
         playerNames.add("Yurii");
+        playerNames.add("Falccco");
 
         Intent myIntent = new Intent(MainActivity.this, PlayDesk.class);
         myIntent.putStringArrayListExtra("playerNames", playerNames);   //Optional parameters
