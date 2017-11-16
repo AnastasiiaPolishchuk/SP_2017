@@ -1,10 +1,10 @@
-package com.annapol04.munchkin;
+package com.annapol04.munchkin.gui;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.annapol04.munchkin.protocol.HighscoreEntry;
+import com.annapol04.munchkin.data.HighscoreEntry;
 
 import java.util.List;
 

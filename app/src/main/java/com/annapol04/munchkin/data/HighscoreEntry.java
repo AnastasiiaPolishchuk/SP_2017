@@ -1,4 +1,4 @@
-package com.annapol04.munchkin.protocol;
+package com.annapol04.munchkin.data;
 
 /**
  * Created by chris on 16.11.2017.

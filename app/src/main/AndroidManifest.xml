@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PlayDesk"></activity>
+        <activity android:name=".PlayDesk" />
+        <activity android:name=".gui.HighscoreActivity"></activity>
     </application>
 
 </manifest>

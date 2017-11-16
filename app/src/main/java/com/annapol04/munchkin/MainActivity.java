@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.annapol04.munchkin.gui.HighscoreActivity;
 
-import static android.R.attr.value;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,5 +32,9 @@ public class MainActivity extends AppCompatActivity {
         Intent myIntent = new Intent(MainActivity.this, PlayDesk.class);
         myIntent.putStringArrayListExtra("playerNames", playerNames);   //Optional parameters
         startActivity(myIntent);
+    }
+
+    public void goToHighscore(View view) {
+        startActivity(new Intent(MainActivity.this, HighscoreActivity.class));
     }
 }
