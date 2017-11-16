@@ -46,7 +46,7 @@ public class PlayDesk extends AppCompatActivity {
         view1.setText("Level : " + player.getLevel());
 
         TextView view2 = (TextView) findViewById(R.id.first_card_name);
-        view2.setText((CharSequence) player.getCard(0).getCardName());
+        view2.setText(player.getCard(0).getCardName());
     }
 
     public void showNextPlayer(View view) {
