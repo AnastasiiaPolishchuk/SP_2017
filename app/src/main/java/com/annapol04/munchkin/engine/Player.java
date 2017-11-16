@@ -1,6 +1,5 @@
 package com.annapol04.munchkin.engine;
 
-
 import java.util.LinkedList;
 
 /**
