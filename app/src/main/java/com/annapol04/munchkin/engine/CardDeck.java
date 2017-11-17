@@ -25,7 +25,13 @@ public class CardDeck {
         deck.add(new Card(4, "Harfien"));
         deck.add(new Card(5, "Anwalt"));
         deck.add(new Card(6, "Amazone"));
-        deck.add(new Card(7, "Leprachaun"));
+        deck.add(new Card(8, "Leprachaun"));
+        deck.add(new Card(9, "Ekliger Sportdrink"));
+        deck.add(new Card(10, "Vrank Der Terwirrung"));
+        deck.add(new Card(11, "Wunschring"));
+        deck.add(new Card(12, "Doppelgänger"));
+        deck.add(new Card(13, "Wunschring22"));
+
         return deck;
     }
 

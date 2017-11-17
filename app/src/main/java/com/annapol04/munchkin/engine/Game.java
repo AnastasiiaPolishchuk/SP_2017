@@ -16,28 +16,19 @@ public class Game {
 
     public Game(List<Player> players) {
         this.players = players;
-        playerIndex = 0;
+        this.playerIndex = 0;
     }
 
     public List<Player> getPlayers() {
         return players;
     }
 
-    public int getPlayerIndex() {
-        return playerIndex;
-    }
-
-    public void setPlayerIndex(int playerIndex) {
-        this.playerIndex = playerIndex;
-    }
-
-
-    public Player getNextPlayer(int playerIndex) {
+    public Player getNextPlayer() {
         playerIndex++;
         if (playerIndex == players.size()) {
-            setPlayerIndex(0);
-        } else setPlayerIndex(playerIndex);
-        return players.get(getPlayerIndex());
+            playerIndex = 0;
+        }
+        return players.get(playerIndex);
     }
 
     public Player getCurrentPlayer() {
@@ -45,18 +36,19 @@ public class Game {
     }
 
 
-    public void initializePlayersHand(List<Player> players, CardDeck doorDeck, CardDeck doorDeckX) {
+    public void initializePlayersHand(CardDeck doorDeck, CardDeck doorDeckX) {
         for (Player p : players) {
             p.setHand(getInitializeCards(doorDeck, doorDeckX));
         }
     }
 
     public LinkedList getInitializeCards(CardDeck doorDeck, CardDeck doorDeckX) {
+
         LinkedList<Card> initializeCards = new LinkedList<>();
-        initializeCards.add(doorDeck.deck.poll());
-
-        moveFromActiveToPassiveDeck(doorDeck, doorDeckX, initializeCards.getFirst());
-
+        for (int i = 0; i < 4; i++) {
+            initializeCards.add(doorDeck.deck.poll());
+            moveFromActiveToPassiveDeck(doorDeck, doorDeckX, initializeCards.getFirst());
+        }
         return initializeCards;
     }
 
