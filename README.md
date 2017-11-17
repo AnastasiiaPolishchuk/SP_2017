@@ -1,0 +1,2 @@
+# Munchkin App [![Build Status](https://travis-ci.com/annapol04/SP_2017.svg?token=HiA8qMPKPD7cxNf1d2wk&branch=master)](https://travis-ci.com/annapol04/SP_2017)
+A Android app implementing a card game called Munchkin.
