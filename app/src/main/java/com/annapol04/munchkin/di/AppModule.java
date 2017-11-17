@@ -16,7 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module(includes = ViewModelModule.class)
 public class AppModule {
-    @Singleton @Provides
+    @Singleton
+    @Provides
     Webservice provideWebservice() {
         return new Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
@@ -28,7 +29,7 @@ public class AppModule {
     @Singleton
     @Provides
     AppDb provideDb(Application app) {
-        return Room.databaseBuilder(app, AppDb.class,"munchkin_app.db").build();
+        return Room.databaseBuilder(app, AppDb.class, "munchkin_app.db").build();
     }
 
     @Singleton

@@ -31,7 +31,9 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
         this.mData = entries;
     }
 
-    public List<HighscoreEntry> getEntries() { return this.mData; }
+    public List<HighscoreEntry> getEntries() {
+        return this.mData;
+    }
 
     // inflates the row layout from xml when needed
     @Override
