@@ -20,7 +20,9 @@ public interface AppComponent {
     interface Builder {
         @BindsInstance
         Builder application(Application application);
+
         AppComponent build();
     }
+
     void inject(HighscoreActivity activity);
 }

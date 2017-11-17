@@ -30,6 +30,8 @@ public class HighscoreViewModel extends ViewModel {
         return users;
     }
 
-    public String getTitle() { return "Hello World!"; }
+    public String getTitle() {
+        return "Hello World!";
+    }
 
 }

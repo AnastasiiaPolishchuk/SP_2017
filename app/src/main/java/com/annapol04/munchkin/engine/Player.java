@@ -33,4 +33,8 @@ public class Player {
         return hand.get(index);
     }
 
+    public LinkedList<Card> getHand() {
+        return hand;
+    }
+
 }

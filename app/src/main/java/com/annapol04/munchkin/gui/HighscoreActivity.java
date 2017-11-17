@@ -23,7 +23,7 @@ public class HighscoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityHighscoreBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_highscore);
-        ((MunchkinApp)getApplication()).getAppComponent().inject(this);
+        ((MunchkinApp) getApplication()).getAppComponent().inject(this);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(HighscoreViewModel.class);
 
         binding.setVm(viewModel);
