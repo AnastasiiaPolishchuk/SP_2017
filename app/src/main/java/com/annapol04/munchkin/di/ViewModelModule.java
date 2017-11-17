@@ -1,8 +1,10 @@
-package com.annapol04.munchkin.gui;
+package com.annapol04.munchkin.di;
 
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+
+import com.annapol04.munchkin.gui.HighscoreViewModel;
 
 import dagger.Binds;
 import dagger.Module;

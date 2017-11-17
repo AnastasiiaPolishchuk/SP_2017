@@ -1,4 +1,4 @@
-package com.annapol04.munchkin;
+package com.annapol04.munchkin.di;
 
 import android.app.Application;
 

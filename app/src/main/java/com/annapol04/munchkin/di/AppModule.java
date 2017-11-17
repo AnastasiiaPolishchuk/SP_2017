@@ -1,11 +1,10 @@
-package com.annapol04.munchkin;
+package com.annapol04.munchkin.di;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
 import com.annapol04.munchkin.db.AppDb;
-import com.annapol04.munchkin.data.HighscoreEntryDao;
-import com.annapol04.munchkin.gui.ViewModelModule;
+import com.annapol04.munchkin.db.HighscoreEntryDao;
 import com.annapol04.munchkin.network.Webservice;
 
 import javax.inject.Singleton;
@@ -29,7 +28,7 @@ public class AppModule {
     @Singleton
     @Provides
     AppDb provideDb(Application app) {
-        return Room.databaseBuilder(app, AppDb.class,"app.db").build();
+        return Room.databaseBuilder(app, AppDb.class,"munchkin_app.db").build();
     }
 
     @Singleton

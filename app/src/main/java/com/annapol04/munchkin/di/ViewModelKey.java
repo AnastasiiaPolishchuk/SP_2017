@@ -1,4 +1,4 @@
-package com.annapol04.munchkin.gui;
+package com.annapol04.munchkin.di;
 
 import android.arch.lifecycle.ViewModel;
 

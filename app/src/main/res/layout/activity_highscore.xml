@@ -9,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="com.annapol04.munchkin.gui.HighscoreActivity">
-        <TextView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/highscoreList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@{vm.title}"/>
+            android:layout_height="match_parent"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

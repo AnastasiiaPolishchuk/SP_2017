@@ -1,10 +1,12 @@
 package com.annapol04.munchkin.data;
 
-/**
- * Created by chris on 16.11.2017.
- */
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
+@Entity(tableName = "highscores")
 public class HighscoreEntry {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String name;
     private double score;
 
@@ -13,6 +15,10 @@ public class HighscoreEntry {
         this.score = score;
     }
 
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
     public double getScore() { return score; }
+    public void setScore(double score) { this.score = score; }
 }

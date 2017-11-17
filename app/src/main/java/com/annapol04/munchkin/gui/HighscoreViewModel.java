@@ -1,26 +1,33 @@
 package com.annapol04.munchkin.gui;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.annapol04.munchkin.data.HighscoreEntry;
+import com.annapol04.munchkin.data.HighscoreRepository;
 
 import java.util.List;
 
-public class HighscoreViewModel extends ViewModel {
-    private MutableLiveData<List<HighscoreEntry>> users;
+import javax.inject.Inject;
 
-    public LiveData<List<HighscoreEntry>> getEntries() {
-        if (users == null) {
-            users = new MutableLiveData<>();
-            loadEntries();
-        }
-        return users;
+public class HighscoreViewModel extends ViewModel {
+    private LiveData<List<HighscoreEntry>> users;
+    private HighscoreRepository repository;
+
+    @Inject
+    public HighscoreViewModel(HighscoreRepository repository) {
+        this.repository = repository;
     }
 
-    private void loadEntries() {
-        // Do an asyncronous operation to fetch users.
+    public void initialize() {
+        repository.initialize();
+    }
+
+    public LiveData<List<HighscoreEntry>> getEntries() {
+        if (users == null)
+            users = repository.getEntries();
+
+        return users;
     }
 
     public String getTitle() { return "Hello World!"; }
