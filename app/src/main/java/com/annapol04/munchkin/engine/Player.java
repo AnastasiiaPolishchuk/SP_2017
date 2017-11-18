@@ -1,6 +1,7 @@
 package com.annapol04.munchkin.engine;
 
-import java.util.LinkedList;
+
+import java.util.List;
 
 /**
  * Created by anastasiiapolishchuk on 13.11.17.
@@ -9,7 +10,7 @@ import java.util.LinkedList;
 public class Player {
 
     private final String name;
-    private LinkedList<Card> hand;
+    private List<Card> hand;
     private final int level;
 
     public Player(String name, int level) {
@@ -25,7 +26,7 @@ public class Player {
         return level;
     }
 
-    public void setHand(LinkedList hand) {
+    public void setHand(List hand) {
         this.hand = hand;
     }
 
@@ -33,7 +34,7 @@ public class Player {
         return hand.get(index);
     }
 
-    public LinkedList<Card> getHand() {
+    public List<Card> getHand() {
         return hand;
     }
 
