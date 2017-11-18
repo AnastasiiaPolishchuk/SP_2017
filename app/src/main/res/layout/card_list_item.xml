@@ -7,4 +7,4 @@
     android:id="@+id/item_list_view_text_view"
     android:padding="8dp"
     android:text="Large Text"
-    android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
+    android:textAppearance="?android:attr/textAppearanceLarge" />
