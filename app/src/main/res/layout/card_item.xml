@@ -2,6 +2,7 @@
 <ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="50dp"
     android:layout_height="match_parent"
+    android:scaleType="centerCrop"
     android:id="@+id/card_item"
     android:padding="8dp">
 
