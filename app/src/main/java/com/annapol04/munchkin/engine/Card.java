@@ -20,11 +20,12 @@ private final int imageResourceID;
         return imageResourceID;
     }
 
-    public Card(int id, String name) {
+    public Card(int id, String name, int imageResourceID) {
 
         this.name = name;
         this.id = id;
-        this.imageResourceID = R.drawable.door;
+        this.imageResourceID = imageResourceID;
+//this.imageResourceID = R.drawable.door;
     }
 
     public String getCardName() {

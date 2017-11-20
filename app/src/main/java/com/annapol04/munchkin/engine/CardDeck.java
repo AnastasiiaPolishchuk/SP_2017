@@ -1,5 +1,7 @@
 package com.annapol04.munchkin.engine;
 
+import com.annapol04.munchkin.R;
+
 import java.util.LinkedList;
 
 /**
@@ -19,18 +21,18 @@ public class CardDeck {
     private LinkedList<Card> makeDeck() {
 
         LinkedList<Card> deck = new LinkedList<>();
-        deck.add(new Card(1, "Filzläuse"));
-        deck.add(new Card(2, "Sabbernder Schleim"));
-        deck.add(new Card(3, "Topfpflanze"));
-        deck.add(new Card(4, "Harfien"));
-        deck.add(new Card(5, "Anwalt"));
-        deck.add(new Card(6, "Amazone"));
-        deck.add(new Card(8, "Leprachaun"));
-        deck.add(new Card(9, "Ekliger Sportdrink"));
-        deck.add(new Card(10, "Vrank Der Terwirrung"));
-        deck.add(new Card(11, "Wunschring"));
-        deck.add(new Card(12, "Doppelgänger"));
-        deck.add(new Card(13, "Wunschring22"));
+        deck.add(new Card(1, "bigfoot", R.drawable.bigfoot));
+        deck.add(new Card(2, "Orcs", R.drawable.orcs));
+        deck.add(new Card(3, "chickenOnYourHead", R.drawable.chickenonyourhead));
+        deck.add(new Card(4, "cleric", R.drawable.cleric));
+        deck.add(new Card(5, "duckOfDoom", R.drawable.duckofdoom));
+        deck.add(new Card(6, "elf", R.drawable.elf));
+        deck.add(new Card(8, "gazebo", R.drawable.gazebo));
+        deck.add(new Card(9, "halfling", R.drawable.halfling));
+        deck.add(new Card(10, "incomeTax", R.drawable.incometax));
+        deck.add(new Card(11, "insuranceSalesman", R.drawable.insurancesalesman));
+        deck.add(new Card(12, "lawyers", R.drawable.lawyers));
+        deck.add(new Card(13, "platycore", R.drawable.platycore));
 
         return deck;
     }

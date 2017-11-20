@@ -9,8 +9,6 @@ import android.widget.ImageButton;
 
 import com.annapol04.munchkin.R;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
