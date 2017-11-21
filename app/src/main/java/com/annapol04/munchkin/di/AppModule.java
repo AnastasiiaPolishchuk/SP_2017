@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.persistence.room.Room;
 
 import com.annapol04.munchkin.db.AppDb;
+import com.annapol04.munchkin.db.GameDetailsDao;
 import com.annapol04.munchkin.db.HighscoreEntryDao;
 import com.annapol04.munchkin.network.Webservice;
 
@@ -36,5 +37,11 @@ public class AppModule {
     @Provides
     HighscoreEntryDao provideHighscoreDoa(AppDb db) {
         return db.highscoreEntryDao();
+    }
+
+    @Singleton
+    @Provides
+    GameDetailsDao provideGameDetailsDao(AppDb db) {
+        return db.gameDetailsDao();
     }
 }

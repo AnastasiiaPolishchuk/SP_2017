@@ -2,22 +2,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
-
         <variable
             name="vm"
-            type="com.annapol04.munchkin.gui.HighscoreViewModel" />
+            type="com.annapol04.munchkin.gui.GameDetailViewModel" />
     </data>
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.annapol04.munchkin.gui.HighscoreActivity">
+        tools:context="com.annapol04.munchkin.gui.GameDetailActivity">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/highscoreList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
     </android.support.constraint.ConstraintLayout>
 </layout>
+

@@ -23,7 +23,7 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public HighscoreAdapter(Context context) {
+    HighscoreAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
     }
 
@@ -57,6 +57,10 @@ public class HighscoreAdapter extends RecyclerView.Adapter<HighscoreAdapter.View
         return mData.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return mData.get(position).getId();
+    }
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

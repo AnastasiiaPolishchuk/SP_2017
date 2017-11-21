@@ -6,20 +6,21 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "highscores")
 public class HighscoreEntry {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private String name;
     private double score;
 
-    public HighscoreEntry(String name, double score) {
+    public HighscoreEntry(long id, String name, double score) {
+        this.id = id;
         this.name = name;
         this.score = score;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
