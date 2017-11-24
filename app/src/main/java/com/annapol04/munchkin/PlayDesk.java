@@ -58,14 +58,14 @@ public class PlayDesk extends AppCompatActivity {
 
 
         RecyclerView handOfPlayer = (RecyclerView) findViewById(R.id.recycler_view_hand_of_player);
-        RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         handOfPlayer.setLayoutManager(handLayoutManager);
         MyAdapter hatdAdapter = new MyAdapter(game.getCurrentPlayer().getHand());
         handOfPlayer.setAdapter(hatdAdapter);
 
         mRecyclerView = (RecyclerView) findViewById((R.id.recycler_view_cards));
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new MyAdapter(game.getCurrentPlayer().getHand());
         mRecyclerView.setAdapter(mAdapter);
