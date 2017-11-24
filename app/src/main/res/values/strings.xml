@@ -3,4 +3,15 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="dialog">"!!! Bob ist dran!
+- Bob zieht eine Karte vom Schatzstapel und muss gegen Filzläuse kämpfen!
+- Filzläuse: Denen kannst du nicht entkommen!
+- Schlimme Dinge: Lege deine Rüstung und alle Gegenstände unterhalb der Hüfte ab.
+- Bob spielt die Karte Baby (Monsterstufe) ein!
+- Bob hat nun ein gesamtes Kampflevel von 10!
+- Bob besiegt Filzläuse und zieht einen Schatz!
+- Bob hat nun zu viele Handkarten und legt eine ab: Wunschring.
+- Bob hat seinen Spielzug beendet!
+!!! Nun ist Alice dran!"</string>
 </resources>
