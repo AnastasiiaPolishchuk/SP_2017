@@ -2,6 +2,7 @@ package com.annapol04.munchkin.di;
 
 import android.app.Application;
 
+import com.annapol04.munchkin.gui.GameDetailActivity;
 import com.annapol04.munchkin.gui.HighscoreActivity;
 
 import javax.inject.Singleton;
@@ -25,4 +26,5 @@ public interface AppComponent {
     }
 
     void inject(HighscoreActivity activity);
+    void inject(GameDetailActivity activity);
 }

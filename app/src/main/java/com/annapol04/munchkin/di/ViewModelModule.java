@@ -4,6 +4,7 @@ package com.annapol04.munchkin.di;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
+import com.annapol04.munchkin.gui.GameDetailViewModel;
 import com.annapol04.munchkin.gui.HighscoreViewModel;
 
 import dagger.Binds;
@@ -16,6 +17,11 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(HighscoreViewModel.class)
     abstract ViewModel bindHighscoreViewModel(HighscoreViewModel viewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GameDetailViewModel.class)
+    abstract ViewModel bindGameDetailViewModel(GameDetailViewModel viewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);
