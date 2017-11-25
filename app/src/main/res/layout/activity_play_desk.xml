@@ -173,7 +173,8 @@
                 android:gravity="center"
                 android:layout_weight="1">
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/munchkin_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@android:drawable/ic_menu_info_details"
@@ -186,7 +187,8 @@
                 android:gravity="center"
                 android:layout_weight="1">
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/munchkin_exit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@android:drawable/ic_menu_close_clear_cancel"

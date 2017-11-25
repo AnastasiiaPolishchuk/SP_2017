@@ -107,5 +107,21 @@ public class PlayDesk extends AppCompatActivity {
                 Toast.makeText(PlayDesk.this, "treasure is clicked!", Toast.LENGTH_SHORT).show();
             }
         }));
+
+        ImageButton exitButton = (ImageButton) findViewById(R.id.munchkin_exit);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PlayDesk.this, "hier wird das Spiel beendet!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ImageButton infoButton = (ImageButton) findViewById(R.id.munchkin_info);
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PlayDesk.this, "hier wird INFO!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
