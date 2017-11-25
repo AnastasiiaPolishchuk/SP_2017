@@ -28,7 +28,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 // create a new view
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
+        ViewHolder.ViewHolderPlayer holder = new ViewHolder.ViewHolderPlayer(view);
         return holder;
     }
 
@@ -42,13 +42,45 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return cards.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class MyDeskAdapter extends MyAdapter {
+        public MyDeskAdapter(List<Card> Data) {
+            super(Data);
+        }
+
+        @Override
+        public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_item_desk, parent, false);
+            ViewHolder.ViewHolderDesk holder = new ViewHolder.ViewHolderDesk(view);
+            return holder;
+        }
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageButton imageButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageButton = itemView.findViewById(R.id.card_item);
+            //  imageButton = itemView.findViewById(R.id.card_item);
+        }
+
+        public static class ViewHolderPlayer extends ViewHolder {
+
+
+            public ViewHolderPlayer(View itemView) {
+                super(itemView);
+                imageButton = itemView.findViewById(R.id.card_item);
+            }
+        }
+
+        public static class ViewHolderDesk extends ViewHolder {
+
+
+            public ViewHolderDesk(View itemView) {
+                super(itemView);
+                imageButton = itemView.findViewById(R.id.card_item_desk);
+            }
         }
     }
 }
