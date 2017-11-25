@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.annapol04.munchkin.engine.Card;
 import com.annapol04.munchkin.engine.CardDeck;
 import com.annapol04.munchkin.engine.Game;
 import com.annapol04.munchkin.engine.MyAdapter;
@@ -40,10 +41,10 @@ public class PlayDesk extends AppCompatActivity {
                 .collect(Collectors.toList()));
 
         playerList = game.getPlayers();
-        CardDeck doorDeck = new CardDeck();
-        CardDeck doorDeckX = new CardDeck();
-        game.schuffleCards(doorDeck);
-        game.initializePlayersHand(doorDeck, doorDeckX);
+        CardDeck deck = new CardDeck();
+
+        game.getDeck().schuffleCards();
+        game.initializePlayersHand(game.getDeck());
 
 
         showForCurrentPlayer(game.getCurrentPlayer());
@@ -60,8 +61,8 @@ public class PlayDesk extends AppCompatActivity {
         RecyclerView handOfPlayer = (RecyclerView) findViewById(R.id.recycler_view_hand_of_player);
         RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         handOfPlayer.setLayoutManager(handLayoutManager);
-        MyAdapter hatdAdapter = new MyAdapter(game.getCurrentPlayer().getHand());
-        handOfPlayer.setAdapter(hatdAdapter);
+        MyAdapter handAdapter = new MyAdapter(game.getCurrentPlayer().getHand());
+        handOfPlayer.setAdapter(handAdapter);
 
         mRecyclerView = (RecyclerView) findViewById((R.id.recycler_view_cards));
         mRecyclerView.setHasFixedSize(true);
@@ -70,12 +71,19 @@ public class PlayDesk extends AppCompatActivity {
         mAdapter = new MyAdapter(game.getCurrentPlayer().getHand());
         mRecyclerView.setAdapter(mAdapter);
 
+        List<Card> desk = new ArrayList<>();
+        RecyclerView playDesk = (RecyclerView) findViewById(R.id.recycler_view_desk);
+        RecyclerView.LayoutManager deskLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        playDesk.setLayoutManager(deskLayoutManager);
+        desk.add((Card) game.getDeck().getDoorCardDeck().getFirst());
+        desk.add((Card) game.getDeck().getDoorCardDeck().getLast());
+
+        MyAdapter.MyDeskAdapter deskAdapter = new MyAdapter.MyDeskAdapter(desk);
+        playDesk.setAdapter(deskAdapter);
+
+
         addListenerOnButton();
-/*
-        LinearLayoutManager myLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        ListView listView = (ListView) findViewById(R.id.list_view_cards);
-        ArrayAdapter adapter = new ArrayAdapter (this,R.layout.card_list_item, items);
-        listView.setAdapter(adapter);*/
+
     }
 
     public void showNextPlayer(View view) {
@@ -99,5 +107,21 @@ public class PlayDesk extends AppCompatActivity {
                 Toast.makeText(PlayDesk.this, "treasure is clicked!", Toast.LENGTH_SHORT).show();
             }
         }));
+
+        ImageButton exitButton = (ImageButton) findViewById(R.id.munchkin_exit);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PlayDesk.this, "hier wird das Spiel beendet!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ImageButton infoButton = (ImageButton) findViewById(R.id.munchkin_info);
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PlayDesk.this, "hier wird INFO!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

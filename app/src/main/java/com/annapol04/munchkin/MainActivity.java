@@ -26,11 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<String> playerNames = new ArrayList<>(6);
         addPlayerNameIfNotEmpty(R.id.name_of_player_1, playerNames);
-        addPlayerNameIfNotEmpty(R.id.name_of_player_2, playerNames);
+       /* addPlayerNameIfNotEmpty(R.id.name_of_player_2, playerNames);
         addPlayerNameIfNotEmpty(R.id.name_of_player_3, playerNames);
         addPlayerNameIfNotEmpty(R.id.name_of_player_4, playerNames);
         addPlayerNameIfNotEmpty(R.id.name_of_player_5, playerNames);
-        addPlayerNameIfNotEmpty(R.id.name_of_player_6, playerNames);
+        addPlayerNameIfNotEmpty(R.id.name_of_player_6, playerNames);*/
 
         Intent myIntent = new Intent(MainActivity.this, PlayDesk.class);
         myIntent.putStringArrayListExtra("playerNames", playerNames);
