@@ -29,6 +29,8 @@ public class PlayDesk extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
+    private List<Card> desk = new ArrayList<>();
+    private MyAdapter.MyDeskAdapter deskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class PlayDesk extends AppCompatActivity {
         TextView levelOfPlayer = (TextView) findViewById(R.id.level_of_player);
         levelOfPlayer.setText("Level : " + player.getLevel());
 
+        TextView powerOfPlayer = (TextView) findViewById(R.id.power_of_player);
+        powerOfPlayer.setText("Power : " + player.getPower());
+
 
         RecyclerView handOfPlayer = (RecyclerView) findViewById(R.id.recycler_view_hand_of_player);
         RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -71,14 +76,12 @@ public class PlayDesk extends AppCompatActivity {
         mAdapter = new MyAdapter(game.getCurrentPlayer().getHand());
         mRecyclerView.setAdapter(mAdapter);
 
-        List<Card> desk = new ArrayList<>();
         RecyclerView playDesk = (RecyclerView) findViewById(R.id.recycler_view_desk);
         RecyclerView.LayoutManager deskLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         playDesk.setLayoutManager(deskLayoutManager);
-        desk.add((Card) game.getDeck().getDoorCardDeck().getFirst());
-        desk.add((Card) game.getDeck().getDoorCardDeck().getLast());
+        desk.add((Card) game.getDeck().getDoorCardDeck().remove());
 
-        MyAdapter.MyDeskAdapter deskAdapter = new MyAdapter.MyDeskAdapter(desk);
+        deskAdapter = new MyAdapter.MyDeskAdapter(desk);
         playDesk.setAdapter(deskAdapter);
 
 
@@ -96,7 +99,10 @@ public class PlayDesk extends AppCompatActivity {
         doorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PlayDesk.this, "doors is clicked!", Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(PlayDesk.this, "doors is clicked!", Toast.LENGTH_SHORT).show();
+                desk.add(game.getDeck().getDoorCardDeck().remove());
+
+                deskAdapter.notifyDataSetChanged();
             }
         });
 
@@ -123,5 +129,9 @@ public class PlayDesk extends AppCompatActivity {
                 Toast.makeText(PlayDesk.this, "hier wird INFO!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void showDialog(View view) {
+
     }
 }

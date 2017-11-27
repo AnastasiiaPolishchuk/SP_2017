@@ -5,6 +5,7 @@
     android:scaleType="centerCrop"
     android:background="@android:color/transparent"
     android:id="@+id/card_item"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:onClick="showDialog">
 
 </ImageButton>

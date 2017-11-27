@@ -1,11 +1,15 @@
 package com.annapol04.munchkin.engine;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.annapol04.munchkin.R;
 
@@ -29,6 +33,25 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_item, parent, false);
         ViewHolder.ViewHolderPlayer holder = new ViewHolder.ViewHolderPlayer(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // custom dialog
+                final Dialog dialog = new Dialog(parent.getContext());
+                dialog.setContentView(R.layout.zoom_layout);
+                ImageButton imageButton = (ImageButton) v;
+                ImageView imageView = dialog.findViewById(R.id.zoom_image_view);
+                imageView.setImageDrawable(imageButton.getDrawable());
+
+                Button testButton = dialog.findViewById(R.id.zoom_button);      // test setEnabled = false - die Taste wird grau
+                testButton.setEnabled(false);
+
+                dialog.setTitle("Title...");
+
+                dialog.show();
+            }
+        });
         return holder;
     }
 

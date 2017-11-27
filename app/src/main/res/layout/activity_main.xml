@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Player 1 :" />
+            android:text="Player :" />
 
         <EditText
             android:id="@+id/name_of_player_1"
@@ -25,77 +25,21 @@
             android:maxLength="10" />
 
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Player 2 :" />
-
-        <EditText
-            android:id="@+id/name_of_player_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="10" />
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Player 3 :" />
-
-        <EditText
-            android:id="@+id/name_of_player_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="10" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Player 4 :" />
-
-        <EditText
-            android:id="@+id/name_of_player_4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="10" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Player 5 :" />
-
-        <EditText
-            android:id="@+id/name_of_player_5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="10" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Player 6 :" />
-
-        <EditText
-            android:id="@+id/name_of_player_6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="10" />
-
     </LinearLayout>
 
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="start"
         android:text="Start"
-        android:textAllCaps="true"
-        android:onClick="start" />
+        android:textAllCaps="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="goToHighscore"
         android:text="Highscore"
-        android:textAllCaps="true"
-        android:onClick="goToHighscore" />
+        android:textAllCaps="true" />
 
 </LinearLayout>
