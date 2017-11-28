@@ -1,6 +1,5 @@
-package com.annapol04.munchkin.engine;
+package com.annapol04.munchkin.gui;
 
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.annapol04.munchkin.R;
+import com.annapol04.munchkin.engine.Card;
 
 import java.util.List;
 
@@ -15,16 +15,16 @@ import java.util.List;
  * Created by anastasiiapolishchuk on 17.11.17.
  */
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private List<Card> cards;
 
-    public MyAdapter(List<Card> Data) {
+    public CardAdapter(List<Card> Data) {
         cards = Data;
     }
 
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 // create a new view
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_item, parent, false);
@@ -42,13 +42,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return cards.size();
     }
 
-    public static class MyDeskAdapter extends MyAdapter {
+    public static class MyDeskAdapter extends CardAdapter {
         public MyDeskAdapter(List<Card> Data) {
             super(Data);
         }
 
         @Override
-        public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.card_item_desk, parent, false);
             ViewHolder.ViewHolderDesk holder = new ViewHolder.ViewHolderDesk(view);
