@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.annapol04.munchkin.R;
-import com.annapol04.munchkin.network.Match;
 
 public class MainActivity extends AppCompatActivity {
-    private Match match;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
