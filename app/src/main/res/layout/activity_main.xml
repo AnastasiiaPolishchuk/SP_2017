@@ -6,40 +6,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context="com.annapol04.munchkin.MainActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Player :" />
-
-        <EditText
-            android:id="@+id/name_of_player_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLength="10" />
-
-
-    </LinearLayout>
-
+    tools:context="com.annapol04.munchkin.gui.MainActivity">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="start"
         android:text="Start"
-        android:textAllCaps="true" />
+        android:textAllCaps="true"
+        android:onClick="start" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="goToHighscore"
         android:text="Highscore"
-        android:textAllCaps="true" />
+        android:textAllCaps="true"
+        android:onClick="goToHighscore" />
 
 </LinearLayout>

@@ -14,4 +14,9 @@
 - Bob hat nun zu viele Handkarten und legt eine ab: Wunschring.
 - Bob hat seinen Spielzug beendet!
 !!! Nun ist Alice dran!"</string>
+
+    <string name="title_activity_sign_in">SignInActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="signin_other_error">OMG!</string>
 </resources>
