@@ -59,11 +59,11 @@ public class CardDeck {
         return deck;
     }
 
-    public LinkedList getDoorCardDeck() {
+    public LinkedList<Card> getDoorCardDeck() {
         return doorDeck;
     }
 
-    public LinkedList getTreasureCardDeck() {
+    public LinkedList<Card> getTreasureCardDeck() {
         return treasureDeck;
     }
 

@@ -38,4 +38,8 @@ public class Player {
         return hand;
     }
 
+    public int getPower() {
+        return hand.size();
+    }
+
 }
