@@ -7,9 +7,9 @@ Simplified game rules for a easy game play.
 
 ## Game play
 ### Start
-Every player 2 treasure cards.
+Every player get's 2 treasure cards.
 
-### Round
+### Player round
 - player plays equipment cards
 - player draws a door card and enters the fight with 2 choices:
     - player escapes (without bad things and dice)
