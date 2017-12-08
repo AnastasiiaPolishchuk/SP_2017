@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "602225023877",
+    "project_id": "munchkin-2c4f3"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602225023877:android:a93742135b346411",
+        "android_client_info": {
+          "package_name": "com.annapol04.munchkin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "602225023877-s3r60go2etagvopbq12rugio0ia2smf9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.annapol04.munchkin",
+            "certificate_hash": "5fb3e13310ef0616ab397d33fedbbf5d158dfcd3"
+          }
+        },
+        {
+          "client_id": "602225023877-v9750hbnnkl7t8hqaqi9p388jao2t40q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByr_7-ypzyDrrvS9Pmue-LdW8VRzc8qUE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

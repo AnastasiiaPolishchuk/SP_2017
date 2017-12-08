@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.annapol04.munchkin">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
     <application
         android:name=".MunchkinApp"
         android:allowBackup="false"
@@ -12,24 +16,35 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+
         <activity
-            android:name=".MainActivity"
-            android:screenOrientation="landscape">
+            android:name=".gui.SignInActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/FullscreenTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".PlayDesk"
-            android:screenOrientation="landscape"/>
+            android:name=".gui.MainActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".gui.PlayDeskActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".gui.HighscoreActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".gui.GameDetailActivity"
             android:screenOrientation="landscape" />
+
     </application>
 
 </manifest>
