@@ -3,6 +3,7 @@ package com.annapol04.munchkin.di;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
+import com.annapol04.munchkin.data.EventRepository;
 import com.annapol04.munchkin.db.AppDb;
 import com.annapol04.munchkin.db.GameDetailsDao;
 import com.annapol04.munchkin.db.HighscoreEntryDao;
@@ -19,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AppModule {
     @Singleton
     @Provides
-    Webservice provideWebservice() {
+    public Webservice provideWebservice() {
         return new Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -29,19 +30,25 @@ public class AppModule {
 
     @Singleton
     @Provides
-    AppDb provideDb(Application app) {
+    public AppDb provideDb(Application app) {
         return Room.databaseBuilder(app, AppDb.class, "munchkin_app.db").build();
     }
 
     @Singleton
     @Provides
-    HighscoreEntryDao provideHighscoreDoa(AppDb db) {
+    public HighscoreEntryDao provideHighscoreDoa(AppDb db) {
         return db.highscoreEntryDao();
     }
 
     @Singleton
     @Provides
-    GameDetailsDao provideGameDetailsDao(AppDb db) {
+    public GameDetailsDao provideGameDetailsDao(AppDb db) {
         return db.gameDetailsDao();
+    }
+
+    @Singleton
+    @Provides
+    public EventRepository provideEventRepository() {
+        return new EventRepository();
     }
 }

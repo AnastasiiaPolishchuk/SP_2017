@@ -36,9 +36,13 @@ public class PlayDesk extends AppCompatActivity {
         setContentView(activity_play_desk);
         ArrayList<String> playerNames = this.getIntent().getExtras().getStringArrayList("playerNames");
 
-        game = new Game(playerNames.stream()
+        game = new Game();
+
+        /*
+        playerNames.stream()
                 .map(playerName -> new Player(playerName, 1))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList())
+         */
 
         playerList = game.getPlayers();
         CardDeck deck = new CardDeck();
