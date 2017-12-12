@@ -1,5 +1,6 @@
 package com.annapol04.munchkin.engine;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,8 +21,8 @@ public class Game {
     private CardDeck deck;
 
 
-    public Game(List<Player> players) {
-        this.players = players;
+    public Game() {
+        this.players = new ArrayList<>();
         this.playerIndex = 0;
         this.deck = new CardDeck();
     }
