@@ -32,7 +32,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.List;
 
 @Singleton
-public class GooglePlayClient {
+public class GooglePlayClient extends PlayClient {
     private static final String TAG = GooglePlayClient.class.getSimpleName();
     private static final int RC_SIGN_IN = 9001;
     private static final int RC_WAITING_ROOM = 9007;
@@ -43,23 +43,6 @@ public class GooglePlayClient {
     private RoomConfig mJoinedRoomConfig;
     private String mMyParticipantId;
     private Room mRoom;
-    private OnMatchStateChangedListener matchStateChangedListener;
-
-    public interface OnLoggedInListener {
-        void onLoggedIn();
-    }
-
-    public enum MatchState {
-        LOGGED_OUT,
-        LOGGED_IN,
-        STARTED,
-        ABORTED,
-        DISCONNECTED,
-    }
-
-    public interface OnMatchStateChangedListener {
-        void onMatchStateChanged(MatchState state);
-    }
 
     @Inject
     public GooglePlayClient(Application application) {
@@ -68,6 +51,7 @@ public class GooglePlayClient {
         account = GoogleSignIn.getLastSignedInAccount(application);
     }
 
+    @Override
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
@@ -76,19 +60,12 @@ public class GooglePlayClient {
         changeMatchState(MatchState.LOGGED_IN);
     }
 
-    public void setMatchStateChangedListener(OnMatchStateChangedListener matchStateChangedListener) {
-        this.matchStateChangedListener = matchStateChangedListener;
-    }
-
-    private void changeMatchState(MatchState state) {
-        if (matchStateChangedListener != null)
-            matchStateChangedListener.onMatchStateChanged(state);
-    }
-
+    @Override
     public boolean isLoggedIn() {
         return account != null;
     }
 
+    @Override
     public void login() {
         if (isLoggedIn())
             loggedIn();
@@ -96,6 +73,7 @@ public class GooglePlayClient {
             signInSilently();
     }
 
+    @Override
     public void processActivityResults(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -154,6 +132,7 @@ public class GooglePlayClient {
                 .addOnSuccessListener(intent -> activity.startActivityForResult(intent, RC_WAITING_ROOM));
     }
 
+    @Override
     public void startQuickGame() {
         if (mJoinedRoomConfig != null)
             throw new IllegalStateException("There is already a game started");
@@ -178,7 +157,8 @@ public class GooglePlayClient {
                 .create(roomConfig);
     }
 
-    void sendToAllReliably(byte[] message) {
+    @Override
+    public void sendToAllReliably(byte[] message) {
         for (String participantId : mRoom.getParticipantIds()) {
             if (!participantId.equals(mMyParticipantId)) {
                 Task<Integer> task = Games.

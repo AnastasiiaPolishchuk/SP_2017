@@ -10,6 +10,8 @@ import com.annapol04.munchkin.db.HighscoreEntryDao;
 import com.annapol04.munchkin.engine.Executor;
 import com.annapol04.munchkin.engine.Game;
 import com.annapol04.munchkin.engine.Player;
+import com.annapol04.munchkin.network.PlayClient;
+import com.annapol04.munchkin.network.PlayClientDummy;
 import com.annapol04.munchkin.network.Webservice;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 
@@ -79,6 +81,12 @@ public class AppModule {
     @Provides
     @Named("myself")
     public Player provideMyself(Application app) {
-        return new Player(GoogleSignIn.getLastSignedInAccount(app).getDisplayName());
+        return new Player("Anastasiia");//GoogleSignIn.getLastSignedInAccount(app).getDisplayName());
+    }
+
+    @Singleton
+    @Provides
+    public PlayClient providesPlayClient(/*Application app*/) {
+        return new PlayClientDummy();// new GooglePlayClient(app);
     }
 }
