@@ -12,11 +12,11 @@ import static junit.framework.Assert.assertTrue;
 public class EventTest {
     @Test
     public void serializeEventWithEmptyData() {
-        Event event = new Event(Scope.PLAYER2, Action.NOTHING, 3);
+        Event event = new Event(Scope.PLAYER2, Action.JOIN_PLAYER, 3);
 
         byte[] b = new byte[]{
                 (byte)2, // player 2 scope
-                (byte)0,(byte)0,(byte)0,(byte)1, // action id JOING_PLAYER
+                (byte)0,(byte)0,(byte)0,(byte)1, // action id JOIN_PLAYER
                 (byte)0,(byte)0,(byte)0,(byte)3, // message id 3
                 (byte)0, // data type empty
         };
