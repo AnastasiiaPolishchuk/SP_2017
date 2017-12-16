@@ -70,7 +70,7 @@
                 android:padding="6dp">
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_cards"
+                    android:id="@+id/recycler_view_played_cards"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

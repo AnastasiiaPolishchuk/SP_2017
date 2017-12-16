@@ -3,15 +3,15 @@ package com.annapol04.munchkin.gui;
 import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
+import javax.inject.Inject;
 
 public class ToastManager {
 
     private Context mContext;
     private Toast mToast;
 
-    public ToastManager(Context context) {
-        mContext = context;
-    }
+    @Inject
+    public ToastManager() { }
 
     public void show(int stringId) {
         show(stringId, true);

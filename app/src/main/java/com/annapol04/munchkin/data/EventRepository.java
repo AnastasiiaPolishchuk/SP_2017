@@ -1,20 +1,11 @@
 package com.annapol04.munchkin.data;
 
 import com.annapol04.munchkin.engine.Event;
-import com.annapol04.munchkin.engine.EventAction;
-import com.annapol04.munchkin.engine.EventDataType;
-import com.annapol04.munchkin.engine.EventMessage;
-import com.annapol04.munchkin.engine.EventScope;
+import com.annapol04.munchkin.engine.Action;
+import com.annapol04.munchkin.engine.Scope;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-/**
- * Created by chris_000 on 08.12.2017.
- */
 
 public class EventRepository {
     public interface NewEventListener {
@@ -26,9 +17,9 @@ public class EventRepository {
 
     public EventRepository() {
         events = new ArrayList<>();
-        events.add(new Event(EventScope.GAME, EventAction.fromId(0), EventMessage.fromId(0), EventDataType.EMPTY));
-        events.add(new Event(EventScope.GAME, EventAction.fromId(0), EventMessage.fromId(0), EventDataType.EMPTY));
-        events.add(new Event(EventScope.GAME, EventAction.fromId(0), EventMessage.fromId(0), EventDataType.EMPTY));
+        events.add(new Event(Scope.GAME, Action.NOTHING, 0));
+        events.add(new Event(Scope.GAME, Action.NOTHING, 0));
+        events.add(new Event(Scope.GAME, Action.NOTHING, 0));
     }
 
     public void reset() {

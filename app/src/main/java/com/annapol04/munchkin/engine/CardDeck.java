@@ -5,9 +5,7 @@ import com.annapol04.munchkin.R;
 import java.util.Collections;
 import java.util.LinkedList;
 
-/**
- * Created by anastasiiapolishchuk on 14.11.17.
- */
+import javax.inject.Inject;
 
 public class CardDeck {
 
@@ -15,10 +13,12 @@ public class CardDeck {
     LinkedList<Card> stored = new LinkedList<>();
     LinkedList<Card> treasureDeck = new LinkedList<>();
 
-
+    @Inject
     public CardDeck() {
         this.doorDeck = makeDoorDeck();
         this.treasureDeck = makeTreasureDeck();
+
+        shuffleCards();
     }
 
     private LinkedList<Card> makeDoorDeck() {
@@ -67,7 +67,7 @@ public class CardDeck {
         return treasureDeck;
     }
 
-    public void schuffleCards() {
+    public void shuffleCards() {
         Collections.shuffle(this.getDoorCardDeck());
         Collections.shuffle(this.getTreasureCardDeck());
     }

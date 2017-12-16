@@ -1,30 +1,29 @@
 package com.annapol04.munchkin.engine;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by anastasiiapolishchuk on 13.11.17.
- */
+import javax.inject.Named;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class Game {
-
-    private final List<Player> players;
-    private int playerIndex;
-
-    public CardDeck getDeck() {
-        return deck;
-    }
-
+    private final List<Player> players = new ArrayList<>(1);
+    private List<Card> deskCards = new ArrayList<>();
+    private int playerIndex = 0;
     private CardDeck deck;
 
+    @Inject
+    public Game(@Named("myself") Player player, CardDeck deck) {
+        this.deck = deck;
+        this.players.add(player);
+        initializePlayersHand();
+    }
 
-    public Game() {
-        this.players = new ArrayList<>();
-        this.playerIndex = 0;
-        this.deck = new CardDeck();
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 
     public List<Player> getPlayers() {
@@ -44,13 +43,12 @@ public class Game {
     }
 
 
-    public void initializePlayersHand(CardDeck deck) {
-        for (Player p : players) {
+    private void initializePlayersHand() {
+        for (Player p : players)
             p.setHand(getInitializeCards(deck));
-        }
     }
 
-    public LinkedList getInitializeCards(CardDeck deck) {
+    public LinkedList<Card> getInitializeCards(CardDeck deck) {
 
         LinkedList<Card> initializeCards = new LinkedList<>();
         for (int i = 0; i < 4; i++) {
@@ -64,4 +62,7 @@ public class Game {
         return initializeCards;
     }
 
+    public List<Card> getDeskCards() {
+        return deskCards;
+    }
 }

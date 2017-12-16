@@ -7,8 +7,13 @@ import com.annapol04.munchkin.data.EventRepository;
 import com.annapol04.munchkin.db.AppDb;
 import com.annapol04.munchkin.db.GameDetailsDao;
 import com.annapol04.munchkin.db.HighscoreEntryDao;
+import com.annapol04.munchkin.engine.Executor;
+import com.annapol04.munchkin.engine.Game;
+import com.annapol04.munchkin.engine.Player;
 import com.annapol04.munchkin.network.Webservice;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -18,6 +23,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module(includes = ViewModelModule.class)
 public class AppModule {
+    private Application application;
+
+    public AppModule(Application application) {
+        this.application = application;
+    }
+
+    @Singleton
+    @Provides
+    public Application provideApplication() {
+        return application;
+    }
+
     @Singleton
     @Provides
     public Webservice provideWebservice() {
@@ -48,7 +65,20 @@ public class AppModule {
 
     @Singleton
     @Provides
-    public EventRepository provideEventRepository() {
+    public EventRepository eventRepository() {
         return new EventRepository();
+    }
+
+    @Singleton
+    @Provides
+    public Executor provideEventExecutor(Game game, EventRepository repository) {
+        return new Executor(game, repository);
+    }
+
+    @Singleton
+    @Provides
+    @Named("myself")
+    public Player provideMyself(Application app) {
+        return new Player(GoogleSignIn.getLastSignedInAccount(app).getDisplayName());
     }
 }
