@@ -105,10 +105,4 @@ public class Game {
         int i = rnd.nextInt(doorDeck.size());
         return doorDeck.get(i);
     }
-
-    public void moveFromDoorDeckToDesk(){
-       deskCards.add(deck.doorDeck.poll());
-       deck.moveFromActiveToPassiveDeck(deskCards.get(0));
-
-    }
 }

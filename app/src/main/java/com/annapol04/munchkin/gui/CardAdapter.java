@@ -77,10 +77,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Card card = cards.get(position);
         holder.imageButton.setImageResource(card.getImageResourceID());
-        holder.imageButton.setOnClickListener(v -> {
+        /*holder.imageButton.setOnClickListener(v -> {
             if (listener != null)
                 listener.onClicked(card);
-        });
+        });*/
     }
 
     @Override
