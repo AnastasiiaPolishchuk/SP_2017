@@ -1,16 +1,22 @@
 package com.annapol04.munchkin.gui;
 
+import android.app.Dialog;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
+import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.engine.Card;
 
 import java.util.List;
+
 
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
@@ -34,6 +40,27 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(resLayout, parent, false);
         ViewHolder holder = new ViewHolder(view, resId);
+
+        view.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(parent.getContext());
+                dialog.setContentView(R.layout.zoom_layout);
+                RecyclerView recyclerView = dialog.findViewById(R.id.recycler_view_zoom_cards);
+
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
+                recyclerView.setLayoutManager(layoutManager);
+                CardAdapter handAdapter = new CardAdapter(R.layout.card_item_zoom, R.id.card_item_zoom, cards);
+                recyclerView.setAdapter(handAdapter);
+
+                Button testButton = dialog.findViewById(R.id.move_to_desk_button);      // test setEnabled = false - die Taste wird grau
+                testButton.setEnabled(true);
+
+                dialog.show();
+
+            }
+        });
         return holder;
     }
 

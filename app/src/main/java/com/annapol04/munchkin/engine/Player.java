@@ -6,7 +6,7 @@ import java.util.List;
 public class Player {
 
     private final String name;
-    private int level = 0;
+    private int level = 1;
     private List<Card> hand;
     private List<Card> playedCards = new ArrayList<>();
 

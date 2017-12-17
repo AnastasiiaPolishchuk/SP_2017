@@ -129,4 +129,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
                 break;
         }
     }
+
+    public void drawDoorCard(){
+        game.moveFromDoorDeckToDesk();
+    }
 }

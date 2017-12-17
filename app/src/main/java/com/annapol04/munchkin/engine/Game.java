@@ -65,4 +65,10 @@ public class Game {
     public List<Card> getDeskCards() {
         return deskCards;
     }
+
+    public void moveFromDoorDeckToDesk(){
+       deskCards.add(deck.doorDeck.poll());
+       deck.moveFromActiveToPassiveDeck(deskCards.get(0));
+
+    }
 }
