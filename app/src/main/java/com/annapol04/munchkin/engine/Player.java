@@ -1,21 +1,17 @@
 package com.annapol04.munchkin.engine;
 
-
+import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by anastasiiapolishchuk on 13.11.17.
- */
 
 public class Player {
 
     private final String name;
+    private int level = 1;
     private List<Card> hand;
-    private final int level;
+    private List<Card> playedCards = new ArrayList<>();
 
-    public Player(String name, int level) {
+    public Player(String name) {
         this.name = name;
-        this.level = level;
     }
 
     public String getName() {
@@ -26,8 +22,16 @@ public class Player {
         return level;
     }
 
-    public void setHand(List hand) {
+    public void setHand(List<Card> hand) {
         this.hand = hand;
+    }
+
+    public void setPlayedCards(List<Card> playedCards) {
+        this.playedCards = playedCards;
+    }
+
+    public List<Card> getPlayedCards() {
+        return playedCards;
     }
 
     public Card getCard(int index) {

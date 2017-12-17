@@ -1,7 +1,8 @@
 package com.annapol04.munchkin.gui;
 
 import android.app.Dialog;
-import android.graphics.Bitmap;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,49 +10,68 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.engine.Card;
 
 import java.util.List;
 
-/**
- * Created by anastasiiapolishchuk on 17.11.17.
- */
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
-
+    private final @LayoutRes
+    int resLayout;
+    private final @IdRes
+    int resId;
     private List<Card> cards;
+    private OnClickedListener listener;
 
-    public CardAdapter(List<Card> Data) {
-        cards = Data;
+    public interface OnClickedListener {
+        void onClicked(Card card);
+    }
+
+    public CardAdapter(@LayoutRes int resLayout, @IdRes int resId, List<Card> cards) {
+        this.resLayout = resLayout;
+        this.resId = resId;
+        this.cards = cards;
+    }
+
+    public void setOnClickListener(OnClickedListener listener) {
+        this.listener = listener;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+        notifyDataSetChanged();
     }
 
     @Override
     public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-// create a new view
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_item, parent, false);
-        ViewHolder.ViewHolderPlayer holder = new ViewHolder.ViewHolderPlayer(view);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                .inflate(resLayout, parent, false);
+        ViewHolder holder = new ViewHolder(view, resId);
 
-                // custom dialog
-                final Dialog dialog = new Dialog(parent.getContext());
-                dialog.setContentView(R.layout.zoom_layout);
-                ImageButton imageButton = (ImageButton) v;
-                ImageView imageView = dialog.findViewById(R.id.zoom_image_view);
-                imageView.setImageDrawable(imageButton.getDrawable());
+        view.setOnClickListener(v -> {
 
-                Button testButton = dialog.findViewById(R.id.zoom_button);      // test setEnabled = false - die Taste wird grau
-                testButton.setEnabled(false);
+            // custom dialog
+            final Dialog dialog = new Dialog(parent.getContext());
+            dialog.setContentView(R.layout.zoom_layout);
 
-                dialog.setTitle("Title...");
+            //       RecyclerView recyclerView = (RecyclerView) v;
+            ImageButton imageButton = (ImageButton) v;
+            ImageView imageView = dialog.findViewById(R.id.zoom_image_view);
+            imageView.setImageDrawable(imageButton.getDrawable());
 
-                dialog.show();
-            }
+            Button move = dialog.findViewById(R.id.move_button);      // test setEnabled = false - die Taste wird grau
+            move.setEnabled(true);
+            move.setOnClickListener(buttonView -> {
+                if (listener != null) {
+                    listener.onClicked(cards.get(holder.getLayoutPosition()));
+
+                }
+            });
+
+            dialog.setTitle("Title...");
+            dialog.show();
         });
         return holder;
     }
@@ -66,45 +86,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return cards.size();
     }
 
-    public static class MyDeskAdapter extends CardAdapter {
-        public MyDeskAdapter(List<Card> Data) {
-            super(Data);
-        }
-
-        @Override
-        public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_item_desk, parent, false);
-            ViewHolder.ViewHolderDesk holder = new ViewHolder.ViewHolderDesk(view);
-            return holder;
-        }
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final ImageButton imageButton;
 
-        public ImageButton imageButton;
-
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, @IdRes int resource) {
             super(itemView);
-            //  imageButton = itemView.findViewById(R.id.card_item);
-        }
-
-        public static class ViewHolderPlayer extends ViewHolder {
-
-
-            public ViewHolderPlayer(View itemView) {
-                super(itemView);
-                imageButton = itemView.findViewById(R.id.card_item);
-            }
-        }
-
-        public static class ViewHolderDesk extends ViewHolder {
-
-
-            public ViewHolderDesk(View itemView) {
-                super(itemView);
-                imageButton = itemView.findViewById(R.id.card_item_desk);
-            }
+            imageButton = itemView.findViewById(resource);
         }
     }
 }
