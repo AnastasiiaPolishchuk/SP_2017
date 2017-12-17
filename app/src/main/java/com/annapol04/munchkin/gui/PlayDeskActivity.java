@@ -1,5 +1,6 @@
 package com.annapol04.munchkin.gui;
 
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -63,6 +65,7 @@ public class PlayDeskActivity extends AppCompatActivity {
         playDesk.setAdapter(deskCardsAdapter);
         viewModel.getDeskCards().observe(this, deskCardsAdapter::setCards);
 
+
         View rootView = findViewById(R.id.root_view);
         viewModel.getGameStarted().observe(this, isStarted -> {
             rootView.setVisibility(isStarted ? View.VISIBLE : View.INVISIBLE);
@@ -97,7 +100,10 @@ public class PlayDeskActivity extends AppCompatActivity {
     public void addListenerOnButton() {
         ImageButton doorButton = findViewById(R.id.deck_doors);
         doorButton.setOnClickListener(v -> {
+            toastManager.show( "doors is clicked!");
+
             viewModel.drawDoorCard();
+            // WTF
         });
 
         ImageButton treasureButton = findViewById(R.id.deck_treasure);
