@@ -97,12 +97,12 @@ public class PlayDeskActivity extends AppCompatActivity {
     public void addListenerOnButton() {
         ImageButton doorButton = findViewById(R.id.deck_doors);
         doorButton.setOnClickListener(v -> {
-            toastManager.show( "doors is clicked!");
+            viewModel.drawDoorCard();
         });
 
         ImageButton treasureButton = findViewById(R.id.deck_treasure);
         treasureButton.setOnClickListener((v -> {
-            toastManager.show("treasure is clicked!");
+            viewModel.drawTreasureCard();
         }));
 
         ImageButton exitButton = findViewById(R.id.munchkin_exit);

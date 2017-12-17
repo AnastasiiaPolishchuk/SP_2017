@@ -1,8 +1,11 @@
 package com.annapol04.munchkin.engine;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Named;
 import javax.inject.Inject;
@@ -10,59 +13,96 @@ import javax.inject.Singleton;
 
 @Singleton
 public class Game {
-    private final List<Player> players = new ArrayList<>(1);
-    private List<Card> deskCards = new ArrayList<>();
-    private int playerIndex = 0;
-    private CardDeck deck;
+    private MutableLiveData<List<Player>> players = new MutableLiveData<>();
+    private MutableLiveData<List<Card>> deskCards = new MutableLiveData<>();
+    private List<Card> doorDeck;
+    private List<Card> treasureDeck;
+    private Player currentPlayer;
 
     @Inject
-    public Game(@Named("myself") Player player, CardDeck deck) {
-        this.deck = deck;
-        this.players.add(player);
-        initializePlayersHand();
+    public Game(@Named("myself") Player player, @Named("doorDeck") List<Card> doorDeck, @Named("treasureDeck") List<Card> treasureDeck) {
+        this.players.setValue(new ArrayList<>(1));
+        this.players.getValue().add(player);
+        this.doorDeck = doorDeck;
+        this.treasureDeck = treasureDeck;
+        this.deskCards.setValue(new ArrayList<>());
+
+        currentPlayer = player;
+
+        Card c = getRandomDoorCard();
+        drawDoorCard(c);
+        pickupCard(c);
+        c = getRandomDoorCard();
+        drawDoorCard(c);
+        pickupCard(c);
+        c = getRandomDoorCard();
+        drawDoorCard(c);
+        pickupCard(c);
+        c = getRandomDoorCard();
+        drawDoorCard(c);
+        pickupCard(c);
+        drawTreasureCard(getRandomTreasureCard());
+        drawTreasureCard(getRandomTreasureCard());
+        drawTreasureCard(getRandomTreasureCard());
+        drawTreasureCard(getRandomTreasureCard());
     }
 
-    public void addPlayer(Player player) {
-        players.add(player);
+    private <T> void update(MutableLiveData<T> liveData) {
+        liveData.setValue(liveData.getValue());
     }
 
-    public List<Player> getPlayers() {
+    public LiveData<List<Player>> getPlayers() {
         return players;
     }
 
-    public Player getNextPlayer() {
-        playerIndex++;
-        if (playerIndex == players.size()) {
-            playerIndex = 0;
-        }
-        return players.get(playerIndex);
+    public LiveData<List<Card>> getDeskCards() {
+        return deskCards;
     }
 
     public Player getCurrentPlayer() {
-        return players.get(playerIndex);
+        return currentPlayer;
     }
 
-
-    private void initializePlayersHand() {
-        for (Player p : players)
-            p.setHand(getInitializeCards(deck));
+    public void join(Player player) {
+        players.getValue().add(player);
+        update(players);
     }
 
-    public LinkedList<Card> getInitializeCards(CardDeck deck) {
-
-        LinkedList<Card> initializeCards = new LinkedList<>();
-        for (int i = 0; i < 4; i++) {
-            initializeCards.add(deck.doorDeck.poll());
-            deck.moveFromActiveToPassiveDeck(initializeCards.getFirst());
-        }
-        for (int i = 0; i < 4; i++) {
-            initializeCards.add(deck.treasureDeck.poll());
-            deck.moveFromActiveTreasureToPassiveDeck(initializeCards.getFirst()); // alle carten werden in einem stapel abgelert. Mockup Version
-        }
-        return initializeCards;
+    public void leave(Player player) {
+        players.getValue().remove(player);
+        update(players);
     }
 
-    public List<Card> getDeskCards() {
-        return deskCards;
+    public void drawDoorCard(Card card) {
+        deskCards.getValue().add(card);
+        update(deskCards);
+        doorDeck.remove(card);
+    }
+
+    public void drawTreasureCard(Card card) {
+        currentPlayer.pickupCard(card);
+        treasureDeck.remove(card);
+    }
+
+    public void pickupCard(Card card) {
+        deskCards.getValue().remove(card);
+        update(deskCards);
+        currentPlayer.pickupCard(card);
+    }
+
+    public void playCard(Card card) {
+        currentPlayer.playCard(card);
+    }
+
+    public Card getRandomTreasureCard() {
+        Random rnd = new Random();
+        int i = rnd.nextInt(treasureDeck.size());
+        return treasureDeck.get(i);
+    }
+
+    public Card getRandomDoorCard() {
+        Random rnd = new Random();
+        int i = rnd.nextInt(doorDeck.size());
+        return doorDeck.get(i);
     }
 }

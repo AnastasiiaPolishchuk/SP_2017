@@ -11,7 +11,7 @@ import dagger.android.AndroidInjector;
 import dagger.multibindings.IntoMap;
 
 @Module(subcomponents = PlayDeskActivitySubcomponent.class)
-abstract class PlayDeskActivityModule {
+public abstract class PlayDeskActivityModule {
     @Binds
     @IntoMap
     @ActivityKey(PlayDeskActivity.class)

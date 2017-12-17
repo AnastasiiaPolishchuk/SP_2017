@@ -1,7 +1,9 @@
 package com.annapol04.munchkin.engine;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -29,6 +31,32 @@ public class Decoder {
             pos = decodeEvent(data, pos, end);
 
         return decodedEvents;
+    }
+
+    public EventData decodeEventData(byte[] data) {
+        if (data.length < 4)
+            throw new IllegalArgumentException("Illegal event data format: " + Arrays.toString(data));
+
+        ByteBuffer buffer = ByteBuffer.wrap(data);
+
+        switch (DataType.fromId(buffer.getInt())) {
+            case EMPTY:
+                return new EventData();
+            case INTEGER:
+                if (data.length < 8)
+                    throw new IllegalArgumentException("Illegal event data format: " + Arrays.toString(data));
+
+                return new EventData(buffer.getInt());
+            case STRING:
+                if (data.length < 5)
+                    throw new IllegalArgumentException("Illegal event data format: " + Arrays.toString(data));
+
+                byte[] stringBuffer = Arrays.copyOfRange(buffer.array(), buffer.position(), 0);
+                String string = new String(stringBuffer, StandardCharsets.UTF_8);
+                return new EventData(new String(stringBuffer, StandardCharsets.UTF_8));
+        }
+
+        return null;
     }
 
     private int parseInteger(byte[] data, int pos) {

@@ -158,7 +158,7 @@ public class GooglePlayClient extends PlayClient {
     }
 
     @Override
-    public void sendToAllReliably(byte[] message) {
+    public void sendToAll(byte[] message) {
         for (String participantId : mRoom.getParticipantIds()) {
             if (!participantId.equals(mMyParticipantId)) {
                 Task<Integer> task = Games.

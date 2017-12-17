@@ -1,35 +1,61 @@
 package com.annapol04.munchkin.data;
 
+import com.annapol04.munchkin.AppExecutors;
+import com.annapol04.munchkin.db.EventDao;
+import com.annapol04.munchkin.engine.Decoder;
 import com.annapol04.munchkin.engine.Event;
-import com.annapol04.munchkin.engine.Action;
-import com.annapol04.munchkin.engine.Scope;
+import com.annapol04.munchkin.network.PlayClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class EventRepository {
-    public interface NewEventListener {
+import javax.inject.Singleton;
+import javax.inject.Inject;
+
+@Singleton
+public class EventRepository implements PlayClient.OnMessageReceivedListener {
+    private AppExecutors executors;
+    private EventDao dao;
+    private PlayClient client;
+    private Decoder decoder;
+
+    public interface OnNewEventListener {
         void onNewEvent(Event event);
     }
 
-    private NewEventListener listener;
-    private List<Event> events;
+    private OnNewEventListener listener;
 
-    public EventRepository() {
-        events = new ArrayList<>();
-        events.add(new Event(Scope.GAME, Action.NOTHING, 0));
-        events.add(new Event(Scope.GAME, Action.NOTHING, 0));
-        events.add(new Event(Scope.GAME, Action.NOTHING, 0));
+    @Inject
+    public EventRepository(AppExecutors executors, EventDao dao, PlayClient client, Decoder decoder) {
+        this.executors = executors;
+        this.dao = dao;
+        this.client = client;
+        this.decoder = decoder;
+
+        this.client.setMessageReceivedListener(this);
     }
 
-    public void reset() {
-        if (listener != null) {
-            for (Event event : events)
-                listener.onNewEvent(event);
-        }
+    public void push(Event event) {
+        executors.diskIO().execute(() -> {
+            dao.insert(event);
+        });
+        client.sendToAll(event.getBytes());
+        newEvent(event);
     }
 
-    public void setNewEventListener(NewEventListener listener) {
+    public void setNewEventListener(OnNewEventListener listener) {
         this.listener = listener;
+    }
+
+    public void newEvent(Event event) {
+        if (listener != null)
+            listener.onNewEvent(event);
+    }
+
+    @Override
+    public void onMessageReceived(byte[] data) {
+        final List<Event> received = decoder.decode(data, 0, data.length);
+
+        for (Event event : received)
+            newEvent(event);
     }
 }

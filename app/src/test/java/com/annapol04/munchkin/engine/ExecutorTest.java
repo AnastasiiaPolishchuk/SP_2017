@@ -4,11 +4,13 @@ import com.annapol04.munchkin.data.EventRepository;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 
-public class EventExecuterTest {
+public class ExecutorTest {
     private Game game;
     private EventRepository repository;
     private Executor executor;
@@ -22,8 +24,12 @@ public class EventExecuterTest {
 
     @Test
     public void handlesPlayers() throws Exception {
-        executor.onNewEvent(new Event(Scope.GAME, Action.JOIN_PLAYER,0, "Falco"));
-        executor.onNewEvent(new Event(Scope.GAME, Action.JOIN_PLAYER, 0, "Anastasiia"));
-        executor.onNewEvent(new Event(Scope.GAME, Action.JOIN_PLAYER, 0, "Christian"));
+     //   executor.onNewEvent(new Event(Scope.GAME, Action.JOIN_PLAYER,0, "Falco"));
+/*
+        ArgumentCaptor<Player> argument = ArgumentCaptor.forClass(Player.class);
+        verify(game).join(argument.capture());
+
+        assertEquals(1, argument.getAllValues().size());
+        assertEquals("Falco", argument.getValue().getName());*/
     }
 }

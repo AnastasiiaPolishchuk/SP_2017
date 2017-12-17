@@ -16,7 +16,12 @@ public abstract class PlayClient {
         void onMatchStateChanged(MatchState state);
     }
 
+    public interface OnMessageReceivedListener {
+        void onMessageReceived(byte[] data);
+    }
+
     protected OnMatchStateChangedListener matchStateChangedListener;
+    protected OnMessageReceivedListener messageReceivedListener;
 
     public void setMatchStateChangedListener(OnMatchStateChangedListener matchStateChangedListener) {
         this.matchStateChangedListener = matchStateChangedListener;
@@ -25,6 +30,15 @@ public abstract class PlayClient {
     protected void changeMatchState(MatchState state) {
         if (matchStateChangedListener != null)
             matchStateChangedListener.onMatchStateChanged(state);
+    }
+
+    public void setMessageReceivedListener(OnMessageReceivedListener messageReceivedListener) {
+        this.messageReceivedListener = messageReceivedListener;
+    }
+
+    protected void messageReceived(byte[] data) {
+        if (messageReceivedListener != null)
+            messageReceivedListener.onMessageReceived(data);
     }
 
     public abstract void setActivity(Activity activity);
@@ -37,5 +51,5 @@ public abstract class PlayClient {
 
     public abstract void startQuickGame();
 
-    public abstract void sendToAllReliably(byte[] message);
+    public abstract void sendToAll(byte[] message);
 }

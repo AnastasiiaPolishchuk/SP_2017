@@ -1,45 +1,63 @@
 package com.annapol04.munchkin.engine;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
 
-    private final String name;
-    private int level = 0;
-    private List<Card> hand;
-    private List<Card> playedCards = new ArrayList<>();
+    private String name;
+    private MutableLiveData<Integer> level = new MutableLiveData<>();
+    private MutableLiveData<List<Card>> handCards = new MutableLiveData<>();
+    private MutableLiveData<List<Card>> playedCards = new MutableLiveData<>();
+    private Scope scope;
 
     public Player(String name) {
         this.name = name;
+        this.level.setValue(1);
+        this.handCards.setValue(new ArrayList<>());
+        this.playedCards.setValue(new ArrayList<>());
+    }
+
+    public void pickupCard(Card card) {
+        handCards.getValue().add(card);
+        update(handCards);
+    }
+
+    public void playCard(Card card) {
+        handCards.getValue().remove(card);
+        update(handCards);
+        playedCards.getValue().add(card);
+        update(playedCards);
+    }
+
+    private <T> void update(MutableLiveData<T> liveData) {
+        liveData.setValue(liveData.getValue());
     }
 
     public String getName() {
         return name;
     }
 
-    public int getLevel() {
+    public LiveData<Integer> getLevel() {
         return level;
     }
 
-    public void setHand(List<Card> hand) {
-        this.hand = hand;
+    public LiveData<List<Card>> getHandCards() {
+        return handCards;
     }
 
-    public void setPlayedCards(List<Card> playedCards) {
-        this.playedCards = playedCards;
-    }
-
-    public List<Card> getPlayedCards() {
+    public LiveData<List<Card>> getPlayedCards() {
         return playedCards;
     }
 
-    public Card getCard(int index) {
-        return hand.get(index);
+    public void setScope(Scope scope) {
+        this.scope = scope;
     }
 
-    public List<Card> getHand() {
-        return hand;
+    public Scope getScope() {
+        return scope;
     }
-
 }

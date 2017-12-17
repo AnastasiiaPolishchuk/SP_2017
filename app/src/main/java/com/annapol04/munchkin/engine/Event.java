@@ -1,41 +1,46 @@
 package com.annapol04.munchkin.engine;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-
-import javax.annotation.Nullable;
 
 
+@Entity(tableName = "events")
 public class Event {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+
     private final Scope scope;
     private final Action action;
     private final int messageId;
-    private final DataType dataType;
-    @Nullable
-    private final Object data;
+    private final EventData data;
 
+    @Ignore
     public Event(Scope scope, Action action, int messageId) {
-        this(scope, action, messageId, DataType.EMPTY, null);
+        this(scope, action, messageId, new EventData());
     }
 
+    @Ignore
     public Event(Scope scope, Action action, int messageId, int data) {
-        this(scope, action, messageId, DataType.INTEGER, data);
+        this(scope, action, messageId, new EventData(data));
     }
 
+    @Ignore
     public Event(Scope scope, Action action, int messageId, String data) {
-        this(scope, action, messageId, DataType.STRING, data);
+        this(scope, action, messageId, new EventData(data));
     }
 
-    private Event(Scope scope, Action action, int messageId, DataType type, Object data) {
+    public Event(Scope scope, Action action, int messageId, EventData data) {
         this.scope = scope;
         this.action = action;
         this.messageId = messageId;
-        this.dataType = type;
         this.data = data;
     }
 
     public void execute(Game game) {
-        action.execute(game, data);
+        action.execute(game, data.getData());
     }
 
     public Scope getScope() {
@@ -51,49 +56,39 @@ public class Event {
     }
 
     public DataType getDataType() {
-        return dataType;
+        return data.getType();
     }
 
     public int getInteger() {
-        return (int)data;
+        return data.getInteger();
     }
 
     public String getString() {
-        return (String) data;
+        return data.getString();
     }
 
     public int size() {
-        int size = 10;
-
-        if (dataType == DataType.INTEGER)
-            size += 4;
-        else if (dataType == DataType.STRING)
-            size += ((String)data).length() + 1;
-        else if (dataType != DataType.EMPTY)
-            throw new IllegalStateException("Unknown data type");
-
-        return size;
+        return 9 + data.size();
     }
 
     public byte[] getBytes() {
-        ByteBuffer b = ByteBuffer.allocate(size())
+        return ByteBuffer.allocate(size())
                 .put((byte)scope.ordinal())
                 .putInt(action.getId())
                 .putInt(messageId)
-                .put((byte)dataType.ordinal());
+                .put(data.getBytes())
+                .array();
+    }
 
-        switch (dataType) {
-            case EMPTY: break;
-            case STRING:
-                b.put(((String)data).getBytes(StandardCharsets.UTF_8)).put((byte)0);
-                break;
-            case INTEGER:
-                b.putInt((int)data);
-                break;
-            default:
-                throw new IllegalStateException("Unknown data type to serialize");
-        }
+    public long getId() {
+        return id;
+    }
 
-        return b.array();
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public EventData getData() {
+        return data;
     }
 }

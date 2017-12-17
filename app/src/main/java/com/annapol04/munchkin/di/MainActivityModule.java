@@ -11,7 +11,7 @@ import dagger.android.AndroidInjector;
 import dagger.multibindings.IntoMap;
 
 @Module(subcomponents = MainActivitySubcomponent.class)
-abstract class MainActivityModule {
+public abstract class MainActivityModule {
     @Binds
     @IntoMap
     @ActivityKey(MainActivity.class)

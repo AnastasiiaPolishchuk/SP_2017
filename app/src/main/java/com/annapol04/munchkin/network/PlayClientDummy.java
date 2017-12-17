@@ -30,7 +30,7 @@ public class PlayClientDummy extends PlayClient {
     }
 
     @Override
-    public void sendToAllReliably(byte[] message) {
+    public void sendToAll(byte[] message) {
 
     }
 }

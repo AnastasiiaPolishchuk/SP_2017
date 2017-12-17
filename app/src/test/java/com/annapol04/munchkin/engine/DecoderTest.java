@@ -10,7 +10,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 
 
-public class EventDecoderTest {
+public class DecoderTest {
     @Test
     public void decodeEventWithEmptyData() {
         byte[] b = new byte[]{

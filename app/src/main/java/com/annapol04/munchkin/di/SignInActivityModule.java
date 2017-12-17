@@ -11,7 +11,7 @@ import dagger.android.AndroidInjector;
 import dagger.multibindings.IntoMap;
 
 @Module(subcomponents = SignInActivitySubcomponent.class)
-abstract class SignInActivityModule {
+public abstract class SignInActivityModule {
     @Binds
     @IntoMap
     @ActivityKey(SignInActivity.class)

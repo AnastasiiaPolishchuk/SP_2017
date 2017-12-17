@@ -5,7 +5,12 @@ import java.util.function.BiConsumer;
 
 public class Action {
     public static final Action NOTHING = new Action((g, o) -> { });
-    public static final Action JOIN_PLAYER = new Action((g, o) -> g.addPlayer(new Player((String)o)));
+    public static final Action JOIN_PLAYER = new Action((g, o) -> g.join(new Player((String)o)));
+    public static final Action LEAVE_PLAYER = new Action((g, o) -> { throw new UnsupportedOperationException(); });
+    public static final Action DRAW_DOORCARD = new Action((g, o) -> g.drawDoorCard(Card.fromId((int)o)));
+    public static final Action DRAW_TREASURECARD = new Action((g, o) -> g.drawTreasureCard(Card.fromId((int)o)));
+    public static final Action PICKUP_CARD = new Action((g, o) -> g.pickupCard(Card.fromId((int)o)));
+    public static final Action PLAY_CARD = new Action((g, o) -> g.playCard(Card.fromId((int)o)));
 
     private static int idSource = 0;
     private static final Action[] lookup;

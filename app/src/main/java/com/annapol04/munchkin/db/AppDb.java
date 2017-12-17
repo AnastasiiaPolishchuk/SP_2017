@@ -2,12 +2,12 @@ package com.annapol04.munchkin.db;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 
-import com.annapol04.munchkin.data.GameDetails;
-import com.annapol04.munchkin.data.HighscoreEntry;
+import com.annapol04.munchkin.engine.Event;
 
-@Database(entities = {HighscoreEntry.class, GameDetails.class}, version = 1, exportSchema = false)
+@Database(entities = {Event.class}, version = 1, exportSchema = false)
+@TypeConverters({ActionTypeConverter.class, DataTypeConverter.class, ScopeTypeConverter.class, EventDataTypeConverter.class})
 public abstract class AppDb extends RoomDatabase {
-    public abstract HighscoreEntryDao highscoreEntryDao();
-    public abstract GameDetailsDao gameDetailsDao();
+    public abstract EventDao eventDao();
 }

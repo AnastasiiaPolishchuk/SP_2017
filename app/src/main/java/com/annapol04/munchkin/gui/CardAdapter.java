@@ -14,9 +14,14 @@ import java.util.List;
 
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
+    public interface OnClickListener {
+        void onClicked(Card card);
+    }
+
     private final @LayoutRes int resLayout;
     private final @IdRes int resId;
     private List<Card> cards;
+    private OnClickListener listener;
 
     public CardAdapter(@LayoutRes int resLayout, @IdRes int resId, List<Card> cards) {
         this.resLayout = resLayout;
@@ -29,6 +34,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void setOnClickListener(OnClickListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -39,7 +48,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.imageButton.setImageResource(cards.get(position).getImageResourceID());
+        final Card card = cards.get(position);
+        holder.imageButton.setImageResource(card.getImageResourceID());
+        holder.imageButton.setOnClickListener(v -> {
+            if (listener != null)
+                listener.onClicked(card);
+        });
     }
 
     @Override
@@ -47,9 +61,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         return cards.size();
     }
 
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageButton imageButton;
+        private int position;
 
         public ViewHolder(View itemView, @IdRes int resource) {
             super(itemView);
