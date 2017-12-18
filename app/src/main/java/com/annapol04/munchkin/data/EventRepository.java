@@ -1,5 +1,7 @@
 package com.annapol04.munchkin.data;
 
+import android.util.Log;
+
 import com.annapol04.munchkin.AppExecutors;
 import com.annapol04.munchkin.db.EventDao;
 import com.annapol04.munchkin.engine.Decoder;
@@ -13,6 +15,8 @@ import javax.inject.Inject;
 
 @Singleton
 public class EventRepository implements PlayClient.OnMessageReceivedListener {
+    private static final String TAG = EventRepository.class.getSimpleName();
+
     private AppExecutors executors;
     private EventDao dao;
     private PlayClient client;
@@ -35,6 +39,7 @@ public class EventRepository implements PlayClient.OnMessageReceivedListener {
     }
 
     public void push(Event event) {
+        Log.d(TAG, "pushig event: " + event.toString());
         executors.diskIO().execute(() -> {
             dao.insert(event);
         });

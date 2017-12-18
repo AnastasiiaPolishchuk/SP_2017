@@ -11,6 +11,8 @@ public class Action {
     public static final Action DRAW_TREASURECARD = new Action((g, o) -> g.drawTreasureCard(Card.fromId((int)o)));
     public static final Action PICKUP_CARD = new Action((g, o) -> g.pickupCard(Card.fromId((int)o)));
     public static final Action PLAY_CARD = new Action((g, o) -> g.playCard(Card.fromId((int)o)));
+    public static final Action FIGHT_MONSTER = new Action((g, o) -> g.fightMonster());
+    public static final Action RUN_AWAY = new Action((g, o) -> g.runAwayFromMonster());
 
     private static int idSource = 0;
     private static final Action[] lookup;
@@ -24,8 +26,11 @@ public class Action {
 
         try {
             for (Field field : fields)
-                if (field.getType() == Action.class)
-                    lookup[i++] = (Action) field.get(null);
+                if (field.getType() == Action.class) {
+                    Action action = (Action) field.get(null);
+
+                    lookup[action.getId()] = action;
+                }
         } catch (IllegalAccessException e) { /* wont happen... */ }
     }
 

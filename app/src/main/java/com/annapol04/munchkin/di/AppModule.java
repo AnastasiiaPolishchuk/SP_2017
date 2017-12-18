@@ -54,7 +54,7 @@ public class AppModule {
     @Provides
     @Named("myself")
     public Player provideMyself(Application app) {
-        return new Player("Anastasiia");//GoogleSignIn.getLastSignedInAccount(app).getDisplayName());
+        return new Player("Anastasiia");//new Player(GoogleSignIn.getLastSignedInAccount(app).getDisplayName()));
     }
 
     @Singleton

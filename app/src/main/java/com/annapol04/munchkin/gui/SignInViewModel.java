@@ -8,16 +8,16 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.annapol04.munchkin.network.GooglePlayClient;
+import com.annapol04.munchkin.network.PlayClient;
 
 import javax.inject.Inject;
 
-public class SignInViewModel extends AndroidViewModel implements GooglePlayClient.OnMatchStateChangedListener {
-    private GooglePlayClient client;
+public class SignInViewModel extends AndroidViewModel implements PlayClient.OnMatchStateChangedListener {
+    private PlayClient client;
     private MutableLiveData<Boolean> isLoggedIn;
 
     @Inject
-    public SignInViewModel(@NonNull Application application, GooglePlayClient client) {
+    public SignInViewModel(@NonNull Application application, PlayClient client) {
         super(application);
         this.client = client;
     }
@@ -46,7 +46,7 @@ public class SignInViewModel extends AndroidViewModel implements GooglePlayClien
     }
 
     @Override
-    public void onMatchStateChanged(GooglePlayClient.MatchState state) {
+    public void onMatchStateChanged(PlayClient.MatchState state) {
         switch (state) {
             case LOGGED_OUT:
                 isLoggedIn.setValue(false);

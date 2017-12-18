@@ -20,28 +20,35 @@ import java.util.List;
 
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
-    public interface OnClickListener {
-        void onClicked(Card card);
+    protected final @LayoutRes int resLayout;
+    protected final @IdRes int resId;
+    protected ButtonSetup setup;
+    protected List<Card> cards;
+    protected PlayDeskViewModel viewModel;
+    private SelectableCardAdapter handAdapter;
+
+    public enum ButtonSetup {
+        HAND,
+        PLAYED,
+        DESK,
     }
 
-    private final @LayoutRes int resLayout;
-    private final @IdRes int resId;
-    private List<Card> cards;
-    private OnClickListener listener;
-
-    public CardAdapter(@LayoutRes int resLayout, @IdRes int resId, List<Card> cards) {
+    public CardAdapter(@LayoutRes int resLayout, @IdRes int resId, ButtonSetup setup, List<Card> cards, PlayDeskViewModel viewModel) {
         this.resLayout = resLayout;
         this.resId = resId;
+        this.setup = setup;
         this.cards = cards;
+        this.viewModel = viewModel;
     }
 
     public void setCards(List<Card> cards) {
         this.cards = cards;
         notifyDataSetChanged();
-    }
 
-    public void setOnClickListener(OnClickListener listener) {
-        this.listener = listener;
+        if (handAdapter == null)
+            handAdapter = new SelectableCardAdapter(R.layout.card_item_zoom, R.id.card_item_zoom, setup, cards, viewModel);
+
+        handAdapter.setCards(cards);
     }
 
     @Override
@@ -50,7 +57,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 .inflate(resLayout, parent, false);
         ViewHolder holder = new ViewHolder(view, resId);
 
-        view.setOnClickListener(new View.OnClickListener(){
+        view.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -60,11 +67,32 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
                 recyclerView.setLayoutManager(layoutManager);
-                CardAdapter handAdapter = new CardAdapter(R.layout.card_item_zoom, R.id.card_item_zoom, cards);
+
+                if (handAdapter == null)
+                    handAdapter = new SelectableCardAdapter(R.layout.card_item_zoom, R.id.card_item_zoom, setup, cards, viewModel);
+
+                handAdapter.resetSelected();
                 recyclerView.setAdapter(handAdapter);
 
-                Button testButton = dialog.findViewById(R.id.move_to_desk_button);      // test setEnabled = false - die Taste wird grau
-                testButton.setEnabled(true);
+                Button moveToDesk = dialog.findViewById(R.id.move_to_desk_button);      // test setEnabled = false - die Taste wird grau
+                moveToDesk.setVisibility(setup == ButtonSetup.HAND ? View.VISIBLE : View.INVISIBLE);
+                moveToDesk.setOnClickListener(v2 -> {
+                    Card selected = handAdapter.getSelected();
+                    if (selected != null) {
+                        viewModel.playCard(selected);
+                        handAdapter.resetSelected();
+                    }
+                });
+
+                Button moveToHand = dialog.findViewById(R.id.move_to_hand_button);
+                moveToHand.setVisibility(setup == ButtonSetup.PLAYED ? View.VISIBLE : View.INVISIBLE);
+                moveToHand.setOnClickListener(v2 -> {
+                    Card selected = handAdapter.getSelected();
+                    if (selected != null) {
+                        viewModel.pickupCard(selected);
+                        handAdapter.resetSelected();
+                    }
+                });
 
                 dialog.show();
 
@@ -77,10 +105,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Card card = cards.get(position);
         holder.imageButton.setImageResource(card.getImageResourceID());
-        /*holder.imageButton.setOnClickListener(v -> {
-            if (listener != null)
-                listener.onClicked(card);
-        });*/
     }
 
     @Override

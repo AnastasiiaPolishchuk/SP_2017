@@ -7,11 +7,13 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.annapol04.munchkin.data.EventRepository;
 import com.annapol04.munchkin.engine.Action;
 import com.annapol04.munchkin.engine.Card;
 import com.annapol04.munchkin.engine.Event;
+import com.annapol04.munchkin.engine.Executor;
 import com.annapol04.munchkin.engine.Game;
 import com.annapol04.munchkin.engine.Player;
 import com.annapol04.munchkin.network.GooglePlayClient;
@@ -24,22 +26,25 @@ import javax.inject.Singleton;
 
 @Singleton
 public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.OnMatchStateChangedListener {
+    private static final String TAG = PlayDeskViewModel.class.getName();
+
     private MutableLiveData<String> playerName = new MutableLiveData<>();
-    private MutableLiveData<String> playerLevel = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> isStarted = new MutableLiveData<>();
     private boolean isStartingAlready = false;
     private PlayClient client;
     private Game game;
     private EventRepository eventRepository;
+    private Executor executor;
 
     @Inject
-    public PlayDeskViewModel(@NonNull Application application, PlayClient client, Game game, EventRepository eventRepository) {
+    public PlayDeskViewModel(@NonNull Application application, PlayClient client, Game game, EventRepository eventRepository, Executor executor) {
         super(application);
 
         this.client = client;
         this.game = game;
         this.eventRepository = eventRepository;
+        this.executor = executor;
 
         client.setMatchStateChangedListener(this);
         isStarted.setValue(false);
@@ -63,8 +68,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return playerName;
     }
 
-    public LiveData<String> getPlayerLevel() {
-        return playerLevel;
+    public LiveData<Integer> getPlayerLevel() {
+        return game.getCurrentPlayer().getLevel();
     }
 
     public LiveData<List<Card>> getPlayerHand() {
@@ -83,8 +88,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return isStarted;
     }
 
+    public LiveData<Boolean> getGameFinished() { return game.getGameFinished(); }
+
     public void quitGame() {
-        throw new UnsupportedOperationException("Not implemented");
+    //    throw new UnsupportedOperationException("Not implemented");
     }
 
     public void resume(Activity fromActivity) {
@@ -130,8 +137,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public void drawDoorCard() {
+        Card c = game.getRandomDoorCard();
+        Log.d(TAG, "drawing door card with id=" + c.getId() + " name=" + c.getName());
         eventRepository.push(
-                new Event(game.getCurrentPlayer().getScope(), Action.DRAW_DOORCARD, 0, game.getRandomDoorCard().getId()));
+                new Event(game.getCurrentPlayer().getScope(), Action.DRAW_DOORCARD, 0, c.getId()));
     }
 
     public void drawTreasureCard() {
@@ -147,5 +156,15 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     public void pickupCard(Card card) {
         eventRepository.push(
                 new Event(game.getCurrentPlayer().getScope(), Action.PICKUP_CARD, 0, card.getId()));
+    }
+
+    public void runAwayFromMonster() {
+        eventRepository.push(
+                new Event(game.getCurrentPlayer().getScope(), Action.RUN_AWAY, 0));
+    }
+
+    public void fightMonster() {
+        eventRepository.push(
+                new Event(game.getCurrentPlayer().getScope(), Action.FIGHT_MONSTER, 0));
     }
 }

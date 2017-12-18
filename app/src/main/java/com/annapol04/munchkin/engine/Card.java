@@ -48,16 +48,16 @@ public class Card {
     private static final Card[] lookup;
 
     static {
-        Field[] fields = Action.class.getFields();
+        Field[] fields = Card.class.getFields();
 
         lookup = new Card[fields.length];
 
-        int i = 0;
-
         try {
             for (Field field : fields)
-                if (field.getType() == Card.class)
-                    lookup[i++] = (Card) field.get(null);
+                if (field.getType() == Card.class) {
+                    Card card = (Card) field.get(null);
+                    lookup[card.getId()] = card;
+                }
         } catch (IllegalAccessException e) { /* wont happen... */ }
     }
 
@@ -66,7 +66,7 @@ public class Card {
     private final String name;
     private final int imageResourceID;
 
-    public Card(String name, int imageResourceID) {
+    private Card(String name, int imageResourceID) {
         this.id = idSource++;
         this.name = name;
         this.imageResourceID = imageResourceID;

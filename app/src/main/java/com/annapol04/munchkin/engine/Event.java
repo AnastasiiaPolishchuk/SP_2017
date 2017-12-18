@@ -5,6 +5,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 
 @Entity(tableName = "events")
@@ -90,5 +91,10 @@ public class Event {
 
     public EventData getData() {
         return data;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(getBytes());
     }
 }

@@ -26,11 +26,26 @@ public class Player {
         update(handCards);
     }
 
+    public void takePlayedCard(Card card) {
+        playedCards.getValue().remove(card);
+        update(playedCards);
+    }
+
     public void playCard(Card card) {
         handCards.getValue().remove(card);
         update(handCards);
         playedCards.getValue().add(card);
         update(playedCards);
+    }
+
+    public void levelUp() {
+        level.setValue(level.getValue() + 1);
+        update(level);
+    }
+
+    public void reset() {
+        level.setValue(1);
+        update(level);
     }
 
     private <T> void update(MutableLiveData<T> liveData) {
