@@ -1,15 +1,24 @@
-package com.annapol04.munchkin.logic;
+package com.example.admin.ezmunchkin;
 
 /**
  * Created by Falco on 26.10.2017.
  */
 
-public class Race extends Card { // nur Elf und Zwerg
+public class Race extends Card {
 
-    public Race(int id, int deck, String name, String description) {
-        this.deck = 0; //Muss hardcoded sein
-        this.id = id;
-        this.name = name;
+    public enum RaceName {
+        HUMAN,
+        ELF,
+        DWARF;
+    }
+
+    public String description;
+    public RaceName raceName;
+
+    public Race(String name, RaceName raceName, String description) {
+        super(Membership.TREASURE, name);
+        this.raceName = raceName;
         this.description = description;
     }
+
 }

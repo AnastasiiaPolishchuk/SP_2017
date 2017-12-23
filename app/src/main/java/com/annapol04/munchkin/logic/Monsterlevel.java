@@ -1,4 +1,4 @@
-package com.annapol04.munchkin.logic;
+package com.example.admin.ezmunchkin;
 
 /**
  * Created by Falco on 26.10.2017.
@@ -6,12 +6,20 @@ package com.annapol04.munchkin.logic;
 
 public class Monsterlevel extends Card { //keine Extraschätze
 
-    public int monsterBonus;
+    public enum MonsterLevelName{
+        URALT,
+        GIGANTISCH,
+        BABY,
+        WUETEND,
+        INTELLIGENT;
+    }
 
-    public Monsterlevel (int id, String name, int monsterBonus) {
-        this.deck = 0; //Muss hardcoded sein
-        this.id = id;
-        this.name = name;
+    public int monsterBonus;
+    MonsterLevelName monsterLevelName;
+
+    public Monsterlevel (String name, MonsterLevelName monsterLevelName, int monsterBonus) {
+        super(Membership.DOOR, name);
+        this.monsterLevelName = monsterLevelName;
         this.monsterBonus = monsterBonus;
     }
 }

@@ -1,4 +1,4 @@
-package com.annapol04.munchkin.logic;
+package com.example.admin.ezmunchkin;
 
 import java.util.ArrayList;
 

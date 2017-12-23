@@ -1,4 +1,4 @@
-package com.annapol04.munchkin.logic;
+package com.example.admin.ezmunchkin;
 
 /**
  * Created by Falco on 26.10.2017.
@@ -8,10 +8,18 @@ package com.annapol04.munchkin.logic;
  * Repräsentiert eine Karte im Spiel
  */
 public abstract class Card { //Spezialisations: Monster0, Rasse0, Fluch0, Bonus0, Monsterstufe0 | BonusAnzug1, BonusSeite1, Spezial1
-    public int id;
-    public int deck; //membership: 0 = Doorstack, 1 = Treasuredeck
+
+    public enum Membership{
+        DOOR,
+        TREASURE;
+    }
 
     public String name;
-    public String description;
+    public Membership member;
+
+    public Card (Membership member, String name){
+        this.member = member;
+        this.name = name;
+    }
 
 }

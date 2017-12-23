@@ -1,10 +1,24 @@
-package com.annapol04.munchkin.logic;
+package com.example.admin.ezmunchkin;
 
 /**
  * Created by Falco on 26.10.2017.
  */
 
 public class BonusSide extends Card {
+
+    public enum BonusSideName {
+        LUFTBALLONS,
+        MAGISCHESGESCHOSS,
+        EKLIGERSPORTDRINK,
+        SCHLAFTRUNK,
+        SAEURETRANK,
+        HELDENMUT,
+        MUNDGERUCH,
+        EXPLOSIVTRANK,
+        VERWIRRUNG,
+        GIFTTRANK;
+
+    }
 
     public int bonus;
 
