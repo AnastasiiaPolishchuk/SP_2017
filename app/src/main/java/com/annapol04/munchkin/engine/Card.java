@@ -20,27 +20,28 @@ public class Card {
     public static final Monster LEPERCHAUN = new Monster("Leperchaun", R.drawable.leperchaun, Monster.Monstername.LEPRACHAUN,"Beschreibung dummy", 1, 1, "bad Things");
     //public static final Card LEPERCHAUN = new Card("leperchaun", R.drawable.leperchaun, Membership.DOOR);
 //
-//    public static final Card FILZLAEUSE = new Monster("FILZLAEUSE", R.drawable.filzlaeuse, Monster.Monstername.FILZLAEUSE,"Beschreibung dummy", 1, 1, "bad Things");
-//    public static final Card SABBERNDERSCHLEIM = new Monster("SABBERNDERSCHLEIM", R.drawable.sabbernderschleim, Monster.Monstername.SABBERNDERSCHLEIM,"Beschreibung dummy", 1, 1, "bad Things");
-//    public static final Card LAHMERGOBLIN = new Monster("LAHMERGOBLIN", R.drawable.lahmergoblin, Monster.Monstername.LAHMERGOBLIN,"Beschreibung dummy", 1, 1, "bad Things");
-//    public static final Card HAMMERRATTE = new Monster("HAMMERRATTE", R.drawable.hammerratte, Monster.Monstername.HAMMERRATTE,"Beschreibung dummy", 1, 1, "bad Things");
-//    public static final Card TOPFPFLANZE = new Monster("TOPFPFLANZE", R.drawable.topfpflanze, Monster.Monstername.TOPFPFLANZE,"Beschreibung dummy", 1, 1, "bad Things");
-//    public static final Card FLIEGENDEFROESCHE = new Monster("FLIEGENDEFROESCHE", R.drawable.fliegendefroesche, Monster.Monstername.FLIEGENDEFROESCHE,"Beschreibung dummy", 1, 1, "bad Things");
-//    public static final Card GALLERTOKTAEDER = new Monster("GALLERTOKTAEDER", R.drawable.gallertoktaeder, Monster.Monstername.GALLERTOKTAEDER,"Beschreibung dummy", 1, 1, "bad Things");
-//    public static final Card HUHN = new Monster("HUHN", R.drawable.huhn, Monster.Monstername.HUHN,"Beschreibung dummy", 1, 1, "bad Things");
+    public static final Card FILZLAEUSE = new Monster("FILZLAEUSE", R.drawable.filzlaeuse, Monster.Monstername.FILZLAEUSE,"Beschreibung dummy", 1, 1, "bad Things");
+    public static final Card SABBERNDERSCHLEIM = new Monster("SABBERNDERSCHLEIM", R.drawable.sabbernderschleim, Monster.Monstername.SABBERNDERSCHLEIM,"Beschreibung dummy", 1, 1, "bad Things");
+    public static final Card LAHMERGOBLIN = new Monster("LAHMERGOBLIN", R.drawable.lahmergoblin, Monster.Monstername.LAHMERGOBLIN,"Beschreibung dummy", 1, 1, "bad Things");
+    public static final Card HAMMERRATTE = new Monster("HAMMERRATTE", R.drawable.hammerratte, Monster.Monstername.HAMMERRATTE,"Beschreibung dummy", 1, 1, "bad Things");
+    public static final Card TOPFPFLANZE = new Monster("TOPFPFLANZE", R.drawable.topfpflanze, Monster.Monstername.TOPFPFLANZE,"Beschreibung dummy", 1, 1, "bad Things");
+    public static final Card FLIEGENDEFROESCHE = new Monster("FLIEGENDEFROESCHE", R.drawable.fliegendefroesche, Monster.Monstername.FLIEGENDEFROESCHE,"Beschreibung dummy", 1, 1, "bad Things");
+    public static final Card GALLERTOKTAEDER = new Monster("GALLERTOKTAEDER", R.drawable.gallertoktaeder, Monster.Monstername.GALLERTOKTAEDER,"Beschreibung dummy", 1, 1, "bad Things");
+    public static final Card HUHN = new Monster("HUHN", R.drawable.huhn, Monster.Monstername.HUHN,"Beschreibung dummy", 1, 1, "bad Things");
 
 
     /* Equipment */
+    //public BonusWear (String name, int imageResourceID, BonusWearName bonusWearName, int bonus, Blocking blocking, Size size)
+    public static final Card STANGE = new BonusWear("STANGE", R.drawable.stange, BonusWearName.STANGE, 1, Blocking.TWOHANDS, Size.SMALL);
+    public static final Card HELM = new BonusWear("HELM", R.drawable.helm, BonusWearName.HELM, 1, Blocking.HEAD, Size.SMALL);
+    public static final Card LEDERRUESTUNG = new BonusWear("LEDERRUESTUNG", R.drawable.lederruestung, BonusWearName.LEDERRUESTUNG, 1, Blocking.ARMOR, Size.SMALL);
+    public static final Card SCHLEIMIGERUESTUNG = new BonusWear("SCHLEIMIGERUESTUNG", R.drawable.schleimigeruestung, BonusWearName.SCHLEIMIGERUESTUNG, 1, Blocking.ARMOR, Size.SMALL);
+    public static final Card KNIE = new BonusWear("KNIE", R.drawable.tspikyknies, BonusWearName.KNIE, 1, Blocking.NOTHING, Size.SMALL);
+    public static final Card GEILERHELM = new BonusWear("GEILERHELM", R.drawable.geilerhelm, BonusWearName.GEILERHELM, 1, Blocking.HEAD, Size.SMALL);
+    public static final Card ARSCHTRITTSTIEFEL = new BonusWear("ARSCHTRITTSTIEFEL", R.drawable.arschtrittstiefel, BonusWearName.ARSCHTRITTSTIEFEL, 1, Blocking.SHOES, Size.SMALL);
 
-//    //public BonusWear (String name, int imageResourceID, BonusWearName bonusWearName, int bonus, Blocking blocking, Size size)
-//    public static final Card STANGE = new BonusWear("STANGE", R.drawable.stange, BonusWearName.STANGE, 1, Blocking.TWOHANDS, Size.SMALL);
-//    public static final Card HELM = new BonusWear("HELM", R.drawable.helm, BonusWearName.HELM, 1, Blocking.HEAD, Size.SMALL);
-//    public static final Card LEDERRUESTUNG = new BonusWear("LEDERRUESTUNG", R.drawable.lederruestung, BonusWearName.LEDERRUESTUNG, 1, Blocking.ARMOR, Size.SMALL);
-//    public static final Card SCHLEIMIGERUESTUNG = new BonusWear("SCHLEIMIGERUESTUNG", R.drawable.schleimigeruestung, BonusWearName.SCHLEIMIGERUESTUNG, 1, Blocking.ARMOR, Size.SMALL);
-//    public static final Card KNIE = new BonusWear("KNIE", R.drawable.tspikyknies, BonusWearName.KNIE, 1, Blocking.NOTHING, Size.SMALL);
-//    public static final Card GEILERHELM = new BonusWear("GEILERHELM", R.drawable.geilerhelm, BonusWearName.GEILERHELM, 1, Blocking.HEAD, Size.SMALL);
-//    public static final Card ARSCHTRITTSTIEFEL = new BonusWear("ARSCHTRITTSTIEFEL", R.drawable.arschtrittstiefel, BonusWearName.ARSCHTRITTSTIEFEL, 1, Blocking.SHOES, Size.SMALL);
-//
+
+    //old stuff
 //    public static final Card TUBA_OF_CHARM = new Card("tubaofcharm", R.drawable.tubaofcharm, Membership.TREASURE);
 //    public static final Card STAFF_OF_NAPALM = new Card("staffofnapalm", R.drawable.staffofnapalm, Membership.TREASURE);
 //    public static final Card SNEAKY_BASTARDS_WORD = new Card("sneakybastardsword", R.drawable.sneakybastardsword, Membership.TREASURE);
@@ -53,7 +54,7 @@ public class Card {
 //    public static final Card HELM_OF_COURAGE = new Card("helmofcourage", R.drawable.helmofcourage, Membership.TREASURE);
 //    public static final Card FLAMING_POISON_PORTION = new Card("flamingpoisonportion", R.drawable.flamingpoisonpotion, Membership.TREASURE);
 //    public static final Card BROADSWORD = new Card("broadsword", R.drawable.broadsword, Membership.TREASURE);
-
+//
 //    public static final Card BIGFOOT = new Card("bigfoot", R.drawable.bigfoot);
 //    public static final Card ORCS = new Card("Orcs",R.drawable.orcs);
 //    public static final Card CHICKEN_ON_YOUR_HEAD = new Card("chickenOnYourHead", R.drawable.chickenonyourhead);

@@ -69,13 +69,13 @@ public class AppModule {
     public List<Card> providesDoorDeck() {
         ArrayList<Card> deck = new ArrayList<>();
         deck.add(Card.LEPERCHAUN);
-        deck.add(Card.GELATINOUS_OCTAHEDRON);
-        deck.add(Card.CRABS);
-        deck.add(Card.BIGFOOT);
-        deck.add(Card.GAZEBO);
-        deck.add(Card.INSURANCE_SALESMAN);
-        deck.add(Card.LAWYERS);
-        deck.add(Card.ORCS);
+        deck.add(Card.SABBERNDERSCHLEIM);
+        deck.add(Card.LAHMERGOBLIN);
+        deck.add(Card.HAMMERRATTE);
+        deck.add(Card.TOPFPFLANZE);
+        deck.add(Card.FLIEGENDEFROESCHE);
+        deck.add(Card.GALLERTOKTAEDER);
+        deck.add(Card.HUHN);
         return deck;
     }
 
@@ -84,15 +84,15 @@ public class AppModule {
     @Named("treasureDeck")
     public List<Card> providesTreasureDeck() {
         ArrayList<Card> deck = new ArrayList<>();
-        deck.add(Card.TUBA_OF_CHARM);
-        deck.add(Card.STAFF_OF_NAPALM);
-        deck.add(Card.SNEAKY_BASTARDS_WORD);
-        deck.add(Card.RAT_ON_A_STICK);
-        deck.add(Card.POINTY_HAT_OF_POWER);
-        deck.add(Card.PANTYHOSE_OF_GIANT_STRENGTH);
-        deck.add(Card.HIRELING);
-        deck.add(Card.HELM_OF_COURAGE);
-        deck.add(Card.BROADSWORD);
+        deck.add(Card.STANGE);
+        deck.add(Card.HELM);
+        deck.add(Card.LEDERRUESTUNG);
+        deck.add(Card.SCHLEIMIGERUESTUNG);
+        deck.add(Card.KNIE);
+        deck.add(Card.GEILERHELM);
+        deck.add(Card.ARSCHTRITTSTIEFEL);
+//        deck.add(Card.HELM_OF_COURAGE);
+//        deck.add(Card.BROADSWORD);
         return deck;
     }
 }
