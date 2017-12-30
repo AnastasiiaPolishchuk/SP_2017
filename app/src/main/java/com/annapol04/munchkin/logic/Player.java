@@ -18,7 +18,6 @@
 //    public int level;
 //    public int fightLevel; // fightLevel = level + Boni, die am Table liegen (also im table deck sind)
 //    public PlayerRace playerRace; //0 = keine Race, 1 = elf, 2 = zwerg
-//    //TODO: Race to Enum
 //    public int runAway;
 //    public int bonus;
 //
