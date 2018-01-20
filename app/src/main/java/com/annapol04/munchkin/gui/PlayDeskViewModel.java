@@ -104,6 +104,12 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return game.getPlayers();
     }
 
+    public LiveData<String> getMyName()        {
+        MutableLiveData<String> myName = new MutableLiveData<>();
+        myName.setValue("DummyMarvin");
+        return myName;
+    }
+
     public void quitGame() {
     //    throw new UnsupportedOperationException("Not implemented");
     }
