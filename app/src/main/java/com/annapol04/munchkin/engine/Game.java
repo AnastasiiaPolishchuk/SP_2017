@@ -30,6 +30,7 @@ public class Game {
                 Match matchManager) {
         this.players.setValue(new ArrayList<>(1));
         this.players.getValue().add(player);
+
         this.doorDeck = doorDeck;
         this.treasureDeck = treasureDeck;
         this.deskCards.setValue(new ArrayList<>());
@@ -118,5 +119,18 @@ public class Game {
 
         deskCards.getValue().remove(deskCards.getValue().get(0));
         update(deskCards);
+    }
+
+    public Player getPlayer(int position) {
+        return players.getValue().get(position);
+    }
+
+
+    // ----------------------------------------
+    public void addTestPlayer(){
+        List<Player> list = players.getValue();
+        list.add(new Player("Marvin"));
+        list.add(new Player(("Helga")));
+        players.setValue(list);
     }
 }

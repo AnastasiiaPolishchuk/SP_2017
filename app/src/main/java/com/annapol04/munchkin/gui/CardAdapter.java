@@ -5,6 +5,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,11 +73,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     handAdapter = new SelectableCardAdapter(R.layout.card_item_zoom, R.id.card_item_zoom, setup, cards, viewModel);
 
                 handAdapter.resetSelected();
+
                 recyclerView.setAdapter(handAdapter);
 
-                Button moveToDesk = dialog.findViewById(R.id.move_to_desk_button);      // test setEnabled = false - die Taste wird grau
-                moveToDesk.setVisibility(setup == ButtonSetup.HAND ? View.VISIBLE : View.INVISIBLE);
-                moveToDesk.setOnClickListener(v2 -> {
+                Button moveToPlayed = dialog.findViewById(R.id.move_to_played_button);      // test setEnabled = false - die Taste wird grau
+                moveToPlayed.setVisibility(setup == ButtonSetup.HAND ? View.VISIBLE : View.INVISIBLE);
+                moveToPlayed.setOnClickListener(v2 -> {
                     Card selected = handAdapter.getSelected();
                     if (selected != null) {
                         viewModel.playCard(selected);
@@ -90,6 +92,16 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     Card selected = handAdapter.getSelected();
                     if (selected != null) {
                         viewModel.pickupCard(selected);
+                        handAdapter.resetSelected();
+                    }
+                });
+
+                Button moveToPlayDesk = dialog.findViewById(R.id.move_to_desk_buton);
+                moveToPlayDesk.setVisibility(setup == ButtonSetup.DESK ? View.VISIBLE : View.INVISIBLE);
+                moveToPlayDesk.setOnClickListener(v2 -> {
+                    Card selected = handAdapter.getSelected();
+                    if (selected != null) {
+                        viewModel.moveToPlayDesk(selected);
                         handAdapter.resetSelected();
                     }
                 });

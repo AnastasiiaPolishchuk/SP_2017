@@ -26,9 +26,10 @@
         <activity
             android:name=".gui.SignInActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/FullscreenTheme" >
+            android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -37,8 +38,9 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".gui.PlayDeskActivity"
-            android:screenOrientation="landscape" />
-
+            android:label="@string/title_activity_new_play_desk"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

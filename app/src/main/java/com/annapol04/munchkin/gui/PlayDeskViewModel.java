@@ -67,6 +67,9 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         client.processActivityResults(requestCode, resultCode, data);
     }
 
+    public Player getPlayer(int position){
+        return ( game.getPlayer(position));
+    }
     public LiveData<String> getPlayerName() {
         return playerName;
     }
@@ -83,6 +86,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return game.getCurrentPlayer().getPlayedCards();
     }
 
+    public LiveData<List<Card>> getPlayedCards(int playerID) {
+        return game.getPlayer(playerID).getPlayedCards();
+    }
+
     public LiveData<List<Card>> getDeskCards() {
         return game.getDeskCards();
     }
@@ -92,6 +99,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public LiveData<Boolean> getGameFinished() { return game.getGameFinished(); }
+
+    public LiveData<List<Player>> getPlayers(){
+        return game.getPlayers();
+    }
 
     public void quitGame() {
     //    throw new UnsupportedOperationException("Not implemented");
@@ -171,4 +182,27 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         eventRepository.push(
                 new Event(game.getCurrentPlayer().getScope(), Action.FIGHT_MONSTER, 0));
     }
+
+    public void moveToPlayDesk(Card selected) {
+        //hier wird die Karte aus der Hand auf PlayDesk verschoben
+    }
+
+    // --------------------------------- Für GUI TEST ----------------------------------------------------
+    public void setTestPlayers(){
+        game.addTestPlayer();
+    }
+
+    public String getPlayerName(int playerID) {
+        return game.getPlayer(playerID).getName();
+    }
+
+    public LiveData<Integer> getPlayerLevel(int playerID) {
+        return game.getPlayer(playerID).getLevel();
+    }
+
+    public LiveData<List<Card>> getPlayerHand(int playerID) {
+        return game.getPlayer(playerID).getHandCards();
+    }
+
+
 }

@@ -6,7 +6,7 @@ import android.arch.lifecycle.MutableLiveData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class Player extends LiveData<Player> {
 
     public enum PlayerRace{
         HUMAN,
