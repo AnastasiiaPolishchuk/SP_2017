@@ -142,11 +142,11 @@ public class PlayDeskActivity extends AppCompatActivity
     }
 
     public void updateDeskView(int playerID) {
-        TextView nameOfPlayer = findViewById(R.id.name_of_player);
-        nameOfPlayer.setText( viewModel.getPlayerName(playerID));
-
-        TextView levelOfPlayer = findViewById(R.id.level_of_player);
-        viewModel.getPlayerLevel().observe(this, val -> levelOfPlayer.setText(val.toString()));
+     //   TextView nameOfPlayer = findViewById(R.id.name_of_player);
+     //   nameOfPlayer.setText( viewModel.getPlayerName(playerID));
+//
+//        TextView levelOfPlayer = findViewById(R.id.level_of_player);
+//        viewModel.getPlayerLevel().observe(this, val -> levelOfPlayer.setText(val.toString()));
 
         RecyclerView handOfPlayer = findViewById(R.id.recycler_view_hand_of_player);
         RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
