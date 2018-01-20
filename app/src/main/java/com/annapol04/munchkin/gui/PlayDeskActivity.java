@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -44,7 +43,7 @@ public class PlayDeskActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_play_desk);
+        setContentView(R.layout.activity_drawer_play_desk);
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayDeskViewModel.class);
 
