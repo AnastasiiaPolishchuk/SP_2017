@@ -95,6 +95,18 @@ public class Event {
 
     @Override
     public String toString() {
-        return Arrays.toString(getBytes());
+        return new StringBuilder()
+                .append("[")
+                .append(id)
+                .append(", ")
+                .append(scope.toString())
+                .append(", ")
+                .append(action.toString())
+                .append(", ")
+                .append(data.toString())
+                .append(", ")
+                .append(messageId)
+                .append("]")
+                .toString();
     }
 }

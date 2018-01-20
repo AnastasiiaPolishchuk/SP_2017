@@ -129,8 +129,13 @@ public class Game {
     // ----------------------------------------
     public void addTestPlayer(){
         List<Player> list = players.getValue();
-        list.add(new Player("Marvin"));
-        list.add(new Player(("Helga")));
+        list.add(new Player(1));
+        list.add(new Player((2)));
         players.setValue(list);
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }

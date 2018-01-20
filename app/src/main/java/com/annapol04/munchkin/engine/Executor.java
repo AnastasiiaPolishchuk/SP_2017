@@ -25,7 +25,9 @@ public class Executor implements EventRepository.OnNewEventListener {
 
     @Override
     public void onNewEvent(Event event) {
-        Log.d(TAG, "executing event: " + event.getId());
+        Log.d(TAG, "executing: " + event);
+        Log.d(TAG, "game: " + game);
+
         event.execute(match, game);
     }
 }
