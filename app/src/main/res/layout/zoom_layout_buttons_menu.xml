@@ -7,19 +7,31 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/move_to_desk_button"
-        android:layout_width="wrap_content"
+        android:id="@+id/move_to_played_button"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:onClick="start"
-        android:text="Move to Desk"
+        android:text="Move to Played"
         android:textAllCaps="true" />
 
     <Button
         android:id="@+id/move_to_hand_button"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:onClick="start"
         android:text="Move to Hand"
+        android:textAllCaps="true" />
+
+    <Button
+        android:id="@+id/move_to_desk_buton"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="Move to desk"
+        android:textAllCaps="true" />
+
+    <Button
+        android:id="@+id/move_to_passive_card_deck"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:text="not needed anymore"
         android:textAllCaps="true" />
 
 

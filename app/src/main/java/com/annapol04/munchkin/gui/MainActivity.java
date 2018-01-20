@@ -18,5 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void start(View view) {
         startActivity(new Intent(this, PlayDeskActivity.class));
+        // NewPlayDesk <--> PlayDeskActivity
     }
 }

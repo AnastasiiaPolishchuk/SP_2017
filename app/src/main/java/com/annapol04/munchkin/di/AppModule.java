@@ -23,7 +23,7 @@ import dagger.Provides;
         ViewModelModule.class,
         SignInActivityModule.class,
         MainActivityModule.class,
-        PlayDeskActivityModule.class
+        PlayDeskActivityModule.class,
 })
 public class AppModule {
     private Application application;

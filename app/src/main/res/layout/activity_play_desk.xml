@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/my_drawer_layout"
+    android:layout_marginTop="?android:attr/actionBarSize">
+
+    <!-- The main content view -->
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!-- The navigation drawer -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="#111"     />
+
+    <!--  app:menu="@menu/my_navigation_items" -->
+
+    <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
@@ -20,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#EFEBE9"
-        android:visibility="invisible">
+        android:visibility="visible">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -158,15 +182,15 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="Kämpfen"
+                        android:text="@string/fight"
                         android:onClick="onFightButtonPressed"/>
                     <Button
                         android:id="@+id/run_button"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="Abhauen"
-                        android:onClick="onRunButtonPressed"/>
+                        android:text="@string/next_player"
+                        android:onClick="onNextPlayerButtonPressed"/>
                 </LinearLayout>
 
 
@@ -207,46 +231,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
 
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_weight="1">
-
-                    <ImageButton
-                        android:id="@+id/munchkin_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_info_details"
-                        android:tint="@android:color/black" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_weight="1">
-
-                    <ImageButton
-                        android:id="@+id/munchkin_exit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_close_clear_cancel"
-                        android:tint="#F44336" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#6D4C41" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -284,3 +269,4 @@
     </LinearLayout>
 
 </RelativeLayout>
+</android.support.v4.widget.DrawerLayout>

@@ -2,7 +2,6 @@ package com.annapol04.munchkin.engine;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,7 @@ public class Game {
     public Game(@Named("myself") Player player, @Named("doorDeck") List<Card> doorDeck, @Named("treasureDeck") List<Card> treasureDeck) {
         this.players.setValue(new ArrayList<>(1));
         this.players.getValue().add(player);
+
         this.doorDeck = doorDeck;
         this.treasureDeck = treasureDeck;
         this.deskCards.setValue(new ArrayList<>());
@@ -112,5 +112,18 @@ public class Game {
 
         deskCards.getValue().remove(deskCards.getValue().get(0));
         update(deskCards);
+    }
+
+    public Player getPlayer(int position) {
+        return players.getValue().get(position);
+    }
+
+
+    // ----------------------------------------
+    public void addTestPlayer(){
+        List<Player> list = players.getValue();
+        list.add(new Player("Marvin"));
+        list.add(new Player(("Helga")));
+        players.setValue(list);
     }
 }
