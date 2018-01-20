@@ -1,5 +1,13 @@
 package com.annapol04.munchkin.engine;
 
+import com.annapol04.munchkin.engine.Action;
+import com.annapol04.munchkin.engine.DataType;
+import com.annapol04.munchkin.engine.Decoder;
+import com.annapol04.munchkin.engine.Event;
+import com.annapol04.munchkin.engine.Scope;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -27,10 +35,10 @@ public class DecoderTest {
         assertEquals(1, events.size());
 
         Event event = events.get(0);
-        assertEquals(Scope.PLAYER2, event.getScope());
-        assertEquals(Action.JOIN_PLAYER, event.getAction());
+        Assert.assertEquals(Scope.PLAYER2, event.getScope());
+        Assert.assertEquals(Action.JOIN_PLAYER, event.getAction());
         assertEquals(3, event.getMessageId());
-        assertEquals(DataType.EMPTY, event.getDataType());
+        Assert.assertEquals(DataType.EMPTY, event.getDataType());
     }
 
     @Test

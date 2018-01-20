@@ -1,5 +1,9 @@
 package com.annapol04.munchkin.engine;
 
+import com.annapol04.munchkin.engine.Action;
+import com.annapol04.munchkin.engine.Event;
+import com.annapol04.munchkin.engine.Scope;
+
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;

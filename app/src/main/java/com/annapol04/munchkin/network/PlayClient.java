@@ -52,4 +52,6 @@ public abstract class PlayClient {
     public abstract void startQuickGame();
 
     public abstract void sendToAll(byte[] message);
+
+    public abstract int getAmountOfPlayers();
 }

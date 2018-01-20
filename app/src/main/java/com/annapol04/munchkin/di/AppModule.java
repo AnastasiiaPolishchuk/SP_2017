@@ -12,6 +12,7 @@ import com.annapol04.munchkin.network.PlayClientDummy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -54,7 +55,7 @@ public class AppModule {
     @Provides
     @Named("myself")
     public Player provideMyself(Application app) {
-        return new Player("Anastasiia");//new Player(GoogleSignIn.getLastSignedInAccount(app).getDisplayName()));
+        return new Player(new Random().nextLong());//new Player(GoogleSignIn.getLastSignedInAccount(app).getDisplayName()));
     }
 
     @Singleton

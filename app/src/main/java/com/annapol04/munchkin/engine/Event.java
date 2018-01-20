@@ -40,8 +40,8 @@ public class Event {
         this.data = data;
     }
 
-    public void execute(Game game) {
-        action.execute(game, data.getData());
+    public void execute(Match match, Game game) {
+        action.execute(match, game, this);
     }
 
     public Scope getScope() {

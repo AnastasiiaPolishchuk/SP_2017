@@ -4,22 +4,20 @@ import com.annapol04.munchkin.data.EventRepository;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-
 public class ExecutorTest {
+    private Match match;
     private Game game;
     private EventRepository repository;
     private Executor executor;
 
     @Before
     public void setUp() {
+        match = Mockito.mock(Match.class);
         game = Mockito.mock(Game.class);
         repository = Mockito.mock(EventRepository.class);
-        executor = new Executor(game, repository);
+        executor = new Executor(match, game, repository);
     }
 
     @Test

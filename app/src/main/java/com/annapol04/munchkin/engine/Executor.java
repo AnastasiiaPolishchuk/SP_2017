@@ -10,11 +10,13 @@ import javax.inject.Singleton;
 @Singleton
 public class Executor implements EventRepository.OnNewEventListener {
     private static final String TAG = Executor.class.getSimpleName();
+    private Match match;
     private final Game game;
     private final EventRepository repository;
 
     @Inject
-    public Executor(Game game, EventRepository repository) {
+    public Executor(Match match, Game game, EventRepository repository) {
+        this.match = match;
         this.game = game;
         this.repository = repository;
 
@@ -24,6 +26,6 @@ public class Executor implements EventRepository.OnNewEventListener {
     @Override
     public void onNewEvent(Event event) {
         Log.d(TAG, "executing event: " + event.getId());
-        event.execute(game);
+        event.execute(match, game);
     }
 }

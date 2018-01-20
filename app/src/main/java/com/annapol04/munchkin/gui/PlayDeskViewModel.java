@@ -15,6 +15,7 @@ import com.annapol04.munchkin.engine.Card;
 import com.annapol04.munchkin.engine.Event;
 import com.annapol04.munchkin.engine.Executor;
 import com.annapol04.munchkin.engine.Game;
+import com.annapol04.munchkin.engine.Match;
 import com.annapol04.munchkin.engine.Player;
 import com.annapol04.munchkin.network.GooglePlayClient;
 import com.annapol04.munchkin.network.PlayClient;
@@ -34,15 +35,17 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private boolean isStartingAlready = false;
     private PlayClient client;
     private Game game;
+    private Match match;
     private EventRepository eventRepository;
     private Executor executor;
 
     @Inject
-    public PlayDeskViewModel(@NonNull Application application, PlayClient client, Game game, EventRepository eventRepository, Executor executor) {
+    public PlayDeskViewModel(@NonNull Application application, PlayClient client, Game game, Match match, EventRepository eventRepository, Executor executor) {
         super(application);
 
         this.client = client;
         this.game = game;
+        this.match = match;
         this.eventRepository = eventRepository;
         this.executor = executor;
 
@@ -123,6 +126,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
                 break;
             case STARTED:
                 isStarted.setValue(true);
+                match.start(client.getAmountOfPlayers());
                 isStartingAlready = false;
                 break;
             case ABORTED:

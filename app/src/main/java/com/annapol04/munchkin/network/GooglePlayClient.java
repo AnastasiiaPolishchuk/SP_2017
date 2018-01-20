@@ -172,6 +172,11 @@ public class GooglePlayClient extends PlayClient {
         }
     }
 
+    @Override
+    public int getAmountOfPlayers() {
+        return mRoom.getParticipantIds().size();
+    }
+
     private RealTimeMultiplayerClient.ReliableMessageSentCallback handleMessageSentCallback =
             new RealTimeMultiplayerClient.ReliableMessageSentCallback() {
                 @Override

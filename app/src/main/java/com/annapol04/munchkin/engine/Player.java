@@ -14,7 +14,8 @@ public class Player {
         DWARF; //Zwerg
     }
 
-    private String name;
+    private long id;
+    private MutableLiveData<String> name = new MutableLiveData<>();
     private MutableLiveData<Integer> level = new MutableLiveData<>();
     private MutableLiveData<Integer> fightLevel = new MutableLiveData<>();
     private MutableLiveData<PlayerRace> race = new MutableLiveData<>();
@@ -25,8 +26,8 @@ public class Player {
     private MutableLiveData<List<Card>> playedCards = new MutableLiveData<>();
     private Scope scope;
 
-    public Player(String name) {
-        this.name = name;
+    public Player(long id) {
+        this.id = id;
         this.level.setValue(1);
         this.fightLevel.setValue(1);
         this.race.setValue(PlayerRace.HUMAN);
@@ -34,6 +35,15 @@ public class Player {
         this.handCards.setValue(new ArrayList<>());
         this.playedCards.setValue(new ArrayList<>());
         this.bonus.setValue(0);
+        this.name.setValue("");
+    }
+
+    public void rename(String name) {
+        this.name.setValue(name);
+    }
+
+    public long getId() {
+        return id;
     }
 
     //public Player(String name, int level, int fightLevel, PlayerRace race, int runAway, ArrayList<Card> hand, ArrayList<Card> table, int bonus)
@@ -78,7 +88,7 @@ public class Player {
     }
 
     public String getName() {
-        return name;
+        return name.getValue();
     }
 
     public LiveData<Integer> getLevel() {

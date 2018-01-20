@@ -2,7 +2,6 @@ package com.annapol04.munchkin.engine;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +21,20 @@ public class Game {
     private List<Card> doorDeck;
     private List<Card> treasureDeck;
     private Player currentPlayer;
+    private Match matchManager;
 
     @Inject
-    public Game(@Named("myself") Player player, @Named("doorDeck") List<Card> doorDeck, @Named("treasureDeck") List<Card> treasureDeck) {
+    public Game(@Named("myself") Player player,
+                @Named("doorDeck") List<Card> doorDeck,
+                @Named("treasureDeck") List<Card> treasureDeck,
+                Match matchManager) {
         this.players.setValue(new ArrayList<>(1));
         this.players.getValue().add(player);
         this.doorDeck = doorDeck;
         this.treasureDeck = treasureDeck;
         this.deskCards.setValue(new ArrayList<>());
         this.isGameFinished.setValue(false);
+        this.matchManager = matchManager;
 
         currentPlayer = player;
         player.setScope(Scope.PLAYER1);
@@ -38,6 +42,8 @@ public class Game {
         drawTreasureCard(getRandomTreasureCard());
         drawTreasureCard(getRandomTreasureCard());
     }
+
+    public Match matchManager() { return matchManager; }
 
     private <T> void update(MutableLiveData<T> liveData) {
         liveData.setValue(liveData.getValue());

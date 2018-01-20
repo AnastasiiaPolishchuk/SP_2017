@@ -38,13 +38,15 @@ public class EventRepository implements PlayClient.OnMessageReceivedListener {
         this.client.setMessageReceivedListener(this);
     }
 
-    public void push(Event event) {
-        Log.d(TAG, "pushig event: " + event.toString());
-        executors.diskIO().execute(() -> {
-            dao.insert(event);
-        });
-        client.sendToAll(event.getBytes());
-        newEvent(event);
+    public void push(Event... events) {
+        for (Event event : events) {
+            Log.d(TAG, "pushig event: " + event.toString());
+            executors.diskIO().execute(() -> {
+                dao.insert(event);
+            });
+            client.sendToAll(event.getBytes());
+            newEvent(event);
+        }
     }
 
     public void setNewEventListener(OnNewEventListener listener) {

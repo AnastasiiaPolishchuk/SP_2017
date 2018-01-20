@@ -33,4 +33,9 @@ public class PlayClientDummy extends PlayClient {
     public void sendToAll(byte[] message) {
 
     }
+
+    @Override
+    public int getAmountOfPlayers() {
+        return 2;
+    }
 }
