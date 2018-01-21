@@ -61,9 +61,9 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-condensed"
-                        android:layout_marginStart="8dp"
                         android:text="Hand"
                         android:textSize="24sp"
                         android:textStyle="italic" />
@@ -74,9 +74,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:fontFamily="sans-serif-condensed"
-                        android:layout_marginStart="8dp"
                         android:text="Played"
                         android:textSize="24sp"
                         android:textStyle="italic" />
@@ -171,8 +171,8 @@
                         android:id="@+id/recycler_view_desk"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_margin="4dp"/>
+                        android:layout_margin="4dp"
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 
@@ -186,22 +186,19 @@
                     android:layout_height="0dp"
                     android:layout_weight="1">
 
-                        <Button
-                            android:id="@+id/fight_button"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:onClick="onFightButtonPressed"
-                            android:text="@string/fight" />
+                    <Button
+                        android:id="@+id/fight_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fight" />
 
-                        <Button
-                            android:id="@+id/run_button"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:onClick="onNextPlayerButtonPressed"
-                            android:text="@string/next_player" />
-
+                    <Button
+                        android:id="@+id/run_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/next_player" />
 
                 </LinearLayout>
 

@@ -20,42 +20,6 @@
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/monster_card_image"
-            android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/humongousplustomonster"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/monster_fightlevel"
-            android:textSize="24sp"
-            android:textStyle="italic"
-            />
-
-        <TextView
-            android:id="@+id/monster_fightlevel_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-
-            android:text="1"
-            android:textSize="24sp"
-            android:textStyle="italic" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_margin="4dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <ImageButton
             android:id="@+id/player_card_image"
             android:layout_width="match_parent"
             android:layout_height="320dp"
@@ -81,6 +45,41 @@
             android:textStyle="italic" />
 
     </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/monster_card_image"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/monster_fightlevel"
+                android:textSize="24sp"
+                android:textStyle="italic"
+                />
+
+            <TextView
+                android:id="@+id/monster_fightlevel_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+
+                android:text="1"
+                android:textSize="24sp"
+                android:textStyle="italic" />
+        </LinearLayout>
     </LinearLayout>
 
 
@@ -92,11 +91,21 @@
         android:padding="8dp">
 
         <Button
-            android:layout_width="match_parent"
+            android:id="@+id/fight_diaolog_fight_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="4dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="Fight"
-            />
+            android:text="Fight" />
+        <Button
+            android:id="@+id/fight_diaolog_run_button_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="4dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="Run away" />
     </LinearLayout>
 
 </LinearLayout>
