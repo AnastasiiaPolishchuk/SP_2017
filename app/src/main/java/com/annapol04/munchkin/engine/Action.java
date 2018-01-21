@@ -5,22 +5,22 @@ import java.lang.reflect.Field;
 public class Action {
     public static final Action NOTHING = new Action((match, game, event) -> { });
     public static final Action JOIN_PLAYER = new Action((match, game, event) -> {
-            match.joinPlayer(event.getId());
+            match.joinPlayer(event.getInteger());
     });
     public static final Action ASSIGN_PLAYER_NUMBER = new Action((match, game, event) -> {
         match.assignPlayerNumber(event.getScope().ordinal(), event.getInteger());
     });
     public static final Action NAME_PLAYER = new Action((match, game, event) -> {
-            match.namePlayer(event.getScope().ordinal(), event.getString());
+        match.namePlayer(event.getScope().ordinal(), event.getString());
     });
     public static final Action FINISH_ROUND = new Action((match, game, event) -> {
-            match.finishRound(event.getScope().ordinal());
+        match.finishRound(event.getScope().ordinal());
     });
     public static final Action LEAVE_PLAYER = new Action((match, game, event) -> {
         throw new UnsupportedOperationException();
     });
     public static final Action DRAW_DOORCARD = new Action((match, game, event) -> {
-        game.drawDoorCard(Card.fromId(event.getInteger()));
+        match.getPlayer(event.getScope()).drawDoorCard(Card.fromId(event.getInteger()));
     });
     public static final Action DRAW_TREASURECARD = new Action((match, game, event) -> {
         game.drawTreasureCard(Card.fromId(event.getInteger()));

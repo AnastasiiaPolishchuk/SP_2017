@@ -3,16 +3,21 @@ package com.annapol04.munchkin.di;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
+import com.annapol04.munchkin.data.AndroidMessageBook;
+import com.annapol04.munchkin.data.EventRepository;
 import com.annapol04.munchkin.db.AppDb;
 import com.annapol04.munchkin.db.EventDao;
 import com.annapol04.munchkin.engine.Card;
+import com.annapol04.munchkin.engine.Game;
+import com.annapol04.munchkin.engine.Match;
+import com.annapol04.munchkin.engine.FakeMatch;
+import com.annapol04.munchkin.engine.MessageBook;
+import com.annapol04.munchkin.engine.PlayClient;
 import com.annapol04.munchkin.engine.Player;
-import com.annapol04.munchkin.network.PlayClient;
 import com.annapol04.munchkin.network.PlayClientDummy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -53,18 +58,19 @@ public class AppModule {
 
     @Singleton
     @Provides
-    @Named("myself")
-    public Player provideMyself(Application app) {
-        return new Player(new Random().nextLong());//new Player(GoogleSignIn.getLastSignedInAccount(app).getDisplayName()));
-    }
-
-    @Singleton
-    @Provides
-    public PlayClient providesPlayClient(/*Application app*/) {
+    public PlayClient providePlayClient(/*Application app*/) {
         return new PlayClientDummy();// new GooglePlayClient(app);
     }
 
     @Singleton
+    @Provides
+    @Named("myself")
+    public Player provideMyself(Application app, Game game, EventRepository repository) {
+        Player p = new Player(Integer.MAX_VALUE, game, repository);//new Random().nextLong());//new Player(GoogleSignIn.getLastSignedInAccount(app).getDisplayName()));
+        p.rename("Marvin");
+        return p;
+    }
+
     @Provides
     @Named("doorDeck")
     public List<Card> providesDoorDeck() {
@@ -80,7 +86,6 @@ public class AppModule {
         return deck;
     }
 
-    @Singleton
     @Provides
     @Named("treasureDeck")
     public List<Card> providesTreasureDeck() {
@@ -95,5 +100,16 @@ public class AppModule {
 //        deck.add(Card.HELM_OF_COURAGE);
 //        deck.add(Card.BROADSWORD);
         return deck;
+    }
+
+    @Singleton
+    @Provides
+    public Match providesMatch(Game game, @Named("myself") Player player, EventRepository repository) {
+        return new FakeMatch(game, player, repository);
+    }
+
+    @Provides
+    public MessageBook providesMessageBook(Application application) {
+        return new AndroidMessageBook(application);
     }
 }

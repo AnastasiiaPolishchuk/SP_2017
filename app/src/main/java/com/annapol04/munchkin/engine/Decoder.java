@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 
 /**
@@ -16,6 +17,7 @@ import javax.inject.Inject;
  * |--------|------------|--------------|------------|---------|
  * | 1 Byte |   4 Byte   |   4 Byte     |   1 Byte   | n Bytes |
  */
+@Singleton
 public class Decoder {
     private List<Event> decodedEvents = new ArrayList<>();
 

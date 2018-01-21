@@ -5,6 +5,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -17,22 +18,24 @@ import com.annapol04.munchkin.engine.Executor;
 import com.annapol04.munchkin.engine.Game;
 import com.annapol04.munchkin.engine.Match;
 import com.annapol04.munchkin.engine.Player;
-import com.annapol04.munchkin.network.GooglePlayClient;
-import com.annapol04.munchkin.network.PlayClient;
+import com.annapol04.munchkin.engine.PlayClient;
 
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.inject.Named;
 
-@Singleton
 public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.OnMatchStateChangedListener {
     private static final String TAG = PlayDeskViewModel.class.getName();
 
-    private MutableLiveData<String> playerName = new MutableLiveData<>();
+    private LiveData<String> playerName;
+    private LiveData<Integer> playerLevel;
+    private LiveData<List<Card>> playerHand;
+    private LiveData<List<Card>> playedCards;
 
     private MutableLiveData<Boolean> isStarted = new MutableLiveData<>();
     private boolean isStartingAlready = false;
+    private Player myself;
     private PlayClient client;
     private Game game;
     private Match match;
@@ -40,8 +43,15 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private Executor executor;
 
     @Inject
-    public PlayDeskViewModel(@NonNull Application application, PlayClient client, Game game, Match match, EventRepository eventRepository, Executor executor) {
+    public PlayDeskViewModel(@NonNull Application application,
+                             @Named("myself") Player myself,
+                             PlayClient client,
+                             Match match,
+                             Game game,
+                             EventRepository eventRepository,
+                             Executor executor) {
         super(application);
+        this.myself = myself;
 
         this.client = client;
         this.game = game;
@@ -52,9 +62,12 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         client.setMatchStateChangedListener(this);
         isStarted.setValue(false);
 
-        Player p = game.getCurrentPlayer();
+        LiveData<Player> cur = match.getCurrentPlayer();
 
-        playerName.setValue(p.getName());
+        playerName = Transformations.map(cur, Player::getName);
+        playerLevel = Transformations.switchMap(cur, Player::getLevel);
+        playerHand = Transformations.switchMap(cur, Player::getHandCards);
+        playedCards = Transformations.switchMap(cur, Player::getPlayedCards);
     }
 
     @Override
@@ -67,27 +80,36 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         client.processActivityResults(requestCode, resultCode, data);
     }
 
-    public Player getPlayer(int position){
-        return ( game.getPlayer(position));
+    public LiveData<String> getLog() {
+        return match.getLog();
     }
+
+    public Player getPlayer(int position){
+        return match.getPlayer(position);
+    }
+
+    public Player getMyself() {
+        return myself;
+    }
+
     public LiveData<String> getPlayerName() {
         return playerName;
     }
 
     public LiveData<Integer> getPlayerLevel() {
-        return game.getCurrentPlayer().getLevel();
+        return playerLevel;
     }
 
     public LiveData<List<Card>> getPlayerHand() {
-        return game.getCurrentPlayer().getHandCards();
+        return playerHand;
     }
 
     public LiveData<List<Card>> getPlayedCards() {
-        return game.getCurrentPlayer().getPlayedCards();
+        return playedCards;
     }
 
-    public LiveData<List<Card>> getPlayedCards(int playerID) {
-        return game.getPlayer(playerID).getPlayedCards();
+    public LiveData<List<Card>> getPlayedCards(int playerNr) {
+        return getPlayer(playerNr).getPlayedCards();
     }
 
     public LiveData<List<Card>> getDeskCards() {
@@ -101,7 +123,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     public LiveData<Boolean> getGameFinished() { return game.getGameFinished(); }
 
     public LiveData<List<Player>> getPlayers(){
-        return game.getPlayers();
+        return match.getPlayers();
     }
 
     public void quitGame() {
@@ -130,7 +152,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     @Override
-    public void onMatchStateChanged(GooglePlayClient.MatchState state) {
+    public void onMatchStateChanged(PlayClient.MatchState state) {
         switch (state) {
             case LOGGED_IN:
                 startGameIfPossible();
@@ -152,35 +174,36 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public void drawDoorCard() {
-        Card c = game.getRandomDoorCard();
-        Log.d(TAG, "drawing door card with id=" + c.getId() + " name=" + c.getName());
-        eventRepository.push(
-                new Event(game.getCurrentPlayer().getScope(), Action.DRAW_DOORCARD, 0, c.getId()));
+     //   Card c = game.getRandomDoorCard();
+     //   Log.d(TAG, "drawing door card with id=" + c.getId() + " name=" + c.getName());
+
+     //   eventRepository.push(
+       //         new Event(game.getCurrentPlayer().getScope(), Action.DRAW_DOORCARD, 0, c.getId()));
     }
 
     public void drawTreasureCard() {
-        eventRepository.push(
-                new Event(game.getCurrentPlayer().getScope(), Action.DRAW_TREASURECARD, 0, game.getRandomTreasureCard().getId()));
+   //     eventRepository.push(
+   //             new Event(game.getCurrentPlayer().getScope(), Action.DRAW_TREASURECARD, 0, game.getRandomTreasureCard().getId()));
     }
 
     public void playCard(Card card) {
-        eventRepository.push(
-                new Event(game.getCurrentPlayer().getScope(), Action.PLAY_CARD, 0, card.getId()));
+ //       eventRepository.push(
+  //              new Event(game.getCurrentPlayer().getScope(), Action.PLAY_CARD, 0, card.getId()));
     }
 
     public void pickupCard(Card card) {
-        eventRepository.push(
-                new Event(game.getCurrentPlayer().getScope(), Action.PICKUP_CARD, 0, card.getId()));
+  //      eventRepository.push(
+  //              new Event(game.getCurrentPlayer().getScope(), Action.PICKUP_CARD, 0, card.getId()));
     }
 
     public void runAwayFromMonster() {
-        eventRepository.push(
-                new Event(game.getCurrentPlayer().getScope(), Action.RUN_AWAY, 0));
+   //     eventRepository.push(
+   //             new Event(game.getCurrentPlayer().getScope(), Action.RUN_AWAY, 0));
     }
 
     public void fightMonster() {
-        eventRepository.push(
-                new Event(game.getCurrentPlayer().getScope(), Action.FIGHT_MONSTER, 0));
+   //     eventRepository.push(
+   //             new Event(game.getCurrentPlayer().getScope(), Action.FIGHT_MONSTER, 0));
     }
 
     public void moveToPlayDesk(Card selected) {
@@ -189,19 +212,19 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     // --------------------------------- Für GUI TEST ----------------------------------------------------
     public void setTestPlayers(){
-        game.addTestPlayer();
+     //   game.addTestPlayer();
     }
 
-    public String getPlayerName(int playerID) {
-        return game.getPlayer(playerID).getName();
+    public String getPlayerName(int playerNr) {
+        return getPlayer(playerNr).getName();
     }
 
-    public LiveData<Integer> getPlayerLevel(int playerID) {
-        return game.getPlayer(playerID).getLevel();
+    public LiveData<Integer> getPlayerLevel(int playerNr) {
+        return getPlayer(playerNr).getLevel();
     }
 
-    public LiveData<List<Card>> getPlayerHand(int playerID) {
-        return game.getPlayer(playerID).getHandCards();
+    public LiveData<List<Card>> getPlayerHand(int playerNr) {
+        return getPlayer(playerNr).getHandCards();
     }
 
 

@@ -8,7 +8,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.annapol04.munchkin.network.PlayClient;
+import com.annapol04.munchkin.engine.PlayClient;
 
 import javax.inject.Inject;
 

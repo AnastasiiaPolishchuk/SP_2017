@@ -6,7 +6,7 @@ import com.annapol04.munchkin.AppExecutors;
 import com.annapol04.munchkin.db.EventDao;
 import com.annapol04.munchkin.engine.Decoder;
 import com.annapol04.munchkin.engine.Event;
-import com.annapol04.munchkin.network.PlayClient;
+import com.annapol04.munchkin.engine.PlayClient;
 
 import java.util.List;
 

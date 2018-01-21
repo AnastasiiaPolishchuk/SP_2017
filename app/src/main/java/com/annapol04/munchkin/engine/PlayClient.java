@@ -1,4 +1,4 @@
-package com.annapol04.munchkin.network;
+package com.annapol04.munchkin.engine;
 
 import android.app.Activity;
 import android.content.Intent;

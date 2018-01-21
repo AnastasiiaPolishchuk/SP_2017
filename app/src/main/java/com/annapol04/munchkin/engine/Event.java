@@ -93,6 +93,10 @@ public class Event {
         return data;
     }
 
+    public String getMessage(MessageBook messageBook) {
+        return messageBook.build(this);
+    }
+
     @Override
     public String toString() {
         return new StringBuilder()
@@ -107,6 +111,22 @@ public class Event {
                 .append(", ")
                 .append(messageId)
                 .append("]")
+                .toString();
+    }
+
+    public String toString(MessageBook messageBook) {
+        return new StringBuilder()
+                .append("[")
+                .append(id)
+                .append(", ")
+                .append(scope.toString())
+                .append(", ")
+                .append(action.toString())
+                .append(", ")
+                .append(data.toString())
+                .append(", \"")
+                .append(getMessage(messageBook))
+                .append("\"]")
                 .toString();
     }
 }

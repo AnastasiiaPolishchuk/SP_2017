@@ -1,6 +1,8 @@
 package com.annapol04.munchkin.di;
 
 import com.annapol04.munchkin.App;
+import com.annapol04.munchkin.engine.PlayClient;
+
 import javax.inject.Singleton;
 
 import dagger.Component;

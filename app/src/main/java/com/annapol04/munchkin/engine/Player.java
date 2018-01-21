@@ -3,6 +3,9 @@ package com.annapol04.munchkin.engine;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
+import com.annapol04.munchkin.data.EventRepository;
+import com.annapol04.munchkin.data.EventRepository_Factory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,8 @@ public class Player extends LiveData<Player> {
     }
 
     private long id;
+    private Game game;
+    private EventRepository eventRepository;
     private MutableLiveData<String> name = new MutableLiveData<>();
     private MutableLiveData<Integer> level = new MutableLiveData<>();
     private MutableLiveData<Integer> fightLevel = new MutableLiveData<>();
@@ -26,8 +31,10 @@ public class Player extends LiveData<Player> {
     private MutableLiveData<List<Card>> playedCards = new MutableLiveData<>();
     private Scope scope;
 
-    public Player(long id) {
+    public Player(long id, Game game, EventRepository eventRepository) {
         this.id = id;
+        this.game = game;
+        this.eventRepository = eventRepository;
         this.level.setValue(1);
         this.fightLevel.setValue(1);
         this.race.setValue(PlayerRace.HUMAN);
@@ -109,5 +116,24 @@ public class Player extends LiveData<Player> {
 
     public Scope getScope() {
         return scope;
+    }
+
+    public void emitDrawTreasureCard(int amount) {
+        for (Card card : game.getRandomDoorCards(amount))
+            eventRepository.push(
+                new Event(scope, Action.DRAW_TREASURECARD, 0, card.getId()));
+    }
+
+    public void drawTreasureCard(Card card) {
+        game.drawTreasureCard(card);
+
+        pickupCard(card);
+    }
+
+    public void drawDoorCard(Card card) {
+        game.drawDoorCard(card);
+    }
+
+    public void playRound() {
     }
 }

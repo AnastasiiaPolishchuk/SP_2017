@@ -1,4 +1,7 @@
 <resources>
+    <string name="empty"></string>
+    <string name="join_player">player %string% joined the game</string>
+
     <string name="app_name">Munchkin</string>
 
     <!-- TODO: Remove or change this placeholder text -->

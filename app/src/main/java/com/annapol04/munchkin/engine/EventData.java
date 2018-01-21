@@ -70,4 +70,15 @@ public class EventData {
     public int getInteger() {
         return (int)data;
     }
+
+    @Override
+    public String toString() {
+        switch (type) {
+            case EMPTY: return "null";
+            case INTEGER: return Integer.toString(getInteger());
+            case STRING: return getString();
+        }
+
+        return "";
+    }
 }

@@ -59,13 +59,21 @@ public class PlayDeskActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        viewModel.setTestPlayers(); // was mit dem observer ?
+        viewModel.getPlayers().observe(this, players -> {
+            if (players != null) {
+                navigationView.getMenu().clear();
 
-        for(int i = 0; i < viewModel.getPlayers().getValue().size(); i++) {
-            Player p = viewModel.getPlayers().getValue().get(i);
-            MenuItem item =   navigationView.getMenu().add(R.id.players_group, i + 1, (i + 1) * 100, p.getName());
-            item.setIcon(R.drawable.ic_menu_camera);
-        }
+                for (int i = 0; i < players.size(); i++) {
+                    Player p = players.get(i);
+                    MenuItem item = navigationView.getMenu().add(R.id.players_group, i + 1, (i + 1) * 100, p.getName());
+                    item.setIcon(R.drawable.ic_menu_camera);
+                }
+            }
+        });
+
+        viewModel.getLog().observe(this, log -> {
+
+        });
 
 
 //        View rootView = findViewById(R.id.root_view);
@@ -91,7 +99,21 @@ public class PlayDeskActivity extends AppCompatActivity
 
         addListenerOnButton();
 
-        updateDeskView(0);
+     //   updateDeskView(0);
+    }
+
+    @Override
+     protected void onResume() {
+        super.onResume();
+        viewModel.resume(this);
+        toastManager.resume(this);
+    }
+
+    @Override
+     protected void onPause() {
+        toastManager.pause();
+        viewModel.pause();
+        super.onPause();
     }
 
     @Override

@@ -3,7 +3,11 @@ package com.annapol04.munchkin.network;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.annapol04.munchkin.engine.PlayClient;
+
 public class PlayClientDummy extends PlayClient {
+    private boolean loggedIn = false;
+
     @Override
     public void setActivity(Activity activity) {
 
@@ -11,11 +15,13 @@ public class PlayClientDummy extends PlayClient {
 
     @Override
     public boolean isLoggedIn() {
-        return true;
+        return loggedIn;
     }
 
     @Override
     public void login() {
+        loggedIn = true;
+
         changeMatchState(MatchState.LOGGED_IN);
     }
 
@@ -36,6 +42,6 @@ public class PlayClientDummy extends PlayClient {
 
     @Override
     public int getAmountOfPlayers() {
-        return 6;
+        return 2;
     }
 }
