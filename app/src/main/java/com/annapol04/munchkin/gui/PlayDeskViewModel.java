@@ -126,6 +126,26 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return match.getPlayers();
     }
 
+    public LiveData<String> getMyName()        {
+        MutableLiveData<String> myName = new MutableLiveData<>();
+        myName.setValue("DummyMarvin");
+        return myName;
+    }
+
+    public LiveData<Integer> getMyLevel() {
+        MutableLiveData<Integer> myLevel = new MutableLiveData<>();
+        myLevel.setValue(1);
+        return myLevel;
+    }
+
+    public LiveData<Boolean>isMyLevelGreater(){
+        // vergleichen MyLevel+ bonus mit Monster Level
+        MutableLiveData<Boolean> isGreater = new MutableLiveData<>();
+         isGreater.setValue(true);
+         return isGreater;
+    }
+
+
     public void quitGame() {
     //    throw new UnsupportedOperationException("Not implemented");
     }
@@ -227,5 +247,6 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return getPlayer(playerNr).getHandCards();
     }
 
-
+    public void displayPlayer(int id) {
+    }
 }

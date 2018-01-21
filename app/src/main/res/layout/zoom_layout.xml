@@ -42,7 +42,7 @@
             android:id="@+id/move_to_passive_card_deck"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:text="brauche ned mehr"
+            android:text="DELETE"
             android:textAllCaps="true" />
     </LinearLayout>
 

@@ -19,10 +19,11 @@ import com.annapol04.munchkin.engine.Card;
 import java.util.List;
 
 
-
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
-    protected final @LayoutRes int resLayout;
-    protected final @IdRes int resId;
+    protected final @LayoutRes
+    int resLayout;
+    protected final @IdRes
+    int resId;
     protected ButtonSetup setup;
     protected List<Card> cards;
     protected PlayDeskViewModel viewModel;
