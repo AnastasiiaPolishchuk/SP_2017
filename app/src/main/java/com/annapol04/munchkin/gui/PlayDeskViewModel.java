@@ -33,6 +33,13 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private LiveData<List<Card>> playerHand;
     private LiveData<List<Card>> playedCards;
 
+    private LiveData<Boolean> canPlayBigEquipment;
+    private LiveData<Boolean> canPlayHeadgeer;
+    private LiveData<Boolean> canPlayArmor;
+    private LiveData<Boolean> canPlayShoes;
+    private LiveData<Boolean> canPlayOneHander;
+    private LiveData<Boolean> canPlayTwoHander;
+
     private LiveData<Boolean> isMyself;
     private MutableLiveData<Boolean> isStarted = new MutableLiveData<>();
 
@@ -74,6 +81,13 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         playerLevel = Transformations.switchMap(visiblePlayer, Player::getLevel);
         playerHand = Transformations.switchMap(visiblePlayer, Player::getHandCards);
         playedCards = Transformations.switchMap(visiblePlayer, Player::getPlayedCards);
+
+        canPlayBigEquipment = Transformations.switchMap(visiblePlayer, Player::getCanPlayBigEquipment);
+        canPlayHeadgeer = Transformations.switchMap(visiblePlayer, Player::getCanPlayHeadgeer);
+        canPlayArmor = Transformations.switchMap(visiblePlayer, Player::getCanPlayArmor);
+        canPlayShoes = Transformations.switchMap(visiblePlayer, Player::getCanPlayShoes);
+        canPlayOneHander = Transformations.switchMap(visiblePlayer, Player::getCanPlayOneHander);
+        canPlayTwoHander = Transformations.switchMap(visiblePlayer, Player::getCanPlayTwoHander);
     }
 
     @Override
@@ -198,36 +212,27 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public void drawDoorCard() {
-     //   Card c = game.getRandomDoorCard();
-     //   Log.d(TAG, "drawing door card with id=" + c.getId() + " name=" + c.getName());
-
-     //   eventRepository.push(
-       //         new Event(game.getCurrentPlayer().getScope(), Action.DRAW_DOORCARD, 0, c.getId()));
+        visiblePlayer.getValue().emitDrawDoorCard();
     }
 
     public void drawTreasureCard() {
-   //     eventRepository.push(
-   //             new Event(game.getCurrentPlayer().getScope(), Action.DRAW_TREASURECARD, 0, game.getRandomTreasureCard().getId()));
+        visiblePlayer.getValue().emitDrawTreasureCard();
     }
 
     public void playCard(Card card) {
- //       eventRepository.push(
-  //              new Event(game.getCurrentPlayer().getScope(), Action.PLAY_CARD, 0, card.getId()));
+        visiblePlayer.getValue().emitPlayCard(card);
     }
 
     public void pickupCard(Card card) {
-  //      eventRepository.push(
-  //              new Event(game.getCurrentPlayer().getScope(), Action.PICKUP_CARD, 0, card.getId()));
+        visiblePlayer.getValue().emitPickupCard(card);
     }
 
     public void runAwayFromMonster() {
-   //     eventRepository.push(
-   //             new Event(game.getCurrentPlayer().getScope(), Action.RUN_AWAY, 0));
+        visiblePlayer.getValue().emitRunAway();
     }
 
     public void fightMonster() {
-   //     eventRepository.push(
-   //             new Event(game.getCurrentPlayer().getScope(), Action.FIGHT_MONSTER, 0));
+        visiblePlayer.getValue().emitFightMonster();
     }
 
     public void moveToPlayDesk(Card selected) {

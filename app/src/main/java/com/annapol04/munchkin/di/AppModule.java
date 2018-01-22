@@ -71,37 +71,6 @@ public class AppModule {
         return p;
     }
 
-    @Provides
-    @Named("doorDeck")
-    public List<Card> providesDoorDeck() {
-        ArrayList<Card> deck = new ArrayList<>();
-        deck.add(Card.LEPERCHAUN);
-        deck.add(Card.SABBERNDERSCHLEIM);
-        deck.add(Card.LAHMERGOBLIN);
-        deck.add(Card.HAMMERRATTE);
-        deck.add(Card.TOPFPFLANZE);
-        deck.add(Card.FLIEGENDEFROESCHE);
-        deck.add(Card.GALLERTOKTAEDER);
-        deck.add(Card.HUHN);
-        return deck;
-    }
-
-    @Provides
-    @Named("treasureDeck")
-    public List<Card> providesTreasureDeck() {
-        ArrayList<Card> deck = new ArrayList<>();
-        deck.add(Card.STANGE);
-        deck.add(Card.HELM);
-        deck.add(Card.LEDERRUESTUNG);
-        deck.add(Card.SCHLEIMIGERUESTUNG);
-        deck.add(Card.KNIE);
-        deck.add(Card.GEILERHELM);
-        deck.add(Card.ARSCHTRITTSTIEFEL);
-//        deck.add(Card.HELM_OF_COURAGE);
-//        deck.add(Card.BROADSWORD);
-        return deck;
-    }
-
     @Singleton
     @Provides
     public Match providesMatch(Game game, @Named("myself") Player player, EventRepository repository) {

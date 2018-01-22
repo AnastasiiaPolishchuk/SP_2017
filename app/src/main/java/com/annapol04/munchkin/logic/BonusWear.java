@@ -21,13 +21,13 @@
 //    }
 //
 //    public enum BonusWearName{
-//        STANGE,
-//        HELM,
-//        LEDERRUESTUNG,
-//        SCHLEIMIGERUESTUNG,
-//        KNIE,
-//        GEILERHELM,
-//        ARSCHTRITTSTIEFEL,
+//        POLE,
+//        HELMET,
+//        BOILED_LEATHER,
+//        SLIM_ARMOR,
+//        KNEE,
+//        HOT_HELMET,
+//        ASS_KICK_BOOT,
 //        BUCKLER,
 //        FLAMMENDERUESTUNG,
 //        SCHWERT,

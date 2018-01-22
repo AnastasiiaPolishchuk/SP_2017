@@ -26,16 +26,16 @@ public class Action {
         match.getPlayer(event.getScope()).drawTreasureCard(Card.fromId((event.getInteger())));
     });
     public static final Action PICKUP_CARD = new Action((match, game, event) -> {
-        game.pickupCard(Card.fromId(event.getInteger()));
+        match.getPlayer(event.getScope()).pickupCard(Card.fromId(event.getInteger()));
     });
     public static final Action PLAY_CARD = new Action((match, game, event) -> {
-        game.playCard(Card.fromId(event.getInteger()));
+        match.getPlayer(event.getScope()).playCard(Card.fromId(event.getInteger()));
     });
     public static final Action FIGHT_MONSTER = new Action((match, game, event) -> {
-        game.fightMonster();
+        match.getPlayer(event.getScope()).fightMonster();
     });
     public static final Action RUN_AWAY = new Action((match, game, event) -> {
-        game.runAwayFromMonster();
+        match.getPlayer(event.getScope()).runAway();
     });
 
     private static int idSource = 0;

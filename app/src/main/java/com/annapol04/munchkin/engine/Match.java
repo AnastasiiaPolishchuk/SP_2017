@@ -86,6 +86,11 @@ public class Match {
         players.setValue(new ArrayList<>(amountOfPlayers));
         playerOrder = new ArrayList<>(amountOfPlayers);
 
+        game.reset();
+        myself.reset();
+
+        log.setValue("");
+
         for (int i = 0; i < amountOfPlayers; i++)
             playerOrder.add(0);
 
@@ -145,7 +150,7 @@ public class Match {
 
     protected void namingRound() {
         eventRepository.push(
-                new Event(myScope, Action.NAME_PLAYER, R.string.join_player, myself.getName()),
+                new Event(myScope, Action.NAME_PLAYER, R.string.ev_join_player, myself.getName()),
                 new Event(myScope, Action.FINISH_ROUND, 0)
         );
     }

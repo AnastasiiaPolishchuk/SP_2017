@@ -1,8 +1,7 @@
 package com.annapol04.munchkin.engine;
 
-/**
- * Created by Falco on 30.12.2017.
- */
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 
 public class Monster extends Card {
 
@@ -49,14 +48,9 @@ public class Monster extends Card {
     public int level;
     public int treasure;
     public String badThings;
-    public Monstername monsterName;
-    public Membership stack;
-    public String description;
 
-    public Monster(String name, int imageResourceID, Monstername monsterName, String description, int level, int treasure, String badThings) {
-        super(name, imageResourceID, Membership.DOOR);
-        this.description = description;
-        this.monsterName = monsterName;
+    public Monster(@StringRes int name, @StringRes int description, @DrawableRes int imageResourceID, int level, int treasure, String badThings) {
+        super(name, description, imageResourceID);
         this.level = level;
         this.treasure = treasure;
         this.badThings = badThings;

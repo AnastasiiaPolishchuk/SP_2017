@@ -12,7 +12,7 @@
 //    public enum Monstername{
 //        FILZLAEUSE,
 //        SABBERNDERSCHLEIM,
-//        LAHMERGOBLIN,
+//        LAME_GOBLIN,
 //        HAMMERRATTE,
 //        TOPFPFLANZE,
 //        FLIEGENDEFROESCHE,
@@ -346,7 +346,7 @@
 //        int currentRunaway = currentPlayer.runAway;
 //
 //        switch(this.monsterName){
-//            case LAHMERGOBLIN: currentRunaway++;
+//            case LAME_GOBLIN: currentRunaway++;
 //                break;
 //            case FLIEGENDEFROESCHE: currentRunaway--;
 //                break;
@@ -513,7 +513,7 @@
 //                }
 //            }
 //            break;
-//            case LAHMERGOBLIN: {
+//            case LAME_GOBLIN: {
 //                currentPlayer.levelDown();
 //            }
 //            break;

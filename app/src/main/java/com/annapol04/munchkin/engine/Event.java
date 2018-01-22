@@ -17,6 +17,8 @@ public class Event {
     private final Action action;
     private final int messageId;
     private final EventData data;
+    private String previousHash;
+    private String hash;
 
     @Ignore
     public Event(Scope scope, Action action, int messageId) {
@@ -33,11 +35,18 @@ public class Event {
         this(scope, action, messageId, new EventData(data));
     }
 
+    @Ignore
     public Event(Scope scope, Action action, int messageId, EventData data) {
+        this(scope, action, messageId, data, null, null);
+    }
+
+    public Event(Scope scope, Action action, int messageId, EventData data, String previousHash, String hash) {
         this.scope = scope;
         this.action = action;
         this.messageId = messageId;
         this.data = data;
+        this.previousHash = previousHash;
+        this.hash = hash;
     }
 
     public void execute(Match match, Game game) {
@@ -89,20 +98,38 @@ public class Event {
         this.id = id;
     }
 
+    public String getPreviousHash() {
+        return previousHash;
+    }
+
+    public void setPreviousHash(String previousHash) {
+        if (action == Action.JOIN_PLAYER) {
+            this.previousHash = previousHash;
+
+            this.hash = this.previousHash;
+        } else {
+            this.previousHash = previousHash;
+
+            this.hash = HashUtil.applySha256(previousHash + toString());
+        }
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
     public EventData getData() {
         return data;
     }
 
-    public String getMessage(MessageBook messageBook) {
-        return messageBook.build(this);
+    public String getMessage(MessageBook messageBook, Player player) {
+        return messageBook.build(this, player);
     }
 
     @Override
     public String toString() {
         return new StringBuilder()
                 .append("[")
-                .append(id)
-                .append(", ")
                 .append(scope.toString())
                 .append(", ")
                 .append(action.toString())
@@ -114,18 +141,16 @@ public class Event {
                 .toString();
     }
 
-    public String toString(MessageBook messageBook) {
+    public String toString(MessageBook messageBook, Player player) {
         return new StringBuilder()
                 .append("[")
-                .append(id)
-                .append(", ")
                 .append(scope.toString())
                 .append(", ")
                 .append(action.toString())
                 .append(", ")
                 .append(data.toString())
                 .append(", \"")
-                .append(getMessage(messageBook))
+                .append(getMessage(messageBook, player))
                 .append("\"]")
                 .toString();
     }

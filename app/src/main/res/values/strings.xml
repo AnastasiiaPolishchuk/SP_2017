@@ -1,7 +1,4 @@
 <resources>
-    <string name="empty"></string>
-    <string name="join_player">player %string% joined the game</string>
-
     <string name="app_name">Munchkin</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -45,4 +42,49 @@
     <string name="next_player">Next Player</string>
     <string name="your_fightlevel">Your fightLevel is:</string>
     <string name="monster_fightlevel">Monster fightLevel is:</string>
+
+    <!-- Event messages -->
+    <string name="ev_empty"></string>
+    <string name="ev_join_player">player %string% joined the game</string>
+    <string name="ev_draw_card">%player% draws %card%</string>
+    <string name="ev_play_card">%player% plays %card%</string>
+    <string name="ev_pickup_card">%player% picks %card% up</string>
+    <string name="ev_run_away">%player% runs away</string>
+    <string name="ev_fight_monster">%player% fights against the monster</string>
+
+    <!-- Monster cards -->
+    <string name="leperchaun">Leperchaun</string>
+    <string name="leperchaun_desc"></string>
+    <string name="pubic_lice">Public lice</string>
+    <string name="pubic_lice_desc"></string>
+    <string name="sabbering_slime">Sabbering slime</string>
+    <string name="sabbering_slime_desc"></string>
+    <string name="lame_goblin">Lame goblin</string>
+    <string name="lame_goblin_desc"></string>
+    <string name="hammer_rat">Hammer rat</string>
+    <string name="hammer_rat_desc"></string>
+    <string name="potted_plant">Potted plant</string>
+    <string name="potted_plant_desc"></string>
+    <string name="flying_frogs">Flying frogs</string>
+    <string name="flying_frogs_desc"></string>
+    <string name="gallertoktaeder">Gallertoktaeder</string>
+    <string name="gallertoktaeder_desc"></string>
+    <string name="chicken">Chicken</string>
+    <string name="chicken_desc"></string>
+
+    <!-- Equipment cards -->
+    <string name="pole">Pole</string>
+    <string name="pole_desc"></string>
+    <string name="helmet">Helmet</string>
+    <string name="helmet_desc"></string>
+    <string name="boiled_leather">Boiled leather</string>
+    <string name="boiled_leather_desc"></string>
+    <string name="slim_armor">Slim armor</string>
+    <string name="slim_armor_desc"></string>
+    <string name="knee">Knee</string>
+    <string name="knee_desc"></string>
+    <string name="hot_helmet">Hot helmet</string>
+    <string name="hot_helmet_desc"></string>
+    <string name="ass_kick_boot">Ass kick boot</string>
+    <string name="ass_kick_boot_desc"></string>
 </resources>

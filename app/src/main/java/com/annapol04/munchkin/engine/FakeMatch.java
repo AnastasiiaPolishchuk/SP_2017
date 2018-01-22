@@ -28,7 +28,7 @@ public class FakeMatch extends Match {
 
         for (int i = 0; i < amountOfPlayers - 1; i++) {
             eventRepository.push(
-                    new Event(Scope.fromId(i + 2), Action.NAME_PLAYER, R.string.join_player, names[i]),
+                    new Event(Scope.fromId(i + 2), Action.NAME_PLAYER, R.string.ev_join_player, names[i]),
                     new Event(Scope.fromId(i + 2), Action.FINISH_ROUND, 0)
             );
         }

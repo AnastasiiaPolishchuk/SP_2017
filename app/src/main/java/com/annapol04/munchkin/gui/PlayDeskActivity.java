@@ -171,15 +171,15 @@ public class PlayDeskActivity extends AppCompatActivity
         return true;
     }
 
+    public void updateTitle() {
+        mToolbar.setTitle(viewModel.getPlayerName().getValue() + ": " + viewModel.getPlayerLevel().getValue());
+    }
+
     public void updateDeskView() {
-     //   TextView nameOfPlayer = findViewById(R.id.name_of_player);
-     //   nameOfPlayer.setText( viewModel.getPlayerName(playerID));
-//
-//        TextView levelOfPlayer = findViewById(R.id.level_of_player);
-//        viewModel.getPlayerLevel().observe(this, val -> levelOfPlayer.setText(val.toString()));
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        viewModel.getPlayerName().observe(this, name -> mToolbar.setTitle(name + ": " + viewModel.getPlayerLevel().getValue()));
-        viewModel.getPlayerLevel().observe(this, lvl -> mToolbar.setTitle(viewModel.getPlayerName().getValue() + ": " + lvl));
+        mToolbar = findViewById(R.id.toolbar);
+        updateTitle();
+        viewModel.getPlayerName().observe(this, name -> updateTitle());
+        viewModel.getPlayerLevel().observe(this, lvl -> updateTitle());
 
         RecyclerView handOfPlayer = findViewById(R.id.recycler_view_hand_of_player);
         RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

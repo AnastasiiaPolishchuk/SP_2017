@@ -2,56 +2,58 @@ package com.annapol04.munchkin.engine;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.util.Log;
 
-import com.annapol04.munchkin.data.EventRepository;
-import com.annapol04.munchkin.data.EventRepository_Factory;
-
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.inject.Named;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
 public class Game {
-    private EventRepository eventRepository;
-
     private enum State {
         HAND_OUT_CARDS
     }
 
     private static final String TAG = Game.class.getSimpleName();
 
-    private MutableLiveData<List<Player>> players = new MutableLiveData<>();
     private MutableLiveData<List<Card>> deskCards = new MutableLiveData<>();
     private MutableLiveData<Boolean> isGameFinished = new MutableLiveData<>();
-    private List<Card> doorDeck;
-    private List<Card> treasureDeck;
+    private List<Card> doorDeck = new ArrayList<>();
+    private List<Card> treasureDeck = new ArrayList<>();
     private State state = State.HAND_OUT_CARDS;
     private Random randomDoor = new Random();
     private Random randomTreasure = new Random();
 
     @Inject
-    public Game(@Named("doorDeck") List<Card> doorDeck,
-                @Named("treasureDeck") List<Card> treasureDeck,
-                EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
+    public Game() { }
 
-        this.doorDeck = doorDeck;
-        this.treasureDeck = treasureDeck;
-        this.deskCards.setValue(new ArrayList<>());
-        this.isGameFinished.setValue(false);
+    public void reset() {
+        doorDeck.clear();
+        treasureDeck.clear();
+
+        Field[] doorCardFields = DoorCards.class.getFields();
+        Field[] treasureCardFields = TreasureCards.class.getFields();
+
+        try {
+            for (Field field : doorCardFields)
+                if (field.getType() == Card.class)
+                    doorDeck.add((Card) field.get(null));
+
+            for (Field field : treasureCardFields)
+                if (field.getType() == Card.class)
+                    treasureDeck.add((Card) field.get(null));
+
+        } catch (IllegalAccessException e) { /* wont happen... */ }
+
+        deskCards.setValue(new ArrayList<>());
+        isGameFinished.setValue(false);
     }
 
     private <T> void update(MutableLiveData<T> liveData) {
         liveData.setValue(liveData.getValue());
-    }
-
-    public LiveData<List<Player>> getPlayers() {
-        return players;
     }
 
     public LiveData<List<Card>> getDeskCards() {
@@ -60,15 +62,6 @@ public class Game {
 
     public LiveData<Boolean> getGameFinished() { return isGameFinished; }
 
-    public void join(Player player) {
-        players.getValue().add(player);
-        update(players);
-    }
-
-    public void leave(Player player) {
-        players.getValue().remove(player);
-        update(players);
-    }
 
     public void drawDoorCard(Card card) {
         deskCards.getValue().add(card);
@@ -104,17 +97,6 @@ public class Game {
         return cards;
     }
 
-    public void pickupCard(Card card) {
-        /*   Player current = match.getCurrentPlayer().getValue();
-
-        current.takePlayedCard(card);
-        current.pickupCard(card);*/
-    }
-
-    public void playCard(Card card) {
-       // match.getCurrentPlayer().getValue().playCard(card);
-    }
-
     public List<Card> getRandomTreasureCards(int amount) {
         if (amount > treasureDeck.size())
             throw new IllegalArgumentException("Can not get " + amount + " treasure cards with deck size: " + treasureDeck.size());
@@ -140,18 +122,15 @@ public class Game {
         update(deskCards);
     }
 
-    public void fightMonster() {
-   /*     match.getCurrentPlayer().getValue().levelUp();
-        if ((int)match.getCurrentPlayer().getValue().getLevel().getValue() >= 3)
-            isGameFinished.setValue(true);
-
-        deskCards.getValue().remove(deskCards.getValue().get(0));
-        update(deskCards);*/
-    }
-
     @Override
     public String toString() {
-        return "";
+        return new StringBuilder()
+                .append("door cards: ")
+                .append(doorDeck.size())
+                .append(", treasure cards: ")
+                .append(treasureDeck.size())
+                .append(", finished: ")
+                .append(isGameFinished.getValue())
+                .toString();
     }
-
 }

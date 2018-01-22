@@ -27,14 +27,26 @@ public class Executor implements EventRepository.OnNewEventListener {
 
     @Override
     public void onNewEvent(Event event) {
-        Log.d(TAG, "executing: " + event.toString(messageBook));
-        Log.d(TAG, "game: " + game);
+        Player player = event.getScope() == Scope.GAME ? null : match.getPlayer(event.getScope());
 
-        event.execute(match, game);
+        if (repository.getTopHash().equals(event.getPreviousHash())) {
+            Log.d(TAG, "executing: " + event.toString(messageBook, player));
 
-        String message = event.getMessage(messageBook);
+            event.execute(match, game);
 
-        if (message.length() > 0)
-            match.log(message);
+            Log.d(TAG, "game: " + game);
+
+            String message = event.getMessage(messageBook, player);
+
+            if (message.length() > 0)
+                match.log(message);
+
+            repository.setTopHash(event.getHash());
+        } else {
+            String msg = "failed to execute: " + event.toString(messageBook, player) + " because of wrong hash value";
+
+            Log.e(TAG, msg);
+            throw new IllegalStateException(msg);
+        }
     }
 }
