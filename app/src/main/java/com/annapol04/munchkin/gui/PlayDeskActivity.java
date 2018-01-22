@@ -50,7 +50,7 @@ public class PlayDeskActivity extends AppCompatActivity
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayDeskViewModel.class);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -78,9 +78,11 @@ public class PlayDeskActivity extends AppCompatActivity
             }
         });
 
-        viewModel.getLog().observe(this, log -> {
+        TextView logView = findViewById(R.id.log);
+        viewModel.getLog().observe(this, logView::setText);
 
-        });
+        View rootView = findViewById(R.id.root_view);
+        viewModel.isMyself().observe(this, rootView::setClickable);
 
 //        View rootView = findViewById(R.id.root_view);
 //        viewModel.getGameStarted().observe(this, isStarted -> {
@@ -106,7 +108,6 @@ public class PlayDeskActivity extends AppCompatActivity
         addListenerOnButton();
 
         updateDeskView();
-     //   updateDeskView(0);
     }
 
     @Override
@@ -162,7 +163,7 @@ public class PlayDeskActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         viewModel.displayPlayer(id);
 

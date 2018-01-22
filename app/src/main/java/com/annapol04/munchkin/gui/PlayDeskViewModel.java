@@ -33,9 +33,12 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private LiveData<List<Card>> playerHand;
     private LiveData<List<Card>> playedCards;
 
+    private LiveData<Boolean> isMyself;
     private MutableLiveData<Boolean> isStarted = new MutableLiveData<>();
+
     private boolean isStartingAlready = false;
     private Player myself;
+    private MutableLiveData<Player> visiblePlayer = new MutableLiveData<>();
     private PlayClient client;
     private Game game;
     private Match match;
@@ -62,12 +65,15 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         client.setMatchStateChangedListener(this);
         isStarted.setValue(false);
 
-        LiveData<Player> cur = match.getCurrentPlayer();
+        visiblePlayer.setValue(myself);
 
-        playerName = Transformations.map(cur, Player::getName);
-        playerLevel = Transformations.switchMap(cur, Player::getLevel);
-        playerHand = Transformations.switchMap(cur, Player::getHandCards);
-        playedCards = Transformations.switchMap(cur, Player::getPlayedCards);
+        isMyself = Transformations.map(visiblePlayer, player -> {
+            Log.d("Executor", " " + player + " == " + myself); return player == myself;
+        });
+        playerName = Transformations.map(visiblePlayer, Player::getName);
+        playerLevel = Transformations.switchMap(visiblePlayer, Player::getLevel);
+        playerHand = Transformations.switchMap(visiblePlayer, Player::getHandCards);
+        playedCards = Transformations.switchMap(visiblePlayer, Player::getPlayedCards);
     }
 
     @Override
@@ -88,8 +94,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return match.getPlayer(position);
     }
 
-    public Player getMyself() {
-        return myself;
+    public LiveData<Boolean> isMyself() {
+        return isMyself;
     }
 
     public LiveData<String> getPlayerName() {
@@ -126,19 +132,17 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return match.getPlayers();
     }
 
-    public LiveData<String> getMyName()        {
+    public LiveData<String> getMyName() {
         MutableLiveData<String> myName = new MutableLiveData<>();
-        myName.setValue("DummyMarvin");
+        myName.setValue(myself.getName());
         return myName;
     }
 
     public LiveData<Integer> getMyLevel() {
-        MutableLiveData<Integer> myLevel = new MutableLiveData<>();
-        myLevel.setValue(1);
-        return myLevel;
+        return myself.getLevel();
     }
 
-    public LiveData<Boolean>isMyLevelGreater(){
+    public LiveData<Boolean> isMyLevelGreater(){
         // vergleichen MyLevel+ bonus mit Monster Level
         MutableLiveData<Boolean> isGreater = new MutableLiveData<>();
          isGreater.setValue(true);
@@ -248,5 +252,6 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public void displayPlayer(int id) {
+        visiblePlayer.setValue(getPlayer(id));
     }
 }

@@ -31,6 +31,10 @@ public class Executor implements EventRepository.OnNewEventListener {
         Log.d(TAG, "game: " + game);
 
         event.execute(match, game);
-        match.log(event.getMessage(messageBook));
+
+        String message = event.getMessage(messageBook);
+
+        if (message.length() > 0)
+            match.log(message);
     }
 }

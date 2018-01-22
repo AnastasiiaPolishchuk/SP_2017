@@ -218,9 +218,9 @@
                         android:layout_margin="2dp">
 
                         <TextView
+                            android:id="@+id/log"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/dialog" />
+                            android:layout_height="wrap_content" />
                     </ScrollView>
 
                 </LinearLayout>

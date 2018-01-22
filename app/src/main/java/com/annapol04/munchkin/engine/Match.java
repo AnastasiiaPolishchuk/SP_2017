@@ -51,8 +51,8 @@ public class Match {
     public void log(String message) {
         log.setValue(new StringBuilder()
                 .append(log.getValue())
-                .append("\n")
                 .append(message)
+                .append("\n")
                 .toString());
     }
 
