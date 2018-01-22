@@ -23,7 +23,7 @@ public abstract class MessageBook {
             message = message.replace("%card%", Card.fromId(event.getInteger()).getName());
 
         if (message.contains("%integer%"))
-            message = message.replace("%integer%", event.getScope().toString());
+            message = message.replace("%integer%", Integer.toString(event.getInteger()));
 
         if (message.contains("%string%"))
             message = message.replace("%string%", event.getString());
