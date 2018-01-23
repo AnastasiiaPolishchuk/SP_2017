@@ -40,7 +40,17 @@
             android:name=".gui.PlayDeskActivity"
             android:label="@string/title_activity_new_play_desk"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".gui.ErrorActivity"
+            android:label="Error"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="com.annapol04.munchkin.SHOW_ERROR" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

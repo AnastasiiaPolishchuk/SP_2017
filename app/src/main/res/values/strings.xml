@@ -87,4 +87,6 @@
     <string name="hot_helmet_desc"></string>
     <string name="ass_kick_boot">Ass kick boot</string>
     <string name="ass_kick_boot_desc"></string>
+    <string name="ok">OK</string>
+    <string name="error_uncaught_exception">Error: Uncaught exception</string>
 </resources>
