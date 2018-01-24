@@ -103,6 +103,8 @@
     <string name="horny_helmet_desc"></string>
     <string name="ass_kick_boot">Ass kick boot</string>
     <string name="ass_kick_boot_desc"></string>
+    <string name="ok">OK</string>
+    <string name="error_uncaught_exception">Error: Uncaught exception</string>
     <string name="dagger_of_treachery">Dagger of treachery</string>
     <string name="dagger_of_treachery_desc"></string>
     <string name="rapier_of_unfairness">Rapier of unfairness</string>
