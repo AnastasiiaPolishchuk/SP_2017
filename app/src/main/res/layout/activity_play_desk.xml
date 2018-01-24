@@ -191,14 +191,16 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/fight" />
+                        android:text="@string/fight"
+                        android:theme="@style/AppTheme.Button"/>
 
                     <Button
                         android:id="@+id/run_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/next_player" />
+                        android:text="@string/next_player"
+                        android:theme="@style/AppTheme.Button"/>
 
                 </LinearLayout>
 

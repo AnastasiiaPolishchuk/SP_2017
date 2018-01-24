@@ -78,7 +78,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 recyclerView.setAdapter(handAdapter);
 
                 Button moveToPlayed = dialog.findViewById(R.id.move_to_played_button);      // test setEnabled = false - die Taste wird grau
-                moveToPlayed.setVisibility(setup == ButtonSetup.HAND ? View.VISIBLE : View.INVISIBLE);
+                moveToPlayed.setEnabled(setup == ButtonSetup.HAND ? true : false);
                 moveToPlayed.setOnClickListener(v2 -> {
                     Card selected = handAdapter.getSelected();
                     if (selected != null) {
@@ -88,7 +88,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 });
 
                 Button moveToHand = dialog.findViewById(R.id.move_to_hand_button);
-                moveToHand.setVisibility(setup == ButtonSetup.PLAYED ? View.VISIBLE : View.INVISIBLE);
+                moveToHand.setEnabled(setup == ButtonSetup.PLAYED ? true : false);
                 moveToHand.setOnClickListener(v2 -> {
                     Card selected = handAdapter.getSelected();
                     if (selected != null) {
@@ -98,7 +98,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 });
 
                 Button moveToPlayDesk = dialog.findViewById(R.id.move_to_desk_buton);
-                moveToPlayDesk.setVisibility(setup == ButtonSetup.DESK ? View.VISIBLE : View.INVISIBLE);
+                moveToPlayDesk.setEnabled(setup == ButtonSetup.DESK ? true : false);
                 moveToPlayDesk.setOnClickListener(v2 -> {
                     Card selected = handAdapter.getSelected();
                     if (selected != null) {

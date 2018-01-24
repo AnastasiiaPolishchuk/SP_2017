@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="#EFEBE9">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_zoom_cards"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@drawable/background_selector"
+        android:background="@android:color/transparent"
         android:padding="8dp" />
 
     <LinearLayout
@@ -22,28 +22,28 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="Move to Played"
-            android:textAllCaps="true" />
+            android:theme="@style/AppTheme.Button"/>
 
         <Button
             android:id="@+id/move_to_hand_button"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="Move to Hand"
-            android:textAllCaps="true" />
+            android:theme="@style/Animation.Design.BottomSheetDialog" />
 
         <Button
             android:id="@+id/move_to_desk_buton"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="Move to desk"
-            android:textAllCaps="true" />
+            android:theme="@style/AppTheme.Button" />
 
         <Button
             android:id="@+id/move_to_passive_card_deck"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="DELETE"
-            android:textAllCaps="true" />
+            android:theme="@style/AppTheme.Button" />
     </LinearLayout>
 
 </LinearLayout>

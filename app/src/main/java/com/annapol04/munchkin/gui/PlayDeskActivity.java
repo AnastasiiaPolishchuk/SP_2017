@@ -232,14 +232,14 @@ public class PlayDeskActivity extends AppCompatActivity
             dialog.show();
 
             Button dialogFightButton = dialog.findViewById(R.id.fight_diaolog_fight_button);
-            dialogFightButton.setVisibility(viewModel.isMyLevelGreater().getValue() ? View.VISIBLE : View.INVISIBLE);
+            dialogFightButton.setEnabled(viewModel.isMyLevelGreater().getValue() ? true : false);
             dialogFightButton.setOnClickListener(vv -> {
                 viewModel.fightMonster();
                 dialog.dismiss();
             });
 
             Button dialogRunAwayButton = dialog.findViewById(R.id.fight_diaolog_run_button_button);
-            dialogRunAwayButton.setVisibility(!viewModel.isMyLevelGreater().getValue()? View.VISIBLE : View.INVISIBLE);
+            dialogRunAwayButton.setEnabled(!viewModel.isMyLevelGreater().getValue()? true : false);
             dialogRunAwayButton.setOnClickListener(vv -> {
                 viewModel.runAwayFromMonster();
                 dialog.dismiss();
