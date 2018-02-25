@@ -2,6 +2,9 @@ package com.annapol04.munchkin.engine;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
+
+import java.util.Arrays;
 
 public abstract class PlayClient {
     public enum MatchState {

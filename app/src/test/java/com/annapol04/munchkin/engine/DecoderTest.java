@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -22,6 +23,10 @@ public class DecoderTest {
     @Test
     public void decodeEventWithEmptyData() {
         byte[] b = new byte[]{
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7, // previous hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
+                (byte)7,(byte)6,(byte)1,(byte)0,(byte)4,(byte)0,(byte)1,(byte)0, // hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
                 (byte)2, // player 2 scope
                 (byte)0,(byte)0,(byte)0,(byte)1, // action id nothing
                 (byte)0,(byte)0,(byte)0,(byte)3, // message id empty
@@ -42,8 +47,44 @@ public class DecoderTest {
     }
 
     @Test
+    public void decodeEventWithHash() throws IOException {
+        byte[] b = new byte[]{
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7, // previous hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
+                (byte)7,(byte)6,(byte)1,(byte)0,(byte)4,(byte)0,(byte)1,(byte)0, // hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
+                (byte)2, // player 2 scope
+                (byte)0,(byte)0,(byte)0,(byte)1, // action id nothing
+                (byte)0,(byte)0,(byte)0,(byte)3, // message id empty
+                (byte)1, // data type empty
+                (byte)1,(byte)2,(byte)3,(byte)4, // ‭16909060‬
+        };
+
+        Decoder decoder = new Decoder();
+
+        List<Event> events = decoder.decode(b, 0, b.length);
+
+        assertEquals(1, events.size());
+
+        Event event = events.get(0);
+        Assert.assertTrue(
+                Arrays.equals(new byte[]{(byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7, // previous hash
+                                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7},
+                        event.getPreviousHash()));
+
+        Assert.assertTrue(
+                Arrays.equals(new byte[]{(byte)7,(byte)6,(byte)1,(byte)0,(byte)4,(byte)0,(byte)1,(byte)0, // hash
+                                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7},
+                        event.getHash()));
+    }
+
+    @Test
     public void decodeEventWithIntegerData() {
         byte[] b = new byte[]{
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7, // previous hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
+                (byte)7,(byte)6,(byte)1,(byte)0,(byte)4,(byte)0,(byte)1,(byte)0, // hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
                 (byte)2, // player 2 scope
                 (byte)0,(byte)0,(byte)0,(byte)1, // action id nothing
                 (byte)0,(byte)0,(byte)0,(byte)3, // message id empty
@@ -69,6 +110,10 @@ public class DecoderTest {
     public void decodeEventWithStringData() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(new byte[]{
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7, // previous hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
+                (byte)7,(byte)6,(byte)1,(byte)0,(byte)4,(byte)0,(byte)1,(byte)0, // hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
                 (byte)2, // player 2 scope
                 (byte)0,(byte)0,(byte)0,(byte)1, // action id nothing
                 (byte)0,(byte)0,(byte)0,(byte)3, // message id empty
@@ -96,6 +141,10 @@ public class DecoderTest {
     public void decodeMultipleEvents() throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(new byte[]{
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7, // previous hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
+                (byte)7,(byte)6,(byte)1,(byte)0,(byte)4,(byte)0,(byte)1,(byte)0, // hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
                 (byte)2, // player 2 scope
                 (byte)0,(byte)0,(byte)0,(byte)1, // action id nothing
                 (byte)0,(byte)0,(byte)0,(byte)3, // message id empty
@@ -104,6 +153,10 @@ public class DecoderTest {
         outputStream.write("Hello World!".getBytes(StandardCharsets.UTF_8));
         outputStream.write(new byte[] { (byte) 0 });
         outputStream.write(new byte[]{
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7, // previous hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
+                (byte)7,(byte)6,(byte)1,(byte)0,(byte)4,(byte)0,(byte)1,(byte)0, // hash
+                (byte)0,(byte)1,(byte)2,(byte)3,(byte)4,(byte)5,(byte)6,(byte)7,
                 (byte)2, // player 2 scope
                 (byte)0,(byte)0,(byte)0,(byte)1, // action id nothing
                 (byte)0,(byte)0,(byte)0,(byte)3, // message id empty

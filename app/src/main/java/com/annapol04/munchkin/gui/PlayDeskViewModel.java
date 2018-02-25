@@ -239,23 +239,6 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         //hier wird die Karte aus der Hand auf PlayDesk verschoben
     }
 
-    // --------------------------------- Für GUI TEST ----------------------------------------------------
-    public void setTestPlayers(){
-     //   game.addTestPlayer();
-    }
-
-    public String getPlayerName(int playerNr) {
-        return getPlayer(playerNr).getName();
-    }
-
-    public LiveData<Integer> getPlayerLevel(int playerNr) {
-        return getPlayer(playerNr).getLevel();
-    }
-
-    public LiveData<List<Card>> getPlayerHand(int playerNr) {
-        return getPlayer(playerNr).getHandCards();
-    }
-
     public void displayPlayer(int id) {
         visiblePlayer.setValue(getPlayer(id));
     }

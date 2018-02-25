@@ -2,6 +2,7 @@ package com.annapol04.munchkin.engine;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.util.Log;
 
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.data.EventRepository;
@@ -17,7 +18,7 @@ public class Player extends LiveData<Player> {
         DWARF; //Zwerg
     }
 
-    private long id;
+    private int id;
     private Game game;
     private EventRepository eventRepository;
     private MutableLiveData<String> name = new MutableLiveData<>();
@@ -45,10 +46,11 @@ public class Player extends LiveData<Player> {
     private MutableLiveData<List<Card>> playedCards = new MutableLiveData<>();
     private Scope scope;
 
-    public Player(long id, Game game, EventRepository eventRepository) {
+    public Player(int id, Game game, EventRepository eventRepository) {
         this.id = id;
         this.game = game;
         this.eventRepository = eventRepository;
+        name.setValue("");
 
         reset();
     }
@@ -61,7 +63,6 @@ public class Player extends LiveData<Player> {
         handCards.setValue(new ArrayList<>());
         playedCards.setValue(new ArrayList<>());
         bonus.setValue(0);
-        name.setValue("");
 
         canPlayBigEquipment.setValue(true);
         canPlayHeadgeer.setValue(true);
@@ -75,7 +76,7 @@ public class Player extends LiveData<Player> {
         this.name.setValue(name);
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

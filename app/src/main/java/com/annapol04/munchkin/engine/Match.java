@@ -8,8 +8,10 @@ import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.data.EventRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,15 +22,18 @@ public class Match {
     protected static final int AMOUNT_OF_HAND_CARDS = 2;
 
     protected Game game;
-    protected MutableLiveData<String> log = new MutableLiveData<>();
-    protected MutableLiveData<List<Player>> players = new MutableLiveData<>();
-    protected List<Integer> playerOrder;
-    protected Player myself;
-    protected Scope myScope;
-    protected MutableLiveData<Player> current = new MutableLiveData<>();
     protected EventRepository eventRepository;
+
+    protected MutableLiveData<String> log = new MutableLiveData<>();
+    protected MutableLiveData<List<Player>> observablePlayers = new MutableLiveData<>();
+    protected MutableLiveData<Player> current = new MutableLiveData<>();
+
+    protected List<Player> players = new ArrayList<>();
+    protected Player host = null;
+    protected final Player myself;
+
     protected State state = State.JOINING;
-    protected int amountOfPlayers;
+    protected int amountOfPlayers = 0;
     protected int playersRenamed = 0;
 
     protected enum State {
@@ -42,9 +47,9 @@ public class Match {
     public Match(Game game, @Named("myself") Player myself, EventRepository eventRepository) {
         this.game = game;
         this.myself = myself;
-        this.current.setValue(myself);
         this.eventRepository = eventRepository;
 
+        observablePlayers.setValue(new ArrayList<>());
         log.setValue("");
     }
 
@@ -61,7 +66,7 @@ public class Match {
     }
 
     public LiveData<List<Player>> getPlayers() {
-        return players;
+        return observablePlayers;
     }
 
     public int getAmountOfPlayers() {
@@ -69,11 +74,11 @@ public class Match {
     }
 
     public Player getPlayer(int playerNr) {
-        return playerWithNumber(playerNr);
+        return players.get(playerNr);
     }
 
     public Player getPlayer(Scope scope) {
-        return getPlayer(scope.ordinal());
+        return getPlayer(scope.ordinal() - 1);
     }
 
     public LiveData<Player> getCurrentPlayer() {
@@ -83,26 +88,25 @@ public class Match {
     public void start(int amountOfPlayers) {
         this.amountOfPlayers = amountOfPlayers;
         playersRenamed = 0;
-        players.setValue(new ArrayList<>(amountOfPlayers));
-        playerOrder = new ArrayList<>(amountOfPlayers);
+
+        observablePlayers.getValue().clear();
+        players.clear();
+        current.setValue(null);
 
         game.reset();
         myself.reset();
 
         log.setValue("");
 
-        for (int i = 0; i < amountOfPlayers; i++)
-            playerOrder.add(0);
-
         state = State.JOINING;
 
-        eventRepository.push(new Event(Scope.GAME, Action.JOIN_PLAYER, 0, (int)myself.getId()));
+        eventRepository.push(new Event(Scope.GAME, Action.JOIN_PLAYER, 0, myself.getId()));
     }
 
-    private Player evaluateInitialPlayer() {
+    private Player evaluateHost() {
         Player highestId = null;
 
-        for (Player player : players.getValue()) {
+        for (Player player : players) {
             if (highestId == null)
                 highestId = player;
             else if (player.getId() > highestId.getId())
@@ -113,34 +117,33 @@ public class Match {
     }
 
     private void specifyPlayerNumbers() {
-        myScope = Scope.PLAYER1;
+        myself.setScope(Scope.PLAYER1);
 
         eventRepository.push(
-                new Event(Scope.PLAYER1, Action.ASSIGN_PLAYER_NUMBER, 0, (int)myself.getId()));
+                new Event(myself.getScope(), Action.ASSIGN_PLAYER_NUMBER, 0, myself.getId()));
 
         int nr = 2;
 
-        for (Player player : players.getValue())
+        for (Player player : players)
             if (player != myself)
                 eventRepository.push(
-                        new Event(Scope.fromId(nr++), Action.ASSIGN_PLAYER_NUMBER, 0, (int)player.getId()));
+                        new Event(Scope.fromId(nr++), Action.ASSIGN_PLAYER_NUMBER, 0, player.getId()));
     }
 
     private <T> void update(MutableLiveData<T> liveData) {
         liveData.setValue(liveData.getValue());
     }
 
-    public void joinPlayer(long randomNumber) {
-        Log.e(Match.class.getSimpleName(), Integer.toString((int)randomNumber));
-        players.getValue().add(randomNumber == myself.getId() ? myself : new Player(randomNumber, game, eventRepository));
-        update(players);
+    public void joinPlayer(int randomNumber) {
+        players.add(randomNumber == myself.getId() ?
+                myself : new Player(randomNumber, game, eventRepository));
 
-        if (players.getValue().size() == amountOfPlayers) {
+        if (players.size() == amountOfPlayers) {
             state = State.NAMING;
 
-            current.setValue(evaluateInitialPlayer());
+            host = evaluateHost();
 
-            if (current.getValue().getId() == myself.getId()) {
+            if (host == myself) {
                 specifyPlayerNumbers();
 
                 namingRound();
@@ -150,21 +153,19 @@ public class Match {
 
     protected void namingRound() {
         eventRepository.push(
-                new Event(myScope, Action.NAME_PLAYER, R.string.ev_join_player, myself.getName()),
-                new Event(myScope, Action.FINISH_ROUND, 0)
+                new Event(myself.getScope(), Action.NAME_PLAYER, R.string.ev_join_player, myself.getName()),
+                new Event(myself.getScope(), Action.FINISH_ROUND, 0)
         );
     }
 
     private Player nextPlayer(int playerNr) {
-        int next = playerNr % players.getValue().size() + 1;
-
-        return playerWithNumber(next);
+        return players.get(playerNr % players.size());
     }
 
     private void handoutCards() {
         List<Card> cards = game.getRandomTreasureCards(AMOUNT_OF_HAND_CARDS * amountOfPlayers);
 
-        for (Player player : players.getValue()) {
+        for (Player player : players) {
             for (int i = 0; i < AMOUNT_OF_HAND_CARDS; i++) {
                 Card card = cards.remove(0);
 
@@ -179,36 +180,42 @@ public class Match {
         current.setValue(nextPlayer(playerNr));
 
         if (current.getValue() == myself) {
-            if (state == State.INITIAL) {
+            if (state == State.INITIAL && host == myself) {
                 handoutCards();
 
                 state = State.STARTED;
+            } else if (state == State.NAMING) {
+                namingRound();
+
+                state = State.INITIAL;
             } else
                 current.getValue().playRound();
         }
     }
 
-    public void assignPlayerNumber(int playerNr, long randomNumber) {
-        List<Player> players = this.players.getValue();
+    public void assignPlayerNumber(int playerNr, int randomNumber) {
+        boolean allScopesAssigned = true;
 
-        for (int i = 0; i < playerOrder.size(); i++)
-            if (players.get(i).getId() == randomNumber) {
-                playerOrder.set(i, playerNr - 1);
-                players.get(i).setScope(Scope.fromId(playerNr));
+        for (Player player : players) {
+            if (player.getId() == randomNumber)
+                player.setScope(Scope.fromId(playerNr));
+            if (player.getScope() == null)
+                allScopesAssigned = false;
+        }
 
-                if (players.get(i) == myself)
-                    myScope = Scope.fromId(playerNr);
-            }
-    }
-
-    private Player playerWithNumber(int nr) {
-        return players.getValue().get(playerOrder.get(nr - 1));
+        if (allScopesAssigned)
+            players = players.stream()
+                    .sorted(Comparator.comparingInt(p -> p.getScope().ordinal()))
+                    .collect(Collectors.toList());
     }
 
     public void namePlayer(int playerNr, String name) {
-        playerWithNumber(playerNr).rename(name);
+        players.get(playerNr).rename(name);
 
-        if (++playersRenamed == amountOfPlayers)
+        if (++playersRenamed == amountOfPlayers) {
+            observablePlayers.setValue(players);
+
             state = State.INITIAL;
+        }
     }
 }

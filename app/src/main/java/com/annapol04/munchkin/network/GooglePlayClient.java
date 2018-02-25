@@ -76,6 +76,9 @@ public class GooglePlayClient extends PlayClient {
 
     @Override
     public void processActivityResults(int requestCode, int resultCode, Intent data) {
+        if (data == null)
+            return;
+
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess())
@@ -160,17 +163,13 @@ public class GooglePlayClient extends PlayClient {
 
     @Override
     public void sendToAll(byte[] message) {
-        for (String participantId : mRoom.getParticipantIds()) {
-            if (!participantId.equals(mMyParticipantId)) {
-                Task<Integer> task = Games.
-                        getRealTimeMultiplayerClient(application, account)
-                        .sendReliableMessage(message, mRoom.getRoomId(), participantId,
-                                handleMessageSentCallback).addOnCompleteListener(task1 -> {
-                            // Keep track of which messages are sent, if desired.
-                            //     recordMessageToken(task.getResult());
-                        });
-            }
-        }
+        Games.getRealTimeMultiplayerClient(application, account)
+            .sendUnreliableMessageToOthers(message, mRoom.getRoomId())
+            .addOnCompleteListener(task1 -> {
+                messageReceived(message);
+                // Keep track of which messages are sent, if desired.
+                //     recordMessageToken(task.getResult());
+            });
     }
 
     @Override
@@ -178,28 +177,9 @@ public class GooglePlayClient extends PlayClient {
         return mRoom.getParticipantIds().size();
     }
 
-    private RealTimeMultiplayerClient.ReliableMessageSentCallback handleMessageSentCallback =
-            new RealTimeMultiplayerClient.ReliableMessageSentCallback() {
-                @Override
-                public void onRealTimeMessageSent(int statusCode, int tokenId, String recipientId) {
-                    // handle the message being sent.
-                    synchronized (this) {
-                        //  pendingMessageSet.remove(tokenId);
-                        Log.d(TAG, "[SENDING PACKET]");
-                    }
-                }
-            };
-
     private OnRealTimeMessageReceivedListener mMessageReceivedHandler =
             realTimeMessage -> {
-                // Handle messages received here.
-                byte[] message = realTimeMessage.getMessageData();
-
-                if (message[0] == (byte)'T') {
-                   //toastManager.show("treasure is clicked!");
-                } else if (message[0] == (byte)'D') {
-                   // toastManager.show("doors is clicked!");
-                }
+                messageReceived(realTimeMessage.getMessageData());
             };
 
     private boolean mWaitingRoomFinishedFromCode = false;

@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ public class Game {
 
     private MutableLiveData<List<Card>> deskCards = new MutableLiveData<>();
     private MutableLiveData<Boolean> isGameFinished = new MutableLiveData<>();
+
     private List<Card> doorDeck = new ArrayList<>();
     private List<Card> treasureDeck = new ArrayList<>();
     private State state = State.HAND_OUT_CARDS;
@@ -28,9 +30,15 @@ public class Game {
     private Random randomTreasure = new Random();
 
     @Inject
-    public Game() { }
+    public Game() {
+        deskCards.setValue(new ArrayList<>());
+        isGameFinished.setValue(false);
+    }
 
     public void reset() {
+        deskCards.getValue().clear();
+        isGameFinished.setValue(false);
+
         doorDeck.clear();
         treasureDeck.clear();
 
@@ -47,9 +55,6 @@ public class Game {
                     treasureDeck.add((Card) field.get(null));
 
         } catch (IllegalAccessException e) { /* wont happen... */ }
-
-        deskCards.setValue(new ArrayList<>());
-        isGameFinished.setValue(false);
     }
 
     private <T> void update(MutableLiveData<T> liveData) {

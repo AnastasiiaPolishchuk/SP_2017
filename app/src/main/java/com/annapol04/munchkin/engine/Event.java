@@ -5,7 +5,10 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.nio.ByteBuffer;
+import java.security.MessageDigest;
 import java.util.Arrays;
+
+import okio.ByteString;
 
 
 @Entity(tableName = "events")
@@ -17,8 +20,8 @@ public class Event {
     private final Action action;
     private final int messageId;
     private final EventData data;
-    private String previousHash;
-    private String hash;
+    private byte[] previousHash;
+    private byte[] hash;
 
     @Ignore
     public Event(Scope scope, Action action, int messageId) {
@@ -40,7 +43,12 @@ public class Event {
         this(scope, action, messageId, data, null, null);
     }
 
-    public Event(Scope scope, Action action, int messageId, EventData data, String previousHash, String hash) {
+    @Ignore
+    public Event(Scope scope, Action action, int messageId, byte[] previousHash, byte[] hash) {
+        this(scope, action, messageId, new EventData(), previousHash, hash);
+    }
+
+    public Event(Scope scope, Action action, int messageId, EventData data, byte[] previousHash, byte[] hash) {
         this.scope = scope;
         this.action = action;
         this.messageId = messageId;
@@ -78,11 +86,13 @@ public class Event {
     }
 
     public int size() {
-        return 9 + data.size();
+        return 41 + data.size();
     }
 
     public byte[] getBytes() {
         return ByteBuffer.allocate(size())
+                .put(previousHash)
+                .put(hash)
                 .put((byte)scope.ordinal())
                 .putInt(action.getId())
                 .putInt(messageId)
@@ -98,11 +108,11 @@ public class Event {
         this.id = id;
     }
 
-    public String getPreviousHash() {
+    public byte[] getPreviousHash() {
         return previousHash;
     }
 
-    public void setPreviousHash(String previousHash) {
+    public void setPreviousHash(byte[] previousHash) {
         if (action == Action.JOIN_PLAYER) {
             this.previousHash = previousHash;
 
@@ -110,12 +120,23 @@ public class Event {
         } else {
             this.previousHash = previousHash;
 
-            this.hash = HashUtil.applySha256(previousHash + toString());
+            hash = HashUtil.applyMD5(
+                    ByteBuffer.allocate(size())
+                    .put(previousHash)
+                    .put((byte)scope.ordinal())
+                    .putInt(action.getId())
+                    .putInt(messageId)
+                    .put(data.getBytes())
+                    .array());
         }
     }
 
-    public String getHash() {
+    public byte[] getHash() {
         return hash;
+    }
+
+    public void setHash(byte[] hash) {
+        this.hash = hash;
     }
 
     public EventData getData() {
@@ -128,8 +149,15 @@ public class Event {
 
     @Override
     public String toString() {
+        String prevHashByteString = ByteString.of(previousHash).toString();
+        String hashByteString = ByteString.of(hash).toString();
+
         return new StringBuilder()
                 .append("[")
+                .append(prevHashByteString.substring(5, prevHashByteString.length() - 1))
+                .append(", ")
+                .append(hashByteString.substring(5, hashByteString.length() - 1))
+                .append(", ")
                 .append(scope.toString())
                 .append(", ")
                 .append(action.toString())
@@ -142,8 +170,15 @@ public class Event {
     }
 
     public String toString(MessageBook messageBook, Player player) {
+        String prevHashByteString = ByteString.of(previousHash).toString();
+        String hashByteString = ByteString.of(hash).toString();
+
         return new StringBuilder()
                 .append("[")
+                .append(prevHashByteString.substring(5, prevHashByteString.length() - 1))
+                .append(", ")
+                .append(hashByteString.substring(5, hashByteString.length() - 1))
+                .append(", ")
                 .append(scope.toString())
                 .append(", ")
                 .append(action.toString())

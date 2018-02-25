@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.annapol04.munchkin.data.EventRepository;
 
+import java.util.Arrays;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -29,7 +31,7 @@ public class Executor implements EventRepository.OnNewEventListener {
     public void onNewEvent(Event event) {
         Player player = event.getScope() == Scope.GAME ? null : match.getPlayer(event.getScope());
 
-        if (repository.getTopHash().equals(event.getPreviousHash())) {
+        if (Arrays.equals(repository.getTopHash(), (event.getPreviousHash()))) {
             Log.d(TAG, "executing: " + event.toString(messageBook, player));
 
             event.execute(match, game);

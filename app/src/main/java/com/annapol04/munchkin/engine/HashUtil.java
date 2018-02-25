@@ -1,6 +1,7 @@
 package com.annapol04.munchkin.engine;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class HashUtil {
     //Applies Sha256 to a string and returns the result.
@@ -17,6 +18,15 @@ public class HashUtil {
             }
             return hexString.toString();
         } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static byte[] applyMD5(byte[] input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            return digest.digest(input);
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }

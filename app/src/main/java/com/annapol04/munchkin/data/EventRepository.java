@@ -22,7 +22,12 @@ public class EventRepository implements PlayClient.OnMessageReceivedListener {
     private EventDao dao;
     private PlayClient client;
     private Decoder decoder;
-    private String topHash = HashUtil.applySha256("");
+    private byte[] topHash = new byte[] {
+            (byte)1, (byte)2, (byte)3, (byte)4, (byte)5, (byte)6, (byte)7, (byte)8,
+            (byte)9, (byte)10, (byte)11, (byte)12, (byte)13, (byte)14, (byte)15, (byte)16
+    };
+
+    private byte[] pushTopHash = topHash;
 
     public interface OnNewEventListener {
         void onNewEvent(Event event);
@@ -40,28 +45,22 @@ public class EventRepository implements PlayClient.OnMessageReceivedListener {
         this.client.setMessageReceivedListener(this);
     }
 
-    public String getTopHash() {
+    public byte[] getTopHash() {
         return topHash;
     }
 
-    public void setTopHash(String topHash) {
+    public void setTopHash(byte[] topHash) {
         this.topHash = topHash;
     }
 
     public void push(Event... events) {
-        String top = topHash;
-
         for (Event event : events) {
-            event.setPreviousHash(top);
-            top = event.getHash();
+            event.setPreviousHash(pushTopHash);
+            pushTopHash = event.getHash();
 
             Log.d(TAG, "pushig event: " + event);
 
-            executors.diskIO().execute(() -> {
-                dao.insert(event);
-            });
             client.sendToAll(event.getBytes());
-            newEvent(event);
         }
     }
 
@@ -78,7 +77,12 @@ public class EventRepository implements PlayClient.OnMessageReceivedListener {
     public void onMessageReceived(byte[] data) {
         final List<Event> received = decoder.decode(data, 0, data.length);
 
-        for (Event event : received)
+        for (Event event : received) {
+            executors.diskIO().execute(() -> {
+                dao.insert(event);
+            });
+
             newEvent(event);
+        }
     }
 }

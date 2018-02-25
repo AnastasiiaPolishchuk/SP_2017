@@ -37,7 +37,7 @@ public class PlayClientDummy extends PlayClient {
 
     @Override
     public void sendToAll(byte[] message) {
-
+        messageReceived(message);
     }
 
     @Override

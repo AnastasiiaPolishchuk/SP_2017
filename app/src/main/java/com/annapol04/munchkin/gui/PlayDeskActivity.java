@@ -3,7 +3,9 @@ package com.annapol04.munchkin.gui;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +30,8 @@ import com.annapol04.munchkin.di.ViewModelFactory;
 import com.annapol04.munchkin.engine.Card;
 import com.annapol04.munchkin.engine.Player;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
@@ -40,7 +45,10 @@ public class PlayDeskActivity extends AppCompatActivity
     ViewModelFactory viewModelFactory;
 
     private PlayDeskViewModel viewModel;
-    public Toolbar mToolbar;
+
+    private View mRootView;
+    private Toolbar mToolbar;
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,44 +58,29 @@ public class PlayDeskActivity extends AppCompatActivity
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayDeskViewModel.class);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mRootView = findViewById(R.id.root_view);
+        mRootView.setVisibility(View.INVISIBLE);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View header = navigationView.getHeaderView(0);
-        TextView name = (TextView) header.findViewById(R.id.name_of_player_nav_header);
+        mNavigationView = findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
+        View header = mNavigationView.getHeaderView(0);
+        TextView name = header.findViewById(R.id.name_of_player_nav_header);
         name.setText(viewModel.getMyName().getValue() + ":  " + viewModel.getMyLevel().getValue());
 
-        viewModel.getPlayers().observe(this, players -> {
-            if (players != null) {
-                navigationView.getMenu().clear();
+        viewModel.getPlayers().observe(this, this::updatePlayers);
 
-                for (int i = 0; i < players.size(); i++) {
-                    Player p = players.get(i);
-                    MenuItem item = navigationView.getMenu().add(R.id.players_group, i + 1, (i + 1) * 100, p.getName());
-                    item.setIcon(R.drawable.ic_menu_camera);
-                }
-            }
-        });
 
-        TextView logView = findViewById(R.id.log);
-        viewModel.getLog().observe(this, logView::setText);
-
-        View rootView = findViewById(R.id.root_view);
-        viewModel.isMyself().observe(this, rootView::setClickable);
-
-//        View rootView = findViewById(R.id.root_view);
-//        viewModel.getGameStarted().observe(this, isStarted -> {
-//            rootView.setVisibility(isStarted ? View.VISIBLE : View.INVISIBLE);
-//        });
+  //      viewModel.isMyself().observe(this, mRootView::setClickable);
 
         Activity activity = this;
         viewModel.getGameFinished().observe(this, isFinished -> {
@@ -104,10 +97,6 @@ public class PlayDeskActivity extends AppCompatActivity
 
         // prevent screen from sleeping during handshake
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        addListenerOnButton();
-
-        updateDeskView();
     }
 
     @Override
@@ -139,6 +128,12 @@ public class PlayDeskActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.new_play_desk, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        viewModel.processActivityResults(requestCode, resultCode, data);
     }
 
     @Override
@@ -175,11 +170,26 @@ public class PlayDeskActivity extends AppCompatActivity
         mToolbar.setTitle(viewModel.getPlayerName().getValue() + ": " + viewModel.getPlayerLevel().getValue());
     }
 
-    public void updateDeskView() {
-        mToolbar = findViewById(R.id.toolbar);
+    private void updatePlayers(List<Player> players) {
+        if (players.size() == 0)
+            return;
+
+        Log.d(PlayDeskActivity.class.getSimpleName(), "Updating GUI for players");
+
+        mNavigationView.getMenu().clear();
+
+        for (int i = 0; i < players.size(); i++) {
+            Player p = players.get(i);
+            MenuItem item = mNavigationView.getMenu().add(R.id.players_group, i + 1, (i + 1) * 100, p.getName());
+            item.setIcon(R.drawable.ic_menu_camera);
+        }
+
         updateTitle();
         viewModel.getPlayerName().observe(this, name -> updateTitle());
         viewModel.getPlayerLevel().observe(this, lvl -> updateTitle());
+
+        TextView logView = findViewById(R.id.log);
+        viewModel.getLog().observe(this, logView::setText);
 
         RecyclerView handOfPlayer = findViewById(R.id.recycler_view_hand_of_player);
         RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -205,6 +215,10 @@ public class PlayDeskActivity extends AppCompatActivity
                 viewModel.getDeskCards().getValue(), viewModel);
         playDesk.setAdapter(deskCardsAdapter);
         viewModel.getDeskCards().observe(this, deskCardsAdapter::setCards);
+
+        addListenerOnButton();
+
+        mRootView.setVisibility(View.VISIBLE);
     }
 
     public void addListenerOnButton() {

@@ -13,21 +13,23 @@ import javax.inject.Singleton;
  * Decodes following structure.
  *
  * # Event structure
- * |  scope |  action id |  message id  |  data type |  data   |
- * |--------|------------|--------------|------------|---------|
- * | 1 Byte |   4 Byte   |   4 Byte     |   1 Byte   | n Bytes |
+ * |  previous hash  |   hash   | scope  |  action id |  message id  |  data type |  data   |
+ * |-----------------|----------|--------|------------|--------------|------------|---------|
+ * |    16 bytes     | 16 bytes | 1 Byte |   4 Byte   |   4 Byte     |   1 Byte   | n Bytes |
  */
 @Singleton
 public class Decoder {
-    private List<Event> decodedEvents = new ArrayList<>();
+    private List<Event> decodedEvents;
 
-    private static final int HEADER_LENGTH = 10;
+    private static final int HEADER_LENGTH = 42;
 
     @Inject
     public Decoder() { }
 
     public List<Event> decode(byte[] data, int pos, int length) {
         final int end = pos + length;
+
+        decodedEvents = new ArrayList<>();
 
         while (pos < end)
             pos = decodeEvent(data, pos, end);
@@ -68,6 +70,14 @@ public class Decoder {
             | (data[pos + 3] & 0xFF);
     }
 
+    private byte[] parseHash(byte[] data, int pos) {
+        byte[] hash = new byte[16];
+
+        System.arraycopy(data, pos, hash, 0, 16);
+
+        return hash;
+    }
+
     private int strlen(byte[] data, int pos, int end) {
         int length = 0;
 
@@ -86,17 +96,19 @@ public class Decoder {
 
         if (endOfheader <= end) {
             try {
-                final int scopeId = (int) data[pos];
-                final int actionId = parseInteger(data, pos + 1);
-                final int messageId = parseInteger(data, pos + 5);
-                final int dataTypeId = (int) data[pos + 9];
+                final byte[] previousHash = parseHash(data, pos);
+                final byte[] hash = parseHash(data, pos + 16);
+                final int scopeId = (int) data[pos + 32];
+                final int actionId = parseInteger(data, pos + 33);
+                final int messageId = parseInteger(data, pos + 37);
+                final int dataTypeId = (int) data[pos + 41];
 
                 final Scope scope = Scope.fromId(scopeId);
                 final Action action = Action.fromId(actionId);
                 final DataType dataType = DataType.fromId(dataTypeId);
 
                 if (dataType == DataType.EMPTY)
-                    decodedEvents.add(new Event(scope, action, messageId));
+                    decodedEvents.add(new Event(scope, action, messageId, previousHash, hash));
                 else if (dataType == DataType.STRING) {
                     int length = strlen(data, endOfheader, end);
 
@@ -106,14 +118,15 @@ public class Decoder {
                         byte[] stringBuffer = new byte[length];
                         System.arraycopy(data, endOfheader, stringBuffer, 0, length);
                         String string = new String(stringBuffer, StandardCharsets.UTF_8);
-                        decodedEvents.add(new Event(scope, action, messageId, string));
+                        decodedEvents.add(new Event(scope, action, messageId, new EventData(string), previousHash, hash));
                         endOfheader += length + 1;
                     }
                 } else if (dataType == DataType.INTEGER) {
                     if (endOfheader + 4 > end)
                         throw new IllegalStateException("Unknown integer format");
                     else
-                        decodedEvents.add(new Event(scope, action, messageId, parseInteger(data, endOfheader)));
+                        decodedEvents.add(new Event(scope, action, messageId,
+                                new EventData(parseInteger(data, endOfheader)), previousHash, hash));
                 } else
                     throw new IllegalStateException("Unknown event data type " + dataTypeId);
             } catch (IllegalArgumentException e) {
