@@ -210,7 +210,7 @@ public class Match {
     }
 
     public void namePlayer(int playerNr, String name) {
-        players.get(playerNr).rename(name);
+        players.get(playerNr - 1).rename(name);
 
         if (++playersRenamed == amountOfPlayers) {
             observablePlayers.setValue(players);
