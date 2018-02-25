@@ -1,7 +1,6 @@
 package com.annapol04.munchkin.di;
 
-import com.annapol04.munchkin.App;
-import com.annapol04.munchkin.engine.PlayClient;
+import com.annapol04.munchkin.AppBase;
 
 import javax.inject.Singleton;
 
@@ -21,5 +20,5 @@ public interface AppComponent {
         AppComponent build();
     }
 
-    void inject(App app);
+    void inject(AppBase app);
 }
