@@ -31,19 +31,19 @@ public class Executor implements EventRepository.OnNewEventListener {
     public void onNewEvent(Event event) {
         Player player = event.getScope() == Scope.GAME ? null : match.getPlayer(event.getScope());
 
-        if (Arrays.equals(repository.getTopHash(), (event.getPreviousHash()))) {
+        if (Arrays.equals(repository.getTopHash(), event.getPreviousHash())) {
             Log.d(TAG, "executing: " + event.toString(messageBook, player));
 
-            event.execute(match, game);
-
-            Log.d(TAG, "game: " + game);
+            repository.setTopHash(event.getHash());
 
             String message = event.getMessage(messageBook, player);
 
             if (message.length() > 0)
                 match.log(message);
 
-            repository.setTopHash(event.getHash());
+            event.execute(match, game);
+
+            Log.d(TAG, "game: " + game);
         } else {
             String msg = "failed to execute: " + event.toString(messageBook, player) + " because of wrong hash value";
 
