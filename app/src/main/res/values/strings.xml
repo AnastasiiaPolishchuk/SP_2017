@@ -31,7 +31,7 @@
         <item>Player 5</item>
         <item>Player 6</item>
     </string-array>
-    <string name="title_activity_new_play_desk">Hier wird Name + Level stehen</string>
+    <string name="title_activity_new_play_desk"></string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -72,21 +72,71 @@
     <string name="chicken">Chicken</string>
     <string name="chicken_desc"></string>
 
+    <string name="mr_bones">Mr. Bones</string>
+    <string name="mr_bones_desc"></string>
+    <string name="maul_rat">Maul rat</string>
+    <string name="maul_rat_desc"></string>
+    <string name="octahedron">Octahedron</string>
+    <string name="octahedron_desc"></string>
+    <string name="crabs">Crabs</string>
+    <string name="crabs_desc"></string>
+    <string name="face_sucker">Face sucker</string>
+    <string name="face_sucker_desc"></string>
+    <string name="harpies">Harpies</string>
+    <string name="harpies_desc"></string>
+    <string name="undead_horse">Undead Horse</string>
+    <string name="undead_horse_desc"></string>
+
+
     <!-- Equipment cards -->
-    <string name="pole">Pole</string>
+    <string name="pole">Eleven foot pole</string>
     <string name="pole_desc"></string>
     <string name="helmet">Helmet</string>
     <string name="helmet_desc"></string>
     <string name="boiled_leather">Boiled leather</string>
     <string name="boiled_leather_desc"></string>
-    <string name="slim_armor">Slim armor</string>
-    <string name="slim_armor_desc"></string>
+    <string name="slimy_armor">Slimy armor</string>
+    <string name="slimy_armor_desc"></string>
     <string name="knee">Knee</string>
     <string name="knee_desc"></string>
-    <string name="hot_helmet">Hot helmet</string>
-    <string name="hot_helmet_desc"></string>
+    <string name="horny_helmet">Horny helmet</string>
+    <string name="horny_helmet_desc"></string>
     <string name="ass_kick_boot">Ass kick boot</string>
     <string name="ass_kick_boot_desc"></string>
     <string name="ok">OK</string>
     <string name="error_uncaught_exception">Error: Uncaught exception</string>
+    <string name="dagger_of_treachery">Dagger of treachery</string>
+    <string name="dagger_of_treachery_desc"></string>
+    <string name="rapier_of_unfairness">Rapier of unfairness</string>
+    <string name="rapier_of_unfairness_desc"></string>
+    <string name="really_impressive_title">Really impressive title</string>
+    <string name="really_impressive_title_desc"></string>
+    <string name="swiss_army_polearm">Swiss army polearm</string>
+    <string name="swiss_army_polearm_desc"></string>
+    <string name="singing_dancing_sword">Singing and dancing sword</string>
+    <string name="singing_dancing_sword_desc"></string>
+    <string name="boots_of_running">Boots of running really fast</string>
+    <string name="boots_of_running_desc"></string>
+    <string name="sandals_protection">Sandals of protection</string>
+    <string name="sandals_protection_desc"></string>
+    <string name="rat">Rat on the stick</string>
+    <string name="rat_desc"></string>
+    <string name="pointy_hat">Pointy Hat of power</string>
+    <string name="pointy_hat_desc"></string>
+    <string name="staff_napalm">Staff of napalm</string>
+    <string name="staff_napalm_desc"></string>
+    <string name="sneaky_sword">Sneaky bastard sword</string>
+    <string name="sneaky_sword_desc"></string>
+    <string name="broad_sword">Broad sword</string>
+    <string name="broad_sword_desc"></string>
+    <string name="tuba_of_charm">Tuba of Charm</string>
+    <string name="tuba_of_charm_desc"></string>
+    <string name="huge_rock">Huge rock</string>
+    <string name="huge_rock_desc"></string>
+    <string name="limburger_sandwich">Limburger and Anchovy sandwich</string>
+    <string name="limburger_sandwich_desc"></string>
+    <string name="mithril_armor">Mithril armor</string>
+    <string name="mithril_armor_desc"></string>
+    <string name="stepladder">Stepladder</string>
+    <string name="stepladder_desc"></string>
 </resources>

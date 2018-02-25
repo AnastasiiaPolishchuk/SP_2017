@@ -3,7 +3,7 @@
     android:id="@+id/dialog_fight_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+    android:background="#EFEBE9"
     android:orientation="vertical">
 
     <LinearLayout
@@ -97,7 +97,8 @@
             android:layout_marginHorizontal="4dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="Fight" />
+            android:text="FIGHT"
+            android:background="@drawable/style_button" />
         <Button
             android:id="@+id/fight_diaolog_run_button_button"
             android:layout_width="0dp"
@@ -105,7 +106,8 @@
             android:layout_marginHorizontal="4dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="Run away" />
+            android:text="RUN AWAY"
+            android:background="@drawable/style_button" />
     </LinearLayout>
 
 </LinearLayout>

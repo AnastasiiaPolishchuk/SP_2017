@@ -6,6 +6,8 @@
         <item name="colorPrimary">#8D6E63</item>
         <item name="colorPrimaryDark">#5D4037</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorForeground">@color/foreground_material_light</item>
+        <item name="android:windowBackground">?android:attr/windowBackgroundFallback</item>
 
         <!-- enable window content transitions -->
         <!--<item name="android:windowActivityTransitions">true</item>-->
@@ -32,5 +34,15 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">#BCAAA4</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:enabled">true</item>
+
+    </style>
+
+    <style name="Munchkin" parent="AppTheme" />
 
 </resources>
