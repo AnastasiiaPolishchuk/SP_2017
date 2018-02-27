@@ -141,7 +141,7 @@ public class Game {
     }
 
     public void pushAwayCard() {
-        deskCards.getValue().remove(deskCards.getValue().size() - 1);
+        deskCards.getValue().remove(0);
         update(deskCards);
     }
 
