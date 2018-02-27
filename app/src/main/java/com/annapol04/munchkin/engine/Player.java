@@ -336,7 +336,6 @@ public class Player extends LiveData<Player> {
     }
 
     public void fightMonster() {
-
     }
 
     public void playRound() {

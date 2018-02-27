@@ -20,7 +20,7 @@ public class Action {
         throw new UnsupportedOperationException();
     });
     public static final Action DRAW_DOORCARD = new Action((match, game, event) -> {
-        match.getPlayer(event.getScope()).drawDoorCard(Card.fromId(event.getInteger()));
+        match.drawDoorCard(event.getScope(), Card.fromId(event.getInteger()));
     });
     public static final Action DRAW_TREASURECARD = new Action((match, game, event) -> {
         match.getPlayer(event.getScope()).drawTreasureCard(Card.fromId((event.getInteger())));
@@ -32,10 +32,13 @@ public class Action {
         match.getPlayer(event.getScope()).playCard(Card.fromId(event.getInteger()));
     });
     public static final Action FIGHT_MONSTER = new Action((match, game, event) -> {
-        match.getPlayer(event.getScope()).fightMonster();
+        match.fightMonster(event.getScope());
     });
     public static final Action RUN_AWAY = new Action((match, game, event) -> {
         match.getPlayer(event.getScope()).runAway();
+    });
+    public static final Action ENTER_TURN_PHASE = new Action((match, game, event) -> {
+        match.enterTurnPhase(TurnPhase.fromId(event.getInteger()));
     });
 
     private static int idSource = 0;
