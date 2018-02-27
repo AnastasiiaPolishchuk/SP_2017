@@ -74,11 +74,11 @@ public class Match {
     }
 
     public Player getPlayer(int playerNr) {
-        return players.get(playerNr);
+        return players.get(playerNr - 1);
     }
 
     public Player getPlayer(Scope scope) {
-        return getPlayer(scope.ordinal() - 1);
+        return getPlayer(scope.ordinal());
     }
 
     public LiveData<Player> getCurrentPlayer() {
