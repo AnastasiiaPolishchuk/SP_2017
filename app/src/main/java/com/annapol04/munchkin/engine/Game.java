@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class Game {
+
     private enum State {
         HAND_OUT_CARDS
     }
@@ -138,4 +139,10 @@ public class Game {
                 .append(isGameFinished.getValue())
                 .toString();
     }
+
+    public void pushAwayCard() {
+        deskCards.getValue().remove(deskCards.getValue().size() - 1);
+        update(deskCards);
+    }
+
 }

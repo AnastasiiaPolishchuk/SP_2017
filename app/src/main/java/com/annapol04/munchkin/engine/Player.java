@@ -336,7 +336,8 @@ public class Player extends LiveData<Player> {
     }
 
     public void fightMonster() {
-
+        level.setValue(level.getValue() + 1);
+        game.pushAwayCard();
     }
 
     public void playRound() {
