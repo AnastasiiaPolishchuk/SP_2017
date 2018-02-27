@@ -1,9 +1,5 @@
 package com.annapol04.munchkin.engine;
 
-import com.annapol04.munchkin.engine.Action;
-import com.annapol04.munchkin.engine.Event;
-import com.annapol04.munchkin.engine.Scope;
-
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -11,7 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertTrue;
+import junit.framework.Assert;
 
 public class EventTest {
     @Test
@@ -25,7 +21,7 @@ public class EventTest {
                 (byte)0, // data type empty
         };
 
-        assertTrue(Arrays.equals(b, event.getBytes()));
+        Assert.assertTrue(Arrays.equals(b, event.getBytes()));
     }
 
     @Test
@@ -43,7 +39,7 @@ public class EventTest {
         outputStream.write(new byte[] { (byte) 0 });
         byte b[] = outputStream.toByteArray();
 
-        assertTrue(Arrays.equals(b, event.getBytes()));
+        Assert.assertTrue(Arrays.equals(b, event.getBytes()));
     }
 
     @Test
@@ -58,6 +54,6 @@ public class EventTest {
                 (byte)1,(byte)2,(byte)3,(byte)4, // ‭16909060‬
         };
 
-        assertTrue(Arrays.equals(b, event.getBytes()));
+        Assert.assertTrue(Arrays.equals(b, event.getBytes()));
     }
 }
