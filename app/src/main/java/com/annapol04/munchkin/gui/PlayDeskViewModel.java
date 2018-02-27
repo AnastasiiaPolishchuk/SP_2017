@@ -233,6 +233,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     public void fightMonster() {
         visiblePlayer.getValue().emitFightMonster();
+
     }
 
     public void moveToPlayDesk(Card selected) {

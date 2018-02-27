@@ -140,4 +140,10 @@ public class Game {
                 .append(isGameFinished.getValue())
                 .toString();
     }
+
+    public void pushAwayCard() {
+        deskCards.getValue().remove(0);
+        update(deskCards);
+    }
+
 }
