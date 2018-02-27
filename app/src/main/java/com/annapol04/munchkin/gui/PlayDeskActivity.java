@@ -259,6 +259,12 @@ public class PlayDeskActivity extends AppCompatActivity
                 dialog.dismiss();
             });
         });
+
+        Button nextPlayerButton = findViewById(R.id.next_player_button);
+        nextPlayerButton.setOnClickListener(v -> {
+
+        });
+
     }
 
 }

@@ -68,6 +68,10 @@ h
                         android:textSize="24sp"
                         android:textStyle="italic" />
 
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#6D4C41" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -195,7 +199,7 @@ h
                         android:background="@drawable/style_button" />
 
                     <Button
-                        android:id="@+id/run_button"
+                        android:id="@+id/next_player_button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
