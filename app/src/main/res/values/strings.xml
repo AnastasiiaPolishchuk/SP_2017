@@ -54,10 +54,16 @@
     <string name="ev_enter_turn_phase">%player% %turn-phase%</string>
 
     <!-- Turn phases -->
+    <string name="tp_idle">idles</string>
+    <string name="tp_equipment">is equiping</string>
     <string name="tp_kick_open_the_door">kicks open the door</string>
+    <string name="tp_kick_open_the_door_and_fight">fights</string>
     <string name="tp_look_for_trouble">looks for trouble</string>
     <string name="tp_loot_the_room">loots the room</string>
     <string name="tp_charity">is charitable</string>
+
+    <!-- Anonymized card -->
+    <string name="anonymized_card">a card</string>
 
     <!-- Monster cards -->
     <string name="leperchaun">Leperchaun</string>

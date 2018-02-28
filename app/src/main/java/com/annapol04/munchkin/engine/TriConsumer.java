@@ -9,5 +9,5 @@ public interface TriConsumer<T, U, V> {
      * @param u the second input argument
      * @param v the second input argument
      */
-    void accept(T t, U u, V v);
+    void accept(T t, U u, V v) throws IllegalEngineStateException;
 }

@@ -29,7 +29,7 @@ public class Action {
         match.getPlayer(event.getScope()).pickupCard(Card.fromId(event.getInteger()));
     });
     public static final Action PLAY_CARD = new Action((match, game, event) -> {
-        match.getPlayer(event.getScope()).playCard(Card.fromId(event.getInteger()));
+        match.playCard(event.getScope(), Card.fromId(event.getInteger()));
     });
     public static final Action FIGHT_MONSTER = new Action((match, game, event) -> {
         match.fightMonster(event.getScope());
@@ -71,7 +71,7 @@ public class Action {
         this.modifier = modifier;
     }
 
-    public void execute(Match match, Game game, Event data) {
+    public void execute(Match match, Game game, Event data) throws IllegalEngineStateException {
         modifier.accept(match, game, data);
     }
 

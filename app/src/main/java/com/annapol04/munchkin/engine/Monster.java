@@ -45,14 +45,22 @@ public class Monster extends Card {
         PLUTONIUMDRACHE;
     }
 
-    public int level;
-    public int treasure;
-    public String badThings;
+    private int level;
+    private int treasure;
+    private String badThings;
 
     public Monster(@StringRes int name, @StringRes int description, @DrawableRes int imageResourceID, int level, int treasure, String badThings) {
         super(name, description, imageResourceID);
         this.level = level;
         this.treasure = treasure;
         this.badThings = badThings;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getTreasure() {
+        return treasure;
     }
 }

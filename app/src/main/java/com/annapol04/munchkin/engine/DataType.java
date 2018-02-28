@@ -3,7 +3,9 @@ package com.annapol04.munchkin.engine;
 public enum DataType {
     EMPTY,
     INTEGER,
-    STRING;
+    STRING,
+    CARD,
+    TURN_PHASE;
 
     public static DataType fromId(int id) {
         if (id >= lookup.length)
@@ -15,6 +17,8 @@ public enum DataType {
     private static final DataType[] lookup = new DataType[]{
             EMPTY,
             INTEGER,
-            STRING
+            STRING,
+            CARD,
+            TURN_PHASE
     };
 }

@@ -40,6 +40,12 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private LiveData<Boolean> canPlayOneHander;
     private LiveData<Boolean> canPlayTwoHander;
 
+    private LiveData<Boolean> isHeadgearEquiped;
+    private LiveData<Boolean> isArmorEquiped;
+    private LiveData<Boolean> areShoesEquiped;
+    private LiveData<Boolean> isRightHandEquiped;
+    private LiveData<Boolean> isLeftHandEquiped;
+
     private LiveData<Boolean> isMyself;
     private MutableLiveData<Boolean> isStarted = new MutableLiveData<>();
 
@@ -88,6 +94,12 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         canPlayShoes = Transformations.switchMap(visiblePlayer, Player::getCanPlayShoes);
         canPlayOneHander = Transformations.switchMap(visiblePlayer, Player::getCanPlayOneHander);
         canPlayTwoHander = Transformations.switchMap(visiblePlayer, Player::getCanPlayTwoHander);
+
+        isHeadgearEquiped = Transformations.switchMap(visiblePlayer, Player::getIsHeadgearEquiped);
+        isArmorEquiped = Transformations.switchMap(visiblePlayer, Player::getIsArmorEquiped);
+        areShoesEquiped = Transformations.switchMap(visiblePlayer, Player::getAreShoesEquiped);
+        isLeftHandEquiped = Transformations.switchMap(visiblePlayer, Player::getIsLeftHandEquiped);
+        isRightHandEquiped = Transformations.switchMap(visiblePlayer, Player::getIsRightHandEquiped);
     }
 
     @Override
@@ -98,6 +110,26 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     public void processActivityResults(int requestCode, int resultCode, Intent data) {
         client.processActivityResults(requestCode, resultCode, data);
+    }
+
+    public LiveData<Boolean> getIsHeadgearEquiped() {
+        return isHeadgearEquiped;
+    }
+
+    public LiveData<Boolean> getIsArmorEquiped() {
+        return isArmorEquiped;
+    }
+
+    public LiveData<Boolean> getAreShoesEquiped() {
+        return areShoesEquiped;
+    }
+
+    public LiveData<Boolean> getIsRightHandEquiped() {
+        return isRightHandEquiped;
+    }
+
+    public LiveData<Boolean> getIsLeftHandEquiped() {
+        return isLeftHandEquiped;
     }
 
     public LiveData<String> getLog() {
@@ -220,7 +252,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public void playCard(Card card) {
-        visiblePlayer.getValue().emitPlayCard(card);
+        match.emitPlayCard(visiblePlayer.getValue().getScope(), card);
     }
 
     public void pickupCard(Card card) {
@@ -228,12 +260,11 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public void runAwayFromMonster() {
-        visiblePlayer.getValue().emitRunAway();
+        match.emitRunAway(visiblePlayer.getValue().getScope());
     }
 
     public void fightMonster() {
-        visiblePlayer.getValue().emitFightMonster();
-
+        match.emitFightMonster(visiblePlayer.getValue().getScope());
     }
 
     public void moveToPlayDesk(Card selected) {

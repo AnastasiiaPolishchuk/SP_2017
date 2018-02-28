@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -93,6 +94,27 @@ public class PlayDeskActivity extends AppCompatActivity
                 });
                 dialog.show();
             }
+        });
+
+        TextView headgear = findViewById(R.id.headgear);
+        viewModel.getIsHeadgearEquiped().observe(this, equiped -> {
+            headgear.setTextColor(equiped ? Color.BLACK : Color.GRAY);
+        });
+        TextView armor = findViewById(R.id.armor);
+        viewModel.getIsArmorEquiped().observe(this, equiped -> {
+            armor.setTextColor(equiped ? Color.BLACK : Color.GRAY);
+        });
+        TextView shoes = findViewById(R.id.footgear);
+        viewModel.getAreShoesEquiped().observe(this, equiped -> {
+            shoes.setTextColor(equiped ? Color.BLACK : Color.GRAY);
+        });
+        TextView leftHand = findViewById(R.id.left_hand);
+        viewModel.getIsLeftHandEquiped().observe(this, equiped -> {
+            leftHand.setTextColor(equiped ? Color.BLACK : Color.GRAY);
+        });
+        TextView rightHand = findViewById(R.id.right_hand);
+        viewModel.getIsRightHandEquiped().observe(this, equiped -> {
+            rightHand.setTextColor(equiped ? Color.BLACK : Color.GRAY);
         });
 
         // prevent screen from sleeping during handshake
@@ -236,11 +258,14 @@ public class PlayDeskActivity extends AppCompatActivity
 
         Button fightButton = findViewById(R.id.fight_button);
         fightButton.setOnClickListener(v -> {
+            if (viewModel.getDeskCards().getValue().size() == 0)
+                return;
+
             final Dialog dialog = new Dialog(activity);
             dialog.setContentView(R.layout.dialog_fight_button);
             // TODO: Image für den Player, derzeit statisch
             ImageButton monsterCardImageButton = dialog.findViewById(R.id.monster_card_image);
-            Card monsterCard = viewModel.getDeskCards().getValue().get(0);      // vl kann man es besser machen ?
+            Card monsterCard = viewModel.getDeskCards().getValue().get(0);
             monsterCardImageButton.setImageResource(monsterCard.getImageResourceID());
 
             dialog.show();

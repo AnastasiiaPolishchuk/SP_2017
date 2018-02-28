@@ -8,18 +8,22 @@ import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.data.EventRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import static com.annapol04.munchkin.engine.EngineTest.test;
+
 @Singleton
 public class Match {
     protected static final int AMOUNT_OF_HAND_CARDS = 2;
+    private static final String TAG = Match.class.getSimpleName();
 
     protected Game game;
     protected EventRepository eventRepository;
@@ -31,7 +35,7 @@ public class Match {
     protected List<Player> players = new ArrayList<>();
     protected Player host = null;
     protected final Player myself;
-    protected TurnPhase turnPhase = TurnPhase.IDLE;
+    protected TurnPhase turnPhase;
 
     protected State state = State.JOINING;
     protected int amountOfPlayers = 0;
@@ -51,7 +55,26 @@ public class Match {
         this.eventRepository = eventRepository;
 
         observablePlayers.setValue(new ArrayList<>());
+
+        reset();
+    }
+
+    private void reset() {
+        players.clear();
+        current.setValue(null);
+        playersRenamed = 0;
+        observablePlayers.getValue().clear();
         log.setValue("");
+
+        game.reset();
+        myself.reset();
+
+        turnPhase = TurnPhase.IDLE;
+        state = State.JOINING;
+    }
+
+    public boolean isMyself(Player player) {
+        return player == myself;
     }
 
     public void log(String message) {
@@ -60,6 +83,10 @@ public class Match {
                 .append(message)
                 .append("\n")
                 .toString());
+    }
+
+    public void undoLog() {
+        log.setValue(log.getValue().replaceAll("\n[^\n]+\n+$", "\n"));
     }
 
     public LiveData<String> getLog() {
@@ -87,19 +114,9 @@ public class Match {
     }
 
     public void start(int amountOfPlayers) {
+        reset();
+
         this.amountOfPlayers = amountOfPlayers;
-        playersRenamed = 0;
-
-        observablePlayers.getValue().clear();
-        players.clear();
-        current.setValue(null);
-
-        game.reset();
-        myself.reset();
-
-        log.setValue("");
-
-        state = State.JOINING;
 
         eventRepository.push(new Event(Scope.GAME, Action.JOIN_PLAYER, 0, myself.getId()));
     }
@@ -177,7 +194,7 @@ public class Match {
         }
     }
 
-    public void finishRound(int playerNr) {
+    public void finishRound(int playerNr) throws IllegalEngineStateException {
         current.setValue(nextPlayer(playerNr));
 
         if (current.getValue() == myself) {
@@ -197,40 +214,11 @@ public class Match {
         }
     }
 
-    private void playRound() {
+    private void playRound() throws IllegalEngineStateException {
         if (turnPhase == TurnPhase.IDLE)
             emitEnterTurnPhase(host.getScope(), TurnPhase.EQUIPMENT);
         else
-            throw new IllegalStateException("We can start the turn only from \"idle\" turn phase");
-    }
-
-    private void emitEnterTurnPhase(Scope scope, TurnPhase phase) {
-        eventRepository.push(
-                new Event(scope, Action.ENTER_TURN_PHASE, R.string.ev_enter_turn_phase, phase.ordinal())
-        );
-    }
-
-    public void enterTurnPhase(TurnPhase phase) {
-        turnPhase = phase;
-
-        executeTurnPhase();
-    }
-
-    private void executeTurnPhase() {
-        switch (turnPhase) {
-            case EQUIPMENT:
-                break;
-            case KICK_OPEN_THE_DOOR:
-                break;
-            case KICK_OPEN_THE_DOOR_AND_FIGHT:
-                break;
-            case LOOK_FOR_TROUBLE:
-                break;
-            case LOOT_THE_ROOM:
-                break;
-            case CHARITY:
-                break;
-        }
+            throw new IllegalEngineStateException("We can start the turn only from \"idle\" turn phase");
     }
 
     public void assignPlayerNumber(int playerNr, int randomNumber) {
@@ -259,33 +247,114 @@ public class Match {
         }
     }
 
+    private void testHost(Player player) throws IllegalEngineStateException {
+        if (player != host)
+            throw new IllegalEngineStateException("can not play a card in another player's round");
+    }
+
+
+    /****************************************************************************************
+     *                      ==== Action implementations ====
+     ****************************************************************************************/
+
     public void emitDrawDoorCard(Scope scope) {
         Card card = game.getRandomDoorCards(1).get(0);
 
+        emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR);
+
         eventRepository.push(
-            new Event(scope, Action.ENTER_TURN_PHASE, R.string.ev_enter_turn_phase, turnPhase.ordinal()),
             new Event(scope, Action.DRAW_DOORCARD, R.string.ev_draw_card, card.getId())
         );
     }
 
-    public void drawDoorCard(Scope scope, Card card) {
-        if (turnPhase != TurnPhase.KICK_OPEN_THE_DOOR)
-            throw new IllegalStateException("door cards can be drawn only in \"kick open the door\" phase!");
+    public void drawDoorCard(Scope scope, Card card) throws IllegalEngineStateException {
+        testHost(getPlayer(scope));
 
-        turnPhase = TurnPhase.KICK_OPEN_THE_DOOR;
+        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR,
+                "door cards can be drawn only in \"kick open the door\" phase!");
+        test(game.getDeskCards().getValue().size() == 0,
+                "you can not draw another door card!");
 
         getPlayer(scope).drawDoorCard(card);
-
-        emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT);
     }
 
+
     public void emitFightMonster(Scope scope) {
+        emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT);
+
         eventRepository.push(
                 new Event(scope, Action.FIGHT_MONSTER, R.string.ev_fight_monster)
         );
     }
 
-    public void fightMonster(Scope scope) {
+    public void fightMonster(Scope scope) throws IllegalEngineStateException {
+        testHost(getPlayer(scope));
+
+        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT,
+                "monsters can not fought in \"" + turnPhase + "\" phase!");
+
         getPlayer(scope).fightMonster();
+    }
+
+
+    public void emitRunAway(Scope scope) {
+        eventRepository.push(
+                new Event(scope, Action.RUN_AWAY, R.string.ev_run_away)
+        );
+    }
+
+    public void runAway(Scope scope) throws IllegalEngineStateException {
+        testHost(getPlayer(scope));
+
+        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT,
+                "can not run away from monster in \"" + turnPhase + "\" phase!");
+
+        getPlayer(scope).runAway();
+    }
+
+
+    public void emitPlayCard(Scope scope, Card card) {
+        eventRepository.push(
+                new Event(scope, Action.PLAY_CARD, R.string.ev_play_card, card.getId())
+        );
+    }
+
+    public void playCard(Scope scope, Card card) throws IllegalEngineStateException {
+        testHost(getPlayer(scope));
+
+        test(turnPhase == TurnPhase.EQUIPMENT,
+                "can not equip items in \"" + turnPhase + "\" phase!");
+
+        getPlayer(scope).playCard(card);
+    }
+
+
+    private void emitEnterTurnPhase(Scope scope, TurnPhase phase) {
+        eventRepository.push(
+                new Event(scope, Action.ENTER_TURN_PHASE, R.string.ev_enter_turn_phase, phase.ordinal())
+        );
+    }
+
+    public void enterTurnPhase(TurnPhase phase) throws IllegalEngineStateException {
+        switch (turnPhase) {
+            case EQUIPMENT:
+                test(phase == TurnPhase.KICK_OPEN_THE_DOOR,
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+                break;
+            case KICK_OPEN_THE_DOOR:
+                test(phase == TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT,
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+                break;
+            case KICK_OPEN_THE_DOOR_AND_FIGHT:
+            case LOOK_FOR_TROUBLE:
+            case LOOT_THE_ROOM:
+                test(phase == TurnPhase.CHARITY,
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+                break;
+            case CHARITY:
+                break;
+        }
+
+        turnPhase = phase;
     }
 }

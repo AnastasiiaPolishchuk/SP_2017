@@ -30,25 +30,39 @@ public class Executor implements EventRepository.OnNewEventListener {
     @Override
     public void onNewEvent(Event event) {
         Player player = event.getScope() == Scope.GAME ? null : match.getPlayer(event.getScope());
+        boolean anonymized = isAnonymized(player, event.getAction());
 
         if (Arrays.equals(repository.getTopHash(), event.getPreviousHash())) {
-            Log.d(TAG, "executing: " + event.toString(messageBook, player));
+            Log.d(TAG, "executing: " + event.toString(messageBook, player, anonymized));
 
             repository.setTopHash(event.getHash());
 
-            String message = event.getMessage(messageBook, player);
+            logMessage(event, player, anonymized);
 
-            if (message.length() > 0)
-                match.log(message);
-
-            event.execute(match, game);
-
-            Log.d(TAG, "game: " + game);
+            try {
+                event.execute(match, game);
+            } catch (IllegalEngineStateException exception) {
+                match.undoLog();
+                
+                Log.e(TAG, "ERROR: " + exception.getMessage());
+            }
         } else {
-            String msg = "failed to execute: " + event.toString(messageBook, player) + " because of wrong hash value";
+            String msg = "failed to execute: " + event.toString(messageBook, player, anonymized) + " because of wrong hash value";
 
             Log.e(TAG, msg);
             throw new IllegalStateException(msg);
         }
+    }
+
+    private boolean isAnonymized(Player player, Action action) {
+        return !match.isMyself(player)
+                && action == Action.DRAW_TREASURECARD;
+    }
+
+    private void logMessage(Event event, Player player, boolean anonymized) {
+        String message = event.getMessage(messageBook, player, anonymized);
+
+        if (message.length() > 0)
+            match.log(message);
     }
 }

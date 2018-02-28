@@ -57,7 +57,7 @@ public class Event {
         this.hash = hash;
     }
 
-    public void execute(Match match, Game game) {
+    public void execute(Match match, Game game) throws IllegalEngineStateException {
         action.execute(match, game, this);
     }
 
@@ -143,8 +143,8 @@ public class Event {
         return data;
     }
 
-    public String getMessage(MessageBook messageBook, Player player) {
-        return messageBook.build(this, player);
+    public String getMessage(MessageBook messageBook, Player player, boolean anonymized) {
+        return messageBook.build(this, player, anonymized);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class Event {
                 .toString();
     }
 
-    public String toString(MessageBook messageBook, Player player) {
+    public String toString(MessageBook messageBook, Player player, boolean anonymized) {
         String prevHashByteString = ByteString.of(previousHash).toString();
         String hashByteString = ByteString.of(hash).toString();
 
@@ -185,7 +185,7 @@ public class Event {
                 .append(", ")
                 .append(data.toString())
                 .append(", \"")
-                .append(getMessage(messageBook, player))
+                .append(getMessage(messageBook, player, anonymized))
                 .append("\"]")
                 .toString();
     }

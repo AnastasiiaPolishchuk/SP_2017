@@ -70,6 +70,13 @@ public class Game {
 
     public LiveData<Boolean> getGameFinished() { return isGameFinished; }
 
+    public Monster getMonster() {
+        if (deskCards.getValue().size() == 0)
+            return null;
+
+        return (Monster)deskCards.getValue().get(0);
+    }
+
     public void drawDoorCard(Card card) {
         deskCards.getValue().add(card);
         update(deskCards);
@@ -141,7 +148,10 @@ public class Game {
                 .toString();
     }
 
-    public void pushAwayCard() {
+    public void pushAwayMonsterCard() throws IllegalEngineStateException {
+        if (deskCards.getValue().size() == 0)
+            throw new IllegalEngineStateException("There is no monster card to be pushed away");
+
         deskCards.getValue().remove(0);
         update(deskCards);
     }

@@ -2,7 +2,7 @@ package com.annapol04.munchkin.engine;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.util.Log;
+import static com.annapol04.munchkin.engine.EngineTest.test;
 
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.data.EventRepository;
@@ -34,6 +34,12 @@ public class Player extends LiveData<Player> {
     private BonusWear firstOneHander = null;
     private BonusWear secondOneHander = null;
     private BonusWear twoHander = null;
+
+    private MutableLiveData<Boolean> isHeadgearEquiped = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isArmorEquiped = new MutableLiveData<>();
+    private MutableLiveData<Boolean> areShoesquiped = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isRightHandEquiped = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLeftHandEquiped = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> canPlayBigEquipment = new MutableLiveData<>();
     private MutableLiveData<Boolean> canPlayHeadgeer = new MutableLiveData<>();
@@ -70,6 +76,12 @@ public class Player extends LiveData<Player> {
         canPlayShoes.setValue(true);
         canPlayOneHander.setValue(true);
         canPlayTwoHander.setValue(true);
+
+        isHeadgearEquiped.setValue(false);
+        isArmorEquiped.setValue(false);
+        areShoesquiped.setValue(false);
+        isLeftHandEquiped.setValue(false);
+        isRightHandEquiped.setValue(false);
     }
 
     public void rename(String name) {
@@ -130,6 +142,26 @@ public class Player extends LiveData<Player> {
         return canPlayTwoHander;
     }
 
+    public LiveData<Boolean> getIsHeadgearEquiped() {
+        return isHeadgearEquiped;
+    }
+
+    public LiveData<Boolean> getIsArmorEquiped() {
+        return isArmorEquiped;
+    }
+
+    public LiveData<Boolean> getAreShoesEquiped() {
+        return areShoesquiped;
+    }
+
+    public LiveData<Boolean> getIsRightHandEquiped() {
+        return isRightHandEquiped;
+    }
+
+    public LiveData<Boolean> getIsLeftHandEquiped() {
+        return isLeftHandEquiped;
+    }
+
     public LiveData<List<Card>> getHandCards() {
         return handCards;
     }
@@ -171,19 +203,13 @@ public class Player extends LiveData<Player> {
         game.drawDoorCard(card);
     }
 
-    public void emitPlayCard(Card card) {
-        eventRepository.push(
-                new Event(scope, Action.PLAY_CARD, R.string.ev_play_card, card.getId())
-        );
-    }
-
-    public void playCard(Card card) {
+    public void playCard(Card card) throws IllegalEngineStateException {
         if (card instanceof BonusWear) {
             BonusWear wear = (BonusWear) card;
 
             if (wear.size == BonusWear.Size.BIG) {
                 if (!canPlayBigEquipment.getValue())
-                    throw new IllegalStateException("Can not equip " + wear + " for player " + this);
+                    throw new IllegalEngineStateException("Can not equip " + wear + " for player " + this);
                 else
                     canPlayBigEquipment.setValue(false);
             }
@@ -195,45 +221,52 @@ public class Player extends LiveData<Player> {
                     if (twoHander == null && firstOneHander == null) {
                         firstOneHander = wear;
 
+                        isLeftHandEquiped.setValue(true);
                         canPlayOneHander.setValue(secondOneHander == null);
                     } else if (twoHander == null && secondOneHander == null) {
                         secondOneHander = wear;
 
+                        isRightHandEquiped.setValue(true);
                         canPlayOneHander.setValue(false);
                     } else
-                        throw new IllegalStateException("Can not equip " + wear + " for player " + this);
+                        throw new IllegalEngineStateException("Can not equip " + wear + " for player " + this);
                     break;
                 case TWOHANDS:
                     if (firstOneHander == null && secondOneHander == null && twoHander == null) {
                         twoHander = wear;
 
+                        isLeftHandEquiped.setValue(true);
+                        isRightHandEquiped.setValue(true);
                         canPlayTwoHander.setValue(false);
                     } else
-                        throw new IllegalStateException("Can not equip " + wear + " for player " + this);
+                        throw new IllegalEngineStateException("Can not equip " + wear + " for player " + this);
                     break;
                 case ARMOR:
                     if (armor == null) {
                         armor = wear;
 
+                        isArmorEquiped.setValue(true);
                         canPlayArmor.setValue(false);
                     } else
-                        throw new IllegalStateException("Can not equip " + wear + " for player " + this);
+                        throw new IllegalEngineStateException("Can not equip " + wear + " for player " + this);
                     break;
                 case HEAD:
                     if (headGeer == null) {
                         headGeer = wear;
 
+                        isHeadgearEquiped.setValue(true);
                         canPlayHeadgeer.setValue(false);
                     } else
-                        throw new IllegalStateException("Can not equip " + wear + " for player " + this);
+                        throw new IllegalEngineStateException("Can not equip " + wear + " for player " + this);
                     break;
                 case SHOES:
                     if (shoes == null) {
                         shoes = wear;
 
+                        areShoesquiped.setValue(true);
                         canPlayShoes.setValue(false);
                     } else
-                        throw new IllegalStateException("Can not equip " + wear + " for player " + this);
+                        throw new IllegalEngineStateException("Can not equip " + wear + " for player " + this);
                     break;
             }
 
@@ -254,7 +287,7 @@ public class Player extends LiveData<Player> {
         );
     }
 
-    public void pickupCard(Card card) {
+    public void pickupCard(Card card) throws IllegalEngineStateException {
         if (card instanceof BonusWear) {
             BonusWear wear = (BonusWear) card;
 
@@ -265,12 +298,16 @@ public class Player extends LiveData<Player> {
                 case NOTHING:
                     break;
                 case ONEHAND:
-                    if (firstOneHander == wear)
-                        firstOneHander = null;
-                    else if (secondOneHander == wear)
+                    if (secondOneHander == wear) {
                         secondOneHander = null;
-                    else
-                        throw new IllegalStateException("Can not unequip " + wear + " for player " + this);
+
+                        isRightHandEquiped.setValue(false);
+                    } else if (firstOneHander == wear) {
+                        firstOneHander = null;
+
+                        isLeftHandEquiped.setValue(false);
+                    } else
+                        throw new IllegalEngineStateException("Can not unequip " + wear + " for player " + this);
 
                     canPlayOneHander.setValue(true);
                     break;
@@ -278,33 +315,38 @@ public class Player extends LiveData<Player> {
                     if (twoHander == wear) {
                         twoHander = null;
 
+                        isLeftHandEquiped.setValue(false);
+                        isRightHandEquiped.setValue(false);
                         canPlayTwoHander.setValue(true);
                     } else
-                        throw new IllegalStateException("Can not unequip " + wear + " for player " + this);
+                        throw new IllegalEngineStateException("Can not unequip " + wear + " for player " + this);
                     break;
                 case ARMOR:
                     if (armor == wear) {
                         armor = null;
 
+                        isArmorEquiped.setValue(false);
                         canPlayArmor.setValue(true);
                     } else
-                        throw new IllegalStateException("Can not unequip " + wear + " for player " + this);
+                        throw new IllegalEngineStateException("Can not unequip " + wear + " for player " + this);
                     break;
                 case HEAD:
                     if (headGeer == wear) {
                         headGeer = null;
 
+                        isHeadgearEquiped.setValue(false);
                         canPlayHeadgeer.setValue(true);
                     } else
-                        throw new IllegalStateException("Can not unequip " + wear + " for player " + this);
+                        throw new IllegalEngineStateException("Can not unequip " + wear + " for player " + this);
                     break;
                 case SHOES:
                     if (shoes == wear) {
                         shoes = null;
 
+                        areShoesquiped.setValue(false);
                         canPlayShoes.setValue(true);
                     } else
-                        throw new IllegalStateException("Can not unequip " + wear + " for player " + this);
+                        throw new IllegalEngineStateException("Can not unequip " + wear + " for player " + this);
                     break;
             }
 
@@ -319,27 +361,27 @@ public class Player extends LiveData<Player> {
         update(handCards);
     }
 
-    public void emitRunAway() {
-        eventRepository.push(
-                new Event(scope, Action.RUN_AWAY, R.string.ev_run_away)
-        );
+    public void runAway() throws IllegalEngineStateException {
+        game.pushAwayMonsterCard();
     }
 
-    public void runAway() {
+    public void fightMonster() throws IllegalEngineStateException {
+        List<Card> cards = game.getDeskCards().getValue();
 
-    }
+        test(cards.size() > 0,
+                "a monster has to be on the table to fight against it!");
 
-    public void emitFightMonster() {
-        eventRepository.push(
-                new Event(scope, Action.FIGHT_MONSTER, R.string.ev_fight_monster)
-        );
-    }
+        Card card = cards.get(0);
 
-    public void fightMonster() {
+        test(card instanceof Monster,
+                "the card on the playdesk has to be a monster to fight against it!");
+
+        Monster monster = (Monster)card;
+
+        test(fightLevel.getValue() > monster.getLevel(),
+            "can not fight against a monster with greater or equal fight level!");
+
         level.setValue(level.getValue() + 1);
-        game.pushAwayCard();
-    }
-
-    public void playRound() {
+        game.pushAwayMonsterCard();
     }
 }
