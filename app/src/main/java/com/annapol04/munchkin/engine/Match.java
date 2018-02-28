@@ -2,7 +2,9 @@ package com.annapol04.munchkin.engine;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.support.annotation.StringRes;
 import android.util.Log;
+import android.util.Pair;
 
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.data.EventRepository;
@@ -161,6 +163,8 @@ public class Match {
 
             host = evaluateHost();
 
+            host.allowToDrawTreasureCards(AMOUNT_OF_HAND_CARDS * players.size());
+
             if (host == myself) {
                 specifyPlayerNumbers();
 
@@ -257,6 +261,12 @@ public class Match {
      *                      ==== Action implementations ====
      ****************************************************************************************/
 
+    public void emitMessage(Scope scope, @StringRes int message, int integer) {
+        eventRepository.push(
+                new Event(scope, Action.NOTHING, message, integer)
+        );
+    }
+
     public void emitDrawDoorCard(Scope scope) {
         Card card = game.getRandomDoorCards(1).get(0);
 
@@ -271,11 +281,31 @@ public class Match {
         testHost(getPlayer(scope));
 
         test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR,
-                "door cards can be drawn only in \"kick open the door\" phase!");
+                "it's not allowed to draw door cards in \"" + turnPhase + "\" phase!");
         test(game.getDeskCards().getValue().size() == 0,
-                "you can not draw another door card!");
+                "you can not draw a door card from an empty deck!");
 
         getPlayer(scope).drawDoorCard(card);
+    }
+
+
+    public void emitDrawTreasureCard(Scope scope) {
+        Card card = game.getRandomTreasureCards(1).get(0);
+
+        eventRepository.push(
+            new Event(scope, Action.DRAW_TREASURECARD, R.string.ev_draw_card, card.getId())
+        );
+    }
+
+    public void drawTreasureCard(Scope scope, Card card) throws IllegalEngineStateException {
+        testHost(getPlayer(scope));
+
+        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW,
+                "it's not allowed to draw treasure cards in \"" + turnPhase + "\" phase!");
+        test(game.getDeskCards().getValue().size() == 0,
+                "you can not draw a treasure card from an empty deck!");
+
+        getPlayer(scope).drawTreasureCard(card);
     }
 
 
@@ -293,7 +323,17 @@ public class Match {
         test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT,
                 "monsters can not fought in \"" + turnPhase + "\" phase!");
 
-        getPlayer(scope).fightMonster();
+        Pair<Monster, Integer> result = getPlayer(scope).fightMonster();
+
+        emitMessage(scope, R.string.player_killed_monster, result.first.getId());
+        emitMessage(scope, R.string.player_gets_level, result.second);
+
+        final int cardsToDraw = 1;
+
+        emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW);
+        emitMessage(scope, R.string.player_draws_treasure_cards, cardsToDraw);
+
+        getPlayer(scope).allowToDrawTreasureCards(cardsToDraw);
     }
 
 
@@ -335,8 +375,15 @@ public class Match {
         );
     }
 
+
     public void enterTurnPhase(TurnPhase phase) throws IllegalEngineStateException {
         switch (turnPhase) {
+            case IDLE:
+                test(phase == TurnPhase.EQUIPMENT,
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+
+                host.allowToDrawDoorCards(1);
+                break;
             case EQUIPMENT:
                 test(phase == TurnPhase.KICK_OPEN_THE_DOOR,
                         "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
@@ -346,6 +393,10 @@ public class Match {
                         "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
                 break;
             case KICK_OPEN_THE_DOOR_AND_FIGHT:
+                test(phase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW,
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+                break;
+            case KICK_OPEN_THE_DOOR_AND_DRAW:
             case LOOK_FOR_TROUBLE:
             case LOOT_THE_ROOM:
                 test(phase == TurnPhase.CHARITY,

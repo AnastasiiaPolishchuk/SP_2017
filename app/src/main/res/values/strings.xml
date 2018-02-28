@@ -43,6 +43,11 @@
     <string name="your_fightlevel">Your fightLevel is:</string>
     <string name="monster_fightlevel">Monster fightLevel is:</string>
 
+    <!-- general messages -->
+    <string name="player_killed_monster">%player% has killed %card%</string>
+    <string name="player_gets_level">%player% goes up %integer% level</string>
+    <string name="player_draws_treasure_cards">%player% is allowed to draw %integer% treasure cards</string>
+
     <!-- Event messages -->
     <string name="ev_empty"> </string>
     <string name="ev_join_player">player %string% joined the game</string>
@@ -57,7 +62,8 @@
     <string name="tp_idle">idles</string>
     <string name="tp_equipment">is equiping</string>
     <string name="tp_kick_open_the_door">kicks open the door</string>
-    <string name="tp_kick_open_the_door_and_fight">fights</string>
+    <string name="tp_kick_open_the_door_and_fight">starts the combat</string>
+    <string name="tp_kick_open_the_door_and_draw">has won the combat</string>
     <string name="tp_look_for_trouble">looks for trouble</string>
     <string name="tp_loot_the_room">loots the room</string>
     <string name="tp_charity">is charitable</string>
