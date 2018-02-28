@@ -67,8 +67,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 dialog.setContentView(R.layout.zoom_layout);
                 RecyclerView recyclerView = dialog.findViewById(R.id.recycler_view_zoom_cards);
 
+                int itemPosition = recyclerView.getChildLayoutPosition(view);
+
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext(), LinearLayoutManager.VERTICAL, false);
                 recyclerView.setLayoutManager(layoutManager);
+                layoutManager.scrollToPosition(itemPosition);
 
                 if (handAdapter == null)
                     handAdapter = new SelectableCardAdapter(R.layout.card_item_zoom, R.id.card_item_zoom, setup, cards, viewModel);
