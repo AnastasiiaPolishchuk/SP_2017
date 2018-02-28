@@ -32,6 +32,9 @@ public abstract class MessageBook {
         if (message.contains("%string%"))
             message = message.replace("%string%", event.getString());
 
+        if (message.contains("%turn-phase%"))
+            message = message.replace("%turn-phase%", find(event.getInteger()));
+
         return message;
     }
 }

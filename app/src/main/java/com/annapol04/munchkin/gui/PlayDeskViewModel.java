@@ -212,7 +212,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public void drawDoorCard() {
-        visiblePlayer.getValue().emitDrawDoorCard();
+        match.emitDrawDoorCard(visiblePlayer.getValue().getScope());
     }
 
     public void drawTreasureCard() {

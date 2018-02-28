@@ -3,6 +3,8 @@ package com.annapol04.munchkin.engine;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
+import com.annapol04.munchkin.data.EventRepository;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +33,7 @@ public class Game {
     private Random randomTreasure = new Random();
 
     @Inject
-    public Game() {
+    public Game(EventRepository eventRepository) {
         deskCards.setValue(new ArrayList<>());
         isGameFinished.setValue(false);
     }
@@ -67,7 +69,6 @@ public class Game {
     }
 
     public LiveData<Boolean> getGameFinished() { return isGameFinished; }
-
 
     public void drawDoorCard(Card card) {
         deskCards.getValue().add(card);

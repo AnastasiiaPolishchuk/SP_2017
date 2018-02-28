@@ -31,6 +31,7 @@ public class Match {
     protected List<Player> players = new ArrayList<>();
     protected Player host = null;
     protected final Player myself;
+    protected TurnPhase turnPhase = TurnPhase.IDLE;
 
     protected State state = State.JOINING;
     protected int amountOfPlayers = 0;
@@ -180,16 +181,55 @@ public class Match {
         current.setValue(nextPlayer(playerNr));
 
         if (current.getValue() == myself) {
-            if (state == State.INITIAL && host == myself) {
-                handoutCards();
-
-                state = State.STARTED;
-            } else if (state == State.NAMING) {
+            if (state == State.NAMING) {
                 namingRound();
 
                 state = State.INITIAL;
-            } else
-                current.getValue().playRound();
+            } else if (state == State.INITIAL && host == myself) {
+                handoutCards();
+
+                playRound();
+
+                state = State.STARTED;
+            } else if (state == State.STARTED && current.getValue() == myself)
+                playRound();
+
+        }
+    }
+
+    private void playRound() {
+        if (turnPhase == TurnPhase.IDLE)
+            emitEnterTurnPhase(host.getScope(), TurnPhase.EQUIPMENT);
+        else
+            throw new IllegalStateException("We can start the turn only from \"idle\" turn phase");
+    }
+
+    private void emitEnterTurnPhase(Scope scope, TurnPhase phase) {
+        eventRepository.push(
+                new Event(scope, Action.ENTER_TURN_PHASE, R.string.ev_enter_turn_phase, phase.ordinal())
+        );
+    }
+
+    public void enterTurnPhase(TurnPhase phase) {
+        turnPhase = phase;
+
+        executeTurnPhase();
+    }
+
+    private void executeTurnPhase() {
+        switch (turnPhase) {
+            case EQUIPMENT:
+                break;
+            case KICK_OPEN_THE_DOOR:
+                break;
+            case KICK_OPEN_THE_DOOR_AND_FIGHT:
+                break;
+            case LOOK_FOR_TROUBLE:
+                break;
+            case LOOT_THE_ROOM:
+                break;
+            case CHARITY:
+                break;
         }
     }
 
@@ -217,5 +257,35 @@ public class Match {
 
             state = State.INITIAL;
         }
+    }
+
+    public void emitDrawDoorCard(Scope scope) {
+        Card card = game.getRandomDoorCards(1).get(0);
+
+        eventRepository.push(
+            new Event(scope, Action.ENTER_TURN_PHASE, R.string.ev_enter_turn_phase, turnPhase.ordinal()),
+            new Event(scope, Action.DRAW_DOORCARD, R.string.ev_draw_card, card.getId())
+        );
+    }
+
+    public void drawDoorCard(Scope scope, Card card) {
+        if (turnPhase != TurnPhase.KICK_OPEN_THE_DOOR)
+            throw new IllegalStateException("door cards can be drawn only in \"kick open the door\" phase!");
+
+        turnPhase = TurnPhase.KICK_OPEN_THE_DOOR;
+
+        getPlayer(scope).drawDoorCard(card);
+
+        emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT);
+    }
+
+    public void emitFightMonster(Scope scope) {
+        eventRepository.push(
+                new Event(scope, Action.FIGHT_MONSTER, R.string.ev_fight_monster)
+        );
+    }
+
+    public void fightMonster(Scope scope) {
+        getPlayer(scope).fightMonster();
     }
 }
