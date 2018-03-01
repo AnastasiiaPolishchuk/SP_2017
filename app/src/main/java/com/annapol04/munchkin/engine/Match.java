@@ -25,6 +25,8 @@ import static com.annapol04.munchkin.engine.EngineTest.test;
 @Singleton
 public class Match {
     protected static final int AMOUNT_OF_HAND_CARDS = 2;
+    protected static final int MAX_AMOUNT_OF_HAND_CARDS = 4;
+
     private static final String TAG = Match.class.getSimpleName();
 
     protected Game game;
@@ -163,7 +165,8 @@ public class Match {
 
             host = evaluateHost();
 
-            host.allowToDrawTreasureCards(AMOUNT_OF_HAND_CARDS * players.size());
+            for (Player player : players)
+                player.allowToDrawTreasureCards(AMOUNT_OF_HAND_CARDS);
 
             if (host == myself) {
                 specifyPlayerNumbers();
@@ -218,6 +221,12 @@ public class Match {
         }
     }
 
+    private void emitFinishRound(Scope scope) {
+        eventRepository.push(
+                new Event(myself.getScope(), Action.FINISH_ROUND, 0)
+        );
+    }
+
     private void playRound() throws IllegalEngineStateException {
         if (turnPhase == TurnPhase.IDLE)
             emitEnterTurnPhase(host.getScope(), TurnPhase.EQUIPMENT);
@@ -263,7 +272,7 @@ public class Match {
 
     public void emitMessage(Scope scope, @StringRes int message, int integer) {
         eventRepository.push(
-                new Event(scope, Action.NOTHING, message, integer)
+                new Event(scope, Action.MESSAGE, message, integer)
         );
     }
 
@@ -306,6 +315,9 @@ public class Match {
                 "you can not draw a treasure card from an empty deck!");
 
         getPlayer(scope).drawTreasureCard(card);
+
+        if (scope == myself.getScope() && !myself.isAllowedToDrawTreasureCard())
+            emitEnterTurnPhase(scope, TurnPhase.CHARITY);
     }
 
 
@@ -325,13 +337,15 @@ public class Match {
 
         Pair<Monster, Integer> result = getPlayer(scope).fightMonster();
 
-        emitMessage(scope, R.string.player_killed_monster, result.first.getId());
-        emitMessage(scope, R.string.player_gets_level, result.second);
-
         final int cardsToDraw = 1;
 
-        emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW);
-        emitMessage(scope, R.string.player_draws_treasure_cards, cardsToDraw);
+        if (scope == myself.getScope()) {
+            emitMessage(scope, R.string.player_killed_monster, result.first.getId());
+            emitMessage(scope, R.string.player_gets_level, result.second);
+
+            emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW);
+            emitMessage(scope, R.string.player_draws_treasure_cards, cardsToDraw);
+        }
 
         getPlayer(scope).allowToDrawTreasureCards(cardsToDraw);
     }
@@ -376,31 +390,36 @@ public class Match {
     }
 
 
-    public void enterTurnPhase(TurnPhase phase) throws IllegalEngineStateException {
+    public void enterTurnPhase(Scope scope, TurnPhase phase) throws IllegalEngineStateException {
         switch (turnPhase) {
             case IDLE:
                 test(phase == TurnPhase.EQUIPMENT,
-                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase + "\"");
 
-                host.allowToDrawDoorCards(1);
+                getPlayer(scope).allowToDrawDoorCards(1);
                 break;
             case EQUIPMENT:
                 test(phase == TurnPhase.KICK_OPEN_THE_DOOR,
-                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase + "\"");
                 break;
             case KICK_OPEN_THE_DOOR:
                 test(phase == TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT,
-                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase + "\"");
                 break;
             case KICK_OPEN_THE_DOOR_AND_FIGHT:
                 test(phase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW,
-                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase + "\"");
                 break;
             case KICK_OPEN_THE_DOOR_AND_DRAW:
             case LOOK_FOR_TROUBLE:
             case LOOT_THE_ROOM:
                 test(phase == TurnPhase.CHARITY,
-                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase);
+                        "it is not allowed to enter phase \"" + phase + "\" from \"" + turnPhase + "\"");
+
+                if (scope == myself.getScope()) {
+                    emitEnterTurnPhase(scope, TurnPhase.IDLE);
+                    emitFinishRound(scope);
+                }
                 break;
             case CHARITY:
                 break;

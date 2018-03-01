@@ -3,7 +3,7 @@ package com.annapol04.munchkin.engine;
 import java.lang.reflect.Field;
 
 public class Action {
-    public static final Action NOTHING = new Action((match, game, event) -> { });
+    public static final Action MESSAGE = new Action((match, game, event) -> { });
     public static final Action JOIN_PLAYER = new Action((match, game, event) -> {
             match.joinPlayer(event.getInteger());
     });
@@ -38,7 +38,7 @@ public class Action {
         match.getPlayer(event.getScope()).runAway();
     });
     public static final Action ENTER_TURN_PHASE = new Action((match, game, event) -> {
-        match.enterTurnPhase(TurnPhase.fromId(event.getInteger()));
+        match.enterTurnPhase(event.getScope(), TurnPhase.fromId(event.getInteger()));
     });
 
     private static int idSource = 0;
