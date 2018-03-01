@@ -2,6 +2,8 @@ package com.annapol04.munchkin.engine;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.util.Pair;
+
 import static com.annapol04.munchkin.engine.EngineTest.test;
 
 import com.annapol04.munchkin.R;
@@ -17,6 +19,9 @@ public class Player extends LiveData<Player> {
         ELF,
         DWARF; //Zwerg
     }
+
+    private int numberOfAllowedTreasureCardsToDraw = 0;
+    private int numberOfAllowedDoorCardsToDraw = 0;
 
     private int id;
     private Game game;
@@ -62,6 +67,9 @@ public class Player extends LiveData<Player> {
     }
 
     public void reset() {
+        numberOfAllowedTreasureCardsToDraw = 0;
+        numberOfAllowedDoorCardsToDraw = 0;
+
         level.setValue(1);
         fightLevel.setValue(1);
         race.setValue(PlayerRace.HUMAN);
@@ -82,6 +90,14 @@ public class Player extends LiveData<Player> {
         areShoesquiped.setValue(false);
         isLeftHandEquiped.setValue(false);
         isRightHandEquiped.setValue(false);
+    }
+
+    public void allowToDrawTreasureCards(int numberOfCards) {
+        numberOfAllowedTreasureCardsToDraw = numberOfCards;
+    }
+
+    public void allowToDrawDoorCards(int numberOfCards) {
+        numberOfAllowedDoorCardsToDraw = numberOfCards;
     }
 
     public void rename(String name) {
@@ -185,7 +201,12 @@ public class Player extends LiveData<Player> {
         );
     }
 
-    public void drawTreasureCard(Card card) {
+    public void drawTreasureCard(Card card) throws IllegalEngineStateException {
+        if (numberOfAllowedTreasureCardsToDraw == 0)
+            throw new IllegalEngineStateException("not allowed to draw a treasure card!");
+
+        numberOfAllowedTreasureCardsToDraw--;
+
         game.drawTreasureCard(card);
 
         handCards.getValue().add(card);
@@ -199,7 +220,12 @@ public class Player extends LiveData<Player> {
         );
     }
 
-    public void drawDoorCard(Card card) {
+    public void drawDoorCard(Card card) throws IllegalEngineStateException {
+        if (numberOfAllowedTreasureCardsToDraw == 0)
+            throw new IllegalEngineStateException("not allowed to draw a door card!");
+
+        numberOfAllowedDoorCardsToDraw--;
+
         game.drawDoorCard(card);
     }
 
@@ -365,7 +391,7 @@ public class Player extends LiveData<Player> {
         game.pushAwayMonsterCard();
     }
 
-    public void fightMonster() throws IllegalEngineStateException {
+    public Pair<Monster, Integer> fightMonster() throws IllegalEngineStateException {
         List<Card> cards = game.getDeskCards().getValue();
 
         test(cards.size() > 0,
@@ -383,5 +409,7 @@ public class Player extends LiveData<Player> {
 
         level.setValue(level.getValue() + 1);
         game.pushAwayMonsterCard();
+
+        return new Pair<>(monster, 1);
     }
 }

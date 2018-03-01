@@ -10,6 +10,7 @@ public enum TurnPhase {
     EQUIPMENT(R.string.tp_equipment),
     KICK_OPEN_THE_DOOR(R.string.tp_kick_open_the_door),
     KICK_OPEN_THE_DOOR_AND_FIGHT(R.string.tp_kick_open_the_door_and_fight),
+    KICK_OPEN_THE_DOOR_AND_DRAW(R.string.tp_kick_open_the_door_and_draw),
     LOOK_FOR_TROUBLE(R.string.tp_look_for_trouble),
     LOOT_THE_ROOM(R.string.tp_loot_the_room),
     CHARITY(R.string.tp_charity);
