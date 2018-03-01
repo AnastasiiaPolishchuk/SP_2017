@@ -38,7 +38,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_exit">exit</string>
-    <string name="fight">Fight</string>
+    <string name="fight">Start combat</string>
     <string name="next_player">Next Player</string>
     <string name="your_fightlevel">Your fightLevel is:</string>
     <string name="monster_fightlevel">Monster fightLevel is:</string>

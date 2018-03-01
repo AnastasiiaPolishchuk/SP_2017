@@ -190,6 +190,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     public LiveData<Boolean> isMyLevelGreater(){
         // vergleichen MyLevel+ bonus mit Monster Level
+
         MutableLiveData<Boolean> isGreater = new MutableLiveData<>();
          isGreater.setValue(true);
          return isGreater;
