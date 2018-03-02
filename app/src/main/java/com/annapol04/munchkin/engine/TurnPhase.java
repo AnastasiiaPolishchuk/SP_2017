@@ -37,6 +37,7 @@ public enum TurnPhase {
             EQUIPMENT,
             KICK_OPEN_THE_DOOR,
             KICK_OPEN_THE_DOOR_AND_FIGHT,
+            KICK_OPEN_THE_DOOR_AND_DRAW,
             LOOK_FOR_TROUBLE,
             LOOT_THE_ROOM,
             CHARITY

@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.di.ViewModelFactory;
 import com.annapol04.munchkin.engine.Card;
+import com.annapol04.munchkin.engine.Monster;
 import com.annapol04.munchkin.engine.Player;
 
 import java.util.List;
@@ -36,6 +38,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import io.reactivex.internal.operators.maybe.MaybeOnErrorComplete;
 
 public class PlayDeskActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -261,24 +264,39 @@ public class PlayDeskActivity extends AppCompatActivity
             if (viewModel.getDeskCards().getValue().size() == 0)
                 return;
 
+            Card monsterCard = viewModel.getDeskCards().getValue().get(0);
+
+            if (!(monsterCard instanceof Monster))
+                return;
+
+            Monster monster = (Monster) monsterCard;
+
+
             final Dialog dialog = new Dialog(activity);
             dialog.setContentView(R.layout.dialog_fight_button);
+
             // TODO: Image für den Player, derzeit statisch
             ImageButton monsterCardImageButton = dialog.findViewById(R.id.monster_card_image);
-            Card monsterCard = viewModel.getDeskCards().getValue().get(0);
             monsterCardImageButton.setImageResource(monsterCard.getImageResourceID());
 
+            TextView yourLevel = dialog.findViewById(R.id.your_fightlevel_value);
+            yourLevel.setText(viewModel.getMyLevel().getValue().toString());
+            TextView monsterLevel = dialog.findViewById(R.id.monster_fightlevel_value);
+            monsterLevel.setText(Integer.toString(monster.getLevel()));
+
             dialog.show();
+            dialog.setCancelable(false);
+
 
             Button dialogFightButton = dialog.findViewById(R.id.fight_diaolog_fight_button);
-            dialogFightButton.setEnabled(viewModel.isMyLevelGreater().getValue() ? true : false);
+            dialogFightButton.setEnabled(viewModel.isMyLevelGreater().getValue());
             dialogFightButton.setOnClickListener(vv -> {
                 viewModel.fightMonster();
                 dialog.dismiss();
             });
 
             Button dialogRunAwayButton = dialog.findViewById(R.id.fight_diaolog_run_button_button);
-            dialogRunAwayButton.setEnabled(!viewModel.isMyLevelGreater().getValue()? true : false);
+            dialogRunAwayButton.setEnabled(!(viewModel.isMyLevelGreater().getValue()));
             dialogRunAwayButton.setOnClickListener(vv -> {
                 viewModel.runAwayFromMonster();
                 dialog.dismiss();

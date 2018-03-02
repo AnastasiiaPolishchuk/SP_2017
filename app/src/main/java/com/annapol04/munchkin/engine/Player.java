@@ -96,8 +96,16 @@ public class Player extends LiveData<Player> {
         numberOfAllowedTreasureCardsToDraw = numberOfCards;
     }
 
+    public boolean isAllowedToDrawTreasureCard() {
+        return numberOfAllowedTreasureCardsToDraw > 0;
+    }
+
     public void allowToDrawDoorCards(int numberOfCards) {
         numberOfAllowedDoorCardsToDraw = numberOfCards;
+    }
+
+    public boolean isAllowedToDrawDoorCard() {
+        return numberOfAllowedDoorCardsToDraw > 0;
     }
 
     public void rename(String name) {
@@ -221,7 +229,7 @@ public class Player extends LiveData<Player> {
     }
 
     public void drawDoorCard(Card card) throws IllegalEngineStateException {
-        if (numberOfAllowedTreasureCardsToDraw == 0)
+        if (numberOfAllowedDoorCardsToDraw == 0)
             throw new IllegalEngineStateException("not allowed to draw a door card!");
 
         numberOfAllowedDoorCardsToDraw--;

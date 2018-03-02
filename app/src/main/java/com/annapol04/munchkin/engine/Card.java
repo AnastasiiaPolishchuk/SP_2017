@@ -11,9 +11,12 @@ public class Card {
     private static int idSource = 0;
 
     private final int id;
-    private final @StringRes int name;
-    private final @StringRes int description;
-    private final @DrawableRes int imageResourceID;
+    private final @StringRes
+    int name;
+    private final @StringRes
+    int description;
+    private final @DrawableRes
+    int imageResourceID;
 
     public Card(@StringRes int name, @StringRes int description, @DrawableRes int imageResourceID) {
         this.id = idSource++;
@@ -42,4 +45,5 @@ public class Card {
 
         return lookup.get(id);
     }
+
 }
