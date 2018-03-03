@@ -101,6 +101,52 @@ h
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
+                            <RelativeLayout
+                                android:layout_width="50dp"
+                                android:layout_height="50dp">
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/man" />
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/man_shoes"
+                                    android:id="@+id/man_shoes"
+                                    android:visibility="invisible" />
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/man_armor"
+                                    android:id="@+id/man_armor"
+                                    android:visibility="invisible" />
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/man_head"
+                                    android:id="@+id/man_head"
+                                    android:visibility="invisible" />
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/man_left_hand"
+                                    android:id="@+id/man_left_hand"
+                                    android:visibility="invisible" />
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/man_right_hand"
+                                    android:id="@+id/man_right_hand"
+                                    android:visibility="invisible" />
+                            </RelativeLayout>
+
+
                             <TextView
                                 android:id="@+id/headgear"
                                 android:layout_width="match_parent"

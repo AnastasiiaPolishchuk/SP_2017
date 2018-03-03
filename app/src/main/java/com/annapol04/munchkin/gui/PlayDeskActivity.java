@@ -25,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -104,21 +105,45 @@ public class PlayDeskActivity extends AppCompatActivity
         viewModel.getIsHeadgearEquiped().observe(this, equiped -> {
             headgear.setTextColor(equiped ? Color.BLACK : Color.GRAY);
         });
+        ImageView headgear_ = findViewById(R.id.man_head);
+        viewModel.getIsHeadgearEquiped().observe(this, equiped -> {
+            headgear_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
+        });
+
         TextView armor = findViewById(R.id.armor);
         viewModel.getIsArmorEquiped().observe(this, equiped -> {
             armor.setTextColor(equiped ? Color.BLACK : Color.GRAY);
         });
+        ImageView armor_ = findViewById(R.id.man_armor);
+        viewModel.getIsArmorEquiped().observe(this, equiped -> {
+            armor_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
+        });
+
         TextView shoes = findViewById(R.id.footgear);
         viewModel.getAreShoesEquiped().observe(this, equiped -> {
             shoes.setTextColor(equiped ? Color.BLACK : Color.GRAY);
         });
+        ImageView shoes_ = findViewById(R.id.man_shoes);
+        viewModel.getAreShoesEquiped().observe(this, equiped -> {
+            shoes_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
+        });
+
         TextView leftHand = findViewById(R.id.left_hand);
         viewModel.getIsLeftHandEquiped().observe(this, equiped -> {
             leftHand.setTextColor(equiped ? Color.BLACK : Color.GRAY);
         });
+        ImageView leftHand_ = findViewById(R.id.man_left_hand);
+        viewModel.getIsLeftHandEquiped().observe(this, equiped -> {
+            leftHand_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
+        });
+
         TextView rightHand = findViewById(R.id.right_hand);
         viewModel.getIsRightHandEquiped().observe(this, equiped -> {
             rightHand.setTextColor(equiped ? Color.BLACK : Color.GRAY);
+        });
+        ImageView rightHand_ = findViewById(R.id.man_right_hand);
+        viewModel.getIsRightHandEquiped().observe(this, equiped -> {
+            rightHand_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
         });
 
         // prevent screen from sleeping during handshake
