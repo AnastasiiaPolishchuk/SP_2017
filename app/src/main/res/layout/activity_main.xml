@@ -9,24 +9,25 @@
     android:background="#EFEBE9"
     tools:context="com.annapol04.munchkin.gui.MainActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Munchkin"
-        android:textStyle="italic"
-        android:gravity="center"
-        android:textSize="80sp"
-        android:textColor="#795548"
-        android:padding="16dp"
-        />
-    <ImageButton
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:src="@drawable/ic_play_circle_outline_black_48dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@android:color/transparent"
-        android:tint="#3E2723"
-        android:padding="16dp"
-        android:onClick="start" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Munchkin"
+            android:textStyle="italic"
+            android:gravity="center"
+            android:textSize="85sp"
+            android:textColor="#795548"
+            android:padding="16dp" />
+
+        <ImageButton
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:src="@drawable/ic_play_circle_outline_black_48dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:tint="#3E2723"
+            android:onClick="start" />
+
 
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -274,6 +275,7 @@ public class PlayDeskActivity extends AppCompatActivity
 
             final Dialog dialog = new Dialog(activity);
             dialog.setContentView(R.layout.dialog_fight_button);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             // TODO: Image für den Player, derzeit statisch
             ImageButton monsterCardImageButton = dialog.findViewById(R.id.monster_card_image);
