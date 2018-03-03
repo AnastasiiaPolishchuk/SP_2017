@@ -43,6 +43,44 @@
     <string name="your_fightlevel">Your fightLevel is:</string>
     <string name="monster_fightlevel">Monster fightLevel is:</string>
 
+    <!-- game rules -->
+    <string name="game_rules">"The card game Munchkin is partitioned into four big phases.
+      Those embody one round of one player.
+      1. Kick the Door: Draw one card from the Door deck and turn it face up.
+        a. Monster: fight it! (see combat)
+        b. Curse: it applies to you immediately and gets discarded
+        c. other card: put it in your hand or play it immediately
+      2. Look for Trouble: If you fought a monster in phase 1, skip this phase and go to phase 3.
+        Otherwise you can play a monster from your hand and fight it (see combat).
+      3. Looting the Room: If you fought a monster yet, you just skip this step. Otherwise, draw a card from the Door deck,
+      face down, and place it in your hand.
+      4. Charity: If you have more than five cards in your hand, you must discard enough cards to get you to five or below.
+
+      Combat: Fighting a monster means comparing its level with yours and adding the bonus from your table inventory to your
+      level. If your level is higher than the monster's, you win and draw as much as many treasure cards as the monster gives
+      you. If it's a draw, roll the dice. 1-5 means, you win, otherwise you lose and must run away! Needless to say,
+      you also lose and must run away, if the monster's level is higher than yours.
+
+      Running away: If the monster is too strong for you, you have to run away! So roll the dice. You need at least a 5 or
+      higher to be successful. The Elf race gives you a +1 bonus, so you need a 4 or higher to run away. Of course, there are
+      more options that give you a bonus or penatly for running away, just read the card! If you fail to run away, bad things
+      are happening. Just read the card to get further information. Afterwards you discard the monster and continue with phase 4.
+
+      Inventory: Your inventory contains all cards you own. Each card is either on your hand or on the table in front of you,
+      faced up. On your hand your are allowed to hold 5 cards as a maximum and 6 if you are a dwarf. Only the cards on your table
+      are posing a bonus in combat, so be sure to decide what cards you want to place on the table.
+
+      Race: There are two special races in theh game: Elf and Dwarf. There can only be one race as a maximum simultaneously active,
+      shown by placing the race card on the table, faced up. If you are neither Elf nor Dwarf your race is human.
+
+      Winning: The first player reaching player level 10 wins the game.
+
+
+
+
+
+      "</string>
+
     <!-- general messages -->
     <string name="player_killed_monster">%player% has killed %card%</string>
     <string name="player_gets_level">%player% goes up %integer% level</string>
