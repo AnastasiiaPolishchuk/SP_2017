@@ -1,6 +1,8 @@
 package com.annapol04.munchkin.gui;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.LinearLayoutManager;
@@ -65,6 +67,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             public void onClick(View v) {
                 final Dialog dialog = new Dialog(parent.getContext());
                 dialog.setContentView(R.layout.zoom_layout);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 RecyclerView recyclerView = dialog.findViewById(R.id.recycler_view_zoom_cards);
 
                 int itemPosition = recyclerView.getChildLayoutPosition(view);
