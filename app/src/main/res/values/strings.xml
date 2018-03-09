@@ -114,8 +114,8 @@
     <string name="leperchaun_desc"></string>
     <string name="pubic_lice">Public lice</string>
     <string name="pubic_lice_desc"></string>
-    <string name="sabbering_slime">Sabbering slime</string>
-    <string name="sabbering_slime_desc"></string>
+    <string name="drooling_slime">Drooling slime</string>
+    <string name="drooling_slime_desc"></string>
     <string name="lame_goblin">Lame goblin</string>
     <string name="lame_goblin_desc"></string>
     <string name="hammer_rat">Hammer rat</string>
@@ -126,8 +126,8 @@
     <string name="flying_frogs_desc"></string>
     <string name="gallertoktaeder">Gallertoktaeder</string>
     <string name="gallertoktaeder_desc"></string>
-    <string name="chicken">Chicken</string>
-    <string name="chicken_desc"></string>
+    <string name="large_angry_chicken">Large Angry Chicken</string>
+    <string name="large_angry_chicken_desc"></string>
 
     <string name="mr_bones">Mr. Bones</string>
     <string name="mr_bones_desc"></string>
@@ -143,6 +143,95 @@
     <string name="harpies_desc"></string>
     <string name="undead_horse">Undead Horse</string>
     <string name="undead_horse_desc"></string>
+
+    <string name="amazon">Amazon</string>
+    <string name="amazon_desc"></string>
+    <string name="bigfoot">Bigfoot</string>
+    <string name="bigfoot_desc"></string>
+    <string name="bullrog">Bullrog</string>
+    <string name="bullrog_desc"></string>
+    <string name="floating_nose">Floating Nose</string>
+    <string name="floating_nose_desc"></string>
+    <string name="gazebo">Gazebo</string>
+    <string name="gazebo_desc"></string>
+    <string name="ghoulfiends">Ghoulfiends</string>
+    <string name="ghoulfiends_desc"></string>
+    <string name="hippogreif">Hippogreif</string>
+    <string name="hippogreif_desc"></string>
+    <string name="insurance_salesman">Insurance Salesman</string>
+    <string name="insurance_salesman_desc"></string>
+    <string name="king_tut">King Tut</string>
+    <string name="king_tut_desc"></string>
+    <string name="lawyers">Lawyers</string>
+    <string name="lawyers_desc"></string>
+
+    <string name="net_troll">Net Troll</string>
+    <string name="net_troll_desc"></string>
+    <string name="orcs">3872 Orcs</string>
+    <string name="orcs_desc"></string>
+    <string name="pit_bull">Pit Bull</string>
+    <string name="pit_bull_desc"></string>
+    <string name="platycore">Platycore</string>
+    <string name="platycore_desc"></string>
+    <string name="plutonium_dragon">Plutonium Dragon</string>
+    <string name="plutonium_dragon_desc"></string>
+    <string name="pukachu">Pukachu</string>
+    <string name="pukachu_desc"></string>
+
+    <string name="shrieking_geek">Shrieking Geek</string>
+    <string name="shrieking_geek_desc"></string>
+    <string name="snails_on_speed">Snails on Speed</string>
+    <string name="snails_on_speed_desc"></string>
+    <string name="squiszilla">Squiszilla</string>
+    <string name="squiszilla_desc"></string>
+    <string name="stoned_golem">Stoned Golem</string>
+    <string name="stoned_golem_desc"></string>
+    <string name="tongue_demon">Tongue Demon</string>
+    <string name="tongue_demon_desc"></string>
+    <string name="uaih">Unspeakably Awful Indescribable Horror</string>
+    <string name="uaih_desc"></string>
+    <string name="wannabe_vampire">Wannabe Vampire</string>
+    <string name="wannabe_vampire_desc"></string>
+    <string name="wight_brothers">Wight Brothers</string>
+    <string name="wight_brothers_desc"></string>
+
+    <string name="dwarf">Dwarf</string>
+    <string name="dwarf_desc"></string>
+    <string name="elf">Elf</string>
+    <string name="elf_desc"></string>
+
+    <string name="duck_of_doom">Duck of Doom</string>
+    <string name="duck_of_doom_desc"></string>
+    <string name="change_race">Change Race</string>
+    <string name="change_race_desc"></string>
+    <string name="truly_obnoxious">Truly Obnoxious Curse </string>
+    <string name="truly_obnoxious_desc"></string>
+    <string name="lose_small_item">Curse Lose Small Item</string>
+    <string name="lose_small_item_desc"></string>
+    <string name="lose_race">Lose Race</string>
+    <string name="lose_race_desc"></string>
+
+    <string name="lose_level">Lose Level</string>
+    <string name="lose_level_desc"></string>
+    <string name="lose_headgear">Lose Headgear</string>
+    <string name="lose_headgear_desc"></string>
+    <string name="lose_footgear">Lose Footgear</string>
+    <string name="lose_footgear_desc"></string>
+    <string name="lose_big_item">Lose Big Item</string>
+    <string name="lose_big_item_desc"></string>
+    <string name="lose_armor">Lose Armor</string>
+    <string name="lose_armor_desc"></string>
+
+    <string name="intelligent">Intelligent</string>
+    <string name="intelligent_desc"></string>
+    <string name="ancient">ancient</string>
+    <string name="ancient_desc"></string>
+    <string name="humongous">Humongous</string>
+    <string name="humongous_desc"></string>
+    <string name="baby">Baby</string>
+    <string name="baby_desc"></string>
+    <string name="enraged">Enreaged</string>
+    <string name="enraged_desc"></string>
 
 
     <!-- Equipment cards -->
