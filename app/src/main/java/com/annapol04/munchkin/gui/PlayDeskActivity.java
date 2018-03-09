@@ -1,7 +1,9 @@
 package com.annapol04.munchkin.gui;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModelProviders;
@@ -18,15 +20,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annapol04.munchkin.R;
@@ -83,8 +88,15 @@ public class PlayDeskActivity extends AppCompatActivity
         TextView name = header.findViewById(R.id.name_of_player_nav_header);
         name.setText(viewModel.getMyName().getValue() + ":  " + viewModel.getMyLevel().getValue());
 
-        viewModel.getPlayers().observe(this, this::updatePlayers);
+        // ProgressBar to show time for an action
+        // TODO: anschließen !
+        ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.time_to_action_bar);
+        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(mProgressBar, "progress", 100, 0);
+        progressAnimator.setDuration(30000);
+        progressAnimator.setInterpolator(new LinearInterpolator());
+        progressAnimator.start();
 
+        viewModel.getPlayers().observe(this, this::updatePlayers);
 
   //      viewModel.isMyself().observe(this, mRootView::setClickable);
 
@@ -101,46 +113,30 @@ public class PlayDeskActivity extends AppCompatActivity
             }
         });
 
-        TextView headgear = findViewById(R.id.headgear);
-        viewModel.getIsHeadgearEquiped().observe(this, equiped -> {
-            headgear.setTextColor(equiped ? Color.BLACK : Color.GRAY);
-        });
+//        TextView headgear = findViewById(R.id.headgear);
+//        viewModel.getIsHeadgearEquiped().observe(this, equiped -> {
+//            headgear.setTextColor(equiped ? Color.BLACK : Color.GRAY);
+//        });
         ImageView headgear_ = findViewById(R.id.man_head);
         viewModel.getIsHeadgearEquiped().observe(this, equiped -> {
             headgear_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
         });
 
-        TextView armor = findViewById(R.id.armor);
-        viewModel.getIsArmorEquiped().observe(this, equiped -> {
-            armor.setTextColor(equiped ? Color.BLACK : Color.GRAY);
-        });
         ImageView armor_ = findViewById(R.id.man_armor);
         viewModel.getIsArmorEquiped().observe(this, equiped -> {
             armor_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
         });
 
-        TextView shoes = findViewById(R.id.footgear);
-        viewModel.getAreShoesEquiped().observe(this, equiped -> {
-            shoes.setTextColor(equiped ? Color.BLACK : Color.GRAY);
-        });
         ImageView shoes_ = findViewById(R.id.man_shoes);
         viewModel.getAreShoesEquiped().observe(this, equiped -> {
             shoes_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
         });
 
-        TextView leftHand = findViewById(R.id.left_hand);
-        viewModel.getIsLeftHandEquiped().observe(this, equiped -> {
-            leftHand.setTextColor(equiped ? Color.BLACK : Color.GRAY);
-        });
         ImageView leftHand_ = findViewById(R.id.man_left_hand);
         viewModel.getIsLeftHandEquiped().observe(this, equiped -> {
             leftHand_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
         });
 
-        TextView rightHand = findViewById(R.id.right_hand);
-        viewModel.getIsRightHandEquiped().observe(this, equiped -> {
-            rightHand.setTextColor(equiped ? Color.BLACK : Color.GRAY);
-        });
         ImageView rightHand_ = findViewById(R.id.man_right_hand);
         viewModel.getIsRightHandEquiped().observe(this, equiped -> {
             rightHand_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
@@ -192,14 +188,34 @@ public class PlayDeskActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case R.id.action_info:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle).setTitle("Game Rules").setMessage(R.string.game_rules);
+                // Get the layout inflater
+                LayoutInflater inflater = this.getLayoutInflater();
+
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                AlertDialog infoDialog = builder.create();
+                infoDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                infoDialog.setContentView(R.layout.dialog_info);
+                infoDialog.show();
+                return true;
+
+            case R.id.action_exit:
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
