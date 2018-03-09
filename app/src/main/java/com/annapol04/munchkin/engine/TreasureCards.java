@@ -8,7 +8,7 @@ public class TreasureCards {
     public static final Card LEATHER_ARMOR         = new BonusWear(R.string.boiled_leather, R.string.boiled_leather_desc, R.drawable.leather_armor, 1, BonusWear.Blocking.ARMOR, BonusWear.Size.SMALL);
     public static final Card SLIMY_ARMOR          = new BonusWear(R.string.slimy_armor, R.string.slimy_armor_desc, R.drawable.plain, 1, BonusWear.Blocking.ARMOR, BonusWear.Size.SMALL);
     public static final Card SPIKY_KNEES           = new BonusWear(R.string.knee, R.string.knee_desc, R.drawable.spiky_knees, 1, BonusWear.Blocking.NOTHING, BonusWear.Size.SMALL);
-    public static final Card HORNY_HELMET          = new BonusWear(R.string.horny_helmet, R.string.horny_helmet_desc, R.drawable.thorny_helmet, 1, BonusWear.Blocking.HEAD, BonusWear.Size.SMALL);
+    public static final Card HORNY_HELMET          = new BonusWear(R.string.horny_helmet, R.string.horny_helmet_desc, R.drawable.horny_helmet, 1, BonusWear.Blocking.HEAD, BonusWear.Size.SMALL);
     public static final Card BOOTS_OF_BUTT_KICKING = new BonusWear(R.string.ass_kick_boot, R.string.ass_kick_boot_desc, R.drawable.plain, 2, BonusWear.Blocking.SHOES, BonusWear.Size.SMALL);
     public static final Card DAGGER_OF_TREACHERY   = new BonusWear(R.string.dagger_of_treachery, R.string.dagger_of_treachery_desc, R.drawable.plain,3, BonusWear.Blocking.ONEHAND, BonusWear.Size.SMALL);
     public static final Card RAPIER_OF_UNFAIRNESS  = new BonusWear(R.string.rapier_of_unfairness, R.string.rapier_of_unfairness_desc, R.drawable.plain,3, BonusWear.Blocking.ONEHAND, BonusWear.Size.SMALL);
