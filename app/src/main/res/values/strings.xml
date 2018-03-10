@@ -301,6 +301,17 @@
     <string name="pantyhose_of_giant_strength">Pantyhose Of Giant Strength</string>
     <string name="pantyhose_of_giant_strength_desc"></string>
 
+    <string name="cloak_of_obscurity">Cloak Of Obscurity</string>
+    <string name="cloak_of_obscurity_desc"></string>
+    <string name="hammer_of_kneecapping">Hammer Of Kneecapping</string>
+    <string name="hammer_of_kneecapping_desc"></string>
+    <string name="mace_of_sharpness">Mace Of Sharpness</string>
+    <string name="mace_of_sharpness_desc"></string>
+    <string name="shield_of_ubiquity">Shield Of Ubiquity</string>
+    <string name="shield_of_ubiquity_desc"></string>
+    <string name="bow_with_ribbons">Bow With Ribbons</string>
+    <string name="bow_with_ribbons_desc"></string>
+
     <string name="wishing_ring">Wishing Ring</string>
     <string name="wishing_ring_desc"></string>
     <string name="tuba_of_charm">Tuba Of Charm</string>

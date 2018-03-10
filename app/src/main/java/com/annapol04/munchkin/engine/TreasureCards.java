@@ -35,13 +35,11 @@ public class TreasureCards {
     public static final Card CHAINSAW_OF_BLOODY_DISMEMBERMENT = new BonusWear(R.string.chainsaw_of_bloody_dismemberment, R.string.chainsaw_of_bloody_dismemberment_desc, R.drawable.chainsaw_of_bloody_dismemberment, 3, BonusWear.Blocking.TWOHANDS, BonusWear.Size.BIG);
     public static final Card PANTYHOSE_OF_GIANT_STRENGTH        = new BonusWear(R.string.pantyhose_of_giant_strength, R.string.pantyhose_of_giant_strength_desc, R.drawable.pantyhose_of_giant_strength, 3, BonusWear.Blocking.NOTHING, BonusWear.Size.SMALL);
 
-//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
+    public static final Card CLOAK_OF_OBSCURITY        = new BonusWear(R.string.cloak_of_obscurity, R.string.cloak_of_obscurity_desc, R.drawable.cloak_of_obscurity, 4, BonusWear.Blocking.NOTHING, BonusWear.Size.SMALL);
+    public static final Card HAMMER_OF_KNEECAPPING        = new BonusWear(R.string.hammer_of_kneecapping, R.string.hammer_of_kneecapping_desc, R.drawable.hammer_of_kneecapping, 4, BonusWear.Blocking.ONEHAND, BonusWear.Size.SMALL);
+    public static final Card MACE_OF_SHARPNESS        = new BonusWear(R.string.mace_of_sharpness, R.string.mace_of_sharpness_desc, R.drawable.mace_of_sharpness, 4, BonusWear.Blocking.ONEHAND, BonusWear.Size.SMALL);
+    public static final Card SHIELD_OF_UBIQUITY        = new BonusWear(R.string.shield_of_ubiquity, R.string.shield_of_ubiquity_desc, R.drawable.shield_of_ubiquity, 4, BonusWear.Blocking.ONEHAND, BonusWear.Size.BIG);
+    public static final Card BOW_WITH_RIBBONS        = new BonusWear(R.string.bow_with_ribbons, R.string.bow_with_ribbons_desc, R.drawable.bow_with_ribbons, 4, BonusWear.Blocking.TWOHANDS, BonusWear.Size.SMALL);
 
     //Special Cards: 11
     public static final Card WISH_RING_1 = new Special(R.string.wishing_ring, R.string.wishing_ring_desc, R.drawable.wishing_ring);
