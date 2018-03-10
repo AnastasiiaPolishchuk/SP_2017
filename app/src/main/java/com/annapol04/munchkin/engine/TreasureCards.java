@@ -28,20 +28,20 @@ public class TreasureCards {
     public static final Card STEPLADDER        = new BonusWear(R.string.stepladder, R.string.stepladder_desc, R.drawable.stepladder,3, BonusWear.Blocking.NOTHING, BonusWear.Size.BIG);
     public static final Card BUCKLER_OF_SWASHING        = new BonusWear(R.string.buckler_of_swashing, R.string.buckler_of_swashing_desc, R.drawable.buckler_of_swashing, 2, BonusWear.Blocking.ONEHAND, BonusWear.Size.SMALL);
     public static final Card FLAMING_ARMOR        = new BonusWear(R.string.flaming_armor, R.string.flaming_armor_desc, R.drawable.flaming_armor, 2, BonusWear.Blocking.ARMOR, BonusWear.Size.SMALL);
-    public static final Card BAD_ASS_BANDANA        = new BonusWear(R.string.bass_ass_bandana, R.string._desc, R.drawable.bass_ass_bandana, 3, BonusWear.Blocking.HEAD, BonusWear.Size.SMALL);
+    public static final Card BAD_ASS_BANDANA        = new BonusWear(R.string.bass_ass_bandana, R.string.bass_ass_bandana_desc, R.drawable.bass_ass_bandana, 3, BonusWear.Blocking.HEAD, BonusWear.Size.SMALL);
     public static final Card CHEESE_GRATER_OF_PEACE  = new BonusWear(R.string.cheese_grater_of_peace, R.string.cheese_grater_of_peace_desc, R.drawable.cheese_grater_of_peace, 3, BonusWear.Blocking.ONEHAND, BonusWear.Size.SMALL);
     public static final Card GENTLEMENS_CLUB        = new BonusWear(R.string.gentlemens_club, R.string.gentlemens_club_desc, R.drawable.gentlemens_club, 3, BonusWear.Blocking.ONEHAND, BonusWear.Size.SMALL);
     public static final Card SHORT_WIDE_ARMOR        = new BonusWear(R.string.short_wide_armor, R.string.short_wide_armor_desc, R.drawable.short_wide_armor, 3, BonusWear.Blocking.ARMOR, BonusWear.Size.SMALL);
     public static final Card CHAINSAW_OF_BLOODY_DISMEMBERMENT = new BonusWear(R.string.chainsaw_of_bloody_dismemberment, R.string.chainsaw_of_bloody_dismemberment_desc, R.drawable.chainsaw_of_bloody_dismemberment, 3, BonusWear.Blocking.TWOHANDS, BonusWear.Size.BIG);
     public static final Card PANTYHOSE_OF_GIANT_STRENGTH        = new BonusWear(R.string.pantyhose_of_giant_strength, R.string.pantyhose_of_giant_strength_desc, R.drawable.pantyhose_of_giant_strength, 3, BonusWear.Blocking.NOTHING, BonusWear.Size.SMALL);
 
-    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
-    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
+//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
+//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
+//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
+//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
+//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
+//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
+//    public static final Card XXXXX        = new BonusWear(R.string.XXXXXXX, R.string._desc, R.drawable.XXXXX, XX, BonusWear.Blocking., BonusWear.Size.);
 
     //Special Cards: 11
     public static final Card WISH_RING_1 = new Special(R.string.wishing_ring, R.string.wishing_ring_desc, R.drawable.wishing_ring);
