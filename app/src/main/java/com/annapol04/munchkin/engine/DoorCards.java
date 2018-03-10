@@ -4,21 +4,20 @@ import com.annapol04.munchkin.R;
 
 public class DoorCards {
     //Monster Cards: 37
-    public static final Card LEPERCHAUN     = new Monster(R.string.leperchaun, R.string.leperchaun_desc, R.drawable.leperchaun, 4, 2, "bad Things");
-    public static final Card DROOLING_SLIME= new Monster(R.string.drooling_slime, R.string.drooling_slime_desc, R.drawable.drooling_slime, 1, 1, "bad Things");
-    public static final Card LAME_GOBLIN    = new Monster(R.string.lame_goblin, R.string.lame_goblin_desc, R.drawable.lame_goblin, 1, 1, "bad Things");
-    public static final Card POTTED_PLANT   = new Monster(R.string.potted_plant, R.string.potted_plant_desc, R.drawable.potted_plant, 1, 1, "bad Things");
-    public static final Card FLYING_FROGS   = new Monster(R.string.flying_frogs, R.string.flying_frogs_desc, R.drawable.flying_frogs, 2, 1, "bad Things");
-    public static final Card GALLERTOKTAEDER= new Monster(R.string.gallertoktaeder, R.string.gallertoktaeder_desc, R.drawable.gelatinous_octaedron, 1, 1, "bad Things");
+    public static final Card LEPERCHAUN         = new Monster(R.string.leperchaun, R.string.leperchaun_desc, R.drawable.leperchaun, 4, 2, "bad Things");
+    public static final Card DROOLING_SLIME     = new Monster(R.string.drooling_slime, R.string.drooling_slime_desc, R.drawable.drooling_slime, 1, 1, "bad Things");
+    public static final Card LAME_GOBLIN        = new Monster(R.string.lame_goblin, R.string.lame_goblin_desc, R.drawable.lame_goblin, 1, 1, "bad Things");
+    public static final Card POTTED_PLANT       = new Monster(R.string.potted_plant, R.string.potted_plant_desc, R.drawable.potted_plant, 1, 1, "bad Things");
+    public static final Card FLYING_FROGS       = new Monster(R.string.flying_frogs, R.string.flying_frogs_desc, R.drawable.flying_frogs, 2, 1, "bad Things");
+    public static final Card GALLERTOKTAEDER    = new Monster(R.string.gallertoktaeder, R.string.gallertoktaeder_desc, R.drawable.gelatinous_octaedron, 1, 1, "bad Things");
     public static final Card LARGE_ANGRY_CHICKEN        = new Monster(R.string.large_angry_chicken, R.string.large_angry_chicken_desc, R.drawable.large_angry_chicken, 1, 1, "bad Things");
 
-    public static final Card MR_BONES = new Monster(R.string.mr_bones, R.string.mr_bones_desc, R.drawable.mr_bones, 2, 1, "bad Things");
-    public static final Card MAUL_RAT = new Monster(R.string.maul_rat, R.string.maul_rat_desc, R.drawable.maul_rat, 1, 1, "bad Things");
-    //public static final Card OCTAHEDRON = new Monster(R.string.octahedron, R.string.octahedron_desc, R.drawable.gelatinous_octaedron, 2, 1, "bad Things");
-    public static final Card CRABS      = new Monster(R.string.crabs, R.string.crabs_desc, R.drawable.crabs, 1, 1, "bad Things");
-    public static final Card FACE_SUCKER = new Monster(R.string.face_sucker, R.string.face_sucker_desc, R.drawable.face_sucker, 8, 2, "bad Things");
-    public static final Card HARPIES = new Monster(R.string.harpies, R.string.harpies_desc, R.drawable.harpies, 4, 2, "bad Things");
-    public static final Card UNDEAD_HORSE = new Monster(R.string.undead_horse, R.string.undead_horse_desc, R.drawable.undead_horse, 4, 2, "bad Things");
+    public static final Card MR_BONES       = new Monster(R.string.mr_bones, R.string.mr_bones_desc, R.drawable.mr_bones, 2, 1, "bad Things");
+    public static final Card MAUL_RAT       = new Monster(R.string.maul_rat, R.string.maul_rat_desc, R.drawable.maul_rat, 1, 1, "bad Things");
+    public static final Card CRABS          = new Monster(R.string.crabs, R.string.crabs_desc, R.drawable.crabs, 1, 1, "bad Things");
+    public static final Card FACE_SUCKER    = new Monster(R.string.face_sucker, R.string.face_sucker_desc, R.drawable.face_sucker, 8, 2, "bad Things");
+    public static final Card HARPIES        = new Monster(R.string.harpies, R.string.harpies_desc, R.drawable.harpies, 4, 2, "bad Things");
+    public static final Card UNDEAD_HORSE   = new Monster(R.string.undead_horse, R.string.undead_horse_desc, R.drawable.undead_horse, 4, 2, "bad Things");
 
     //New
     public static final Card AMAZON         = new Monster(R.string.amazon, R.string.amazon_desc, R.drawable.amazon, 8, 2, "bad Things");
@@ -56,28 +55,24 @@ public class DoorCards {
     public static final Card ELF_3          = new Race(R.string.elf, R.string.elf_desc, R.drawable.elf);
 
     //Curse Cards: 12
-    public static final Card DUCK_OF_DOOM          = new Curse(R.string.duck_of_doom, R.string.duck_of_doom_desc, R.drawable.curse_duck_of_doom);
+    public static final Card DUCK_OF_DOOM         = new Curse(R.string.duck_of_doom, R.string.duck_of_doom_desc, R.drawable.curse_duck_of_doom);
     public static final Card CHANGE_RACE          = new Curse(R.string.change_race, R.string.change_race_desc, R.drawable.curse_change_race);
-    public static final Card TRULY_OBNOXIOUS          = new Curse(R.string.truly_obnoxious, R.string.truly_obnoxious_desc, R.drawable.curse_truly_obnoxious);
-    public static final Card LOSE_SMALL_ITEM_1          = new Curse(R.string.lose_small_item, R.string.lose_small_item_desc, R.drawable.curse_lose_small_item);
-    public static final Card LOSE_SMALL_ITEM_2          = new Curse(R.string.lose_small_item, R.string.lose_small_item_desc, R.drawable.curse_lose_small_item);
-    public static final Card LOSE_RACE          = new Curse(R.string.lose_race, R.string.lose_race_desc, R.drawable.curse_lose_race);
+    public static final Card TRULY_OBNOXIOUS      = new Curse(R.string.truly_obnoxious, R.string.truly_obnoxious_desc, R.drawable.curse_truly_obnoxious);
+    public static final Card LOSE_SMALL_ITEM_1    = new Curse(R.string.lose_small_item, R.string.lose_small_item_desc, R.drawable.curse_lose_small_item);
+    public static final Card LOSE_SMALL_ITEM_2    = new Curse(R.string.lose_small_item, R.string.lose_small_item_desc, R.drawable.curse_lose_small_item);
+    public static final Card LOSE_RACE            = new Curse(R.string.lose_race, R.string.lose_race_desc, R.drawable.curse_lose_race);
 
-    public static final Card LOSE_LEVEL_1          = new Curse(R.string.lose_level, R.string.lose_level_desc, R.drawable.curse_lose_level);
-    public static final Card LOSE_LEVEL_2          = new Curse(R.string.lose_level, R.string.lose_level_desc, R.drawable.curse_lose_level);
-    public static final Card LOSE_HEADGEAR          = new Curse(R.string.lose_headgear, R.string.lose_headgear_desc, R.drawable.curse_lose_headgear);
-    public static final Card LOSE_FOOTGEAR          = new Curse(R.string.lose_footgear, R.string.lose_footgear_desc, R.drawable.curse_lose_footgear);
-    public static final Card LOSE_BIG_ITEM          = new Curse(R.string.lose_big_item, R.string.lose_big_item_desc, R.drawable.curse_lose_big_item);
-    public static final Card LOSE_ARMOR          = new Curse(R.string.lose_armor, R.string.lose_armor_desc, R.drawable.curse_lose_armor);
+    public static final Card LOSE_LEVEL_1         = new Curse(R.string.lose_level, R.string.lose_level_desc, R.drawable.curse_lose_level);
+    public static final Card LOSE_LEVEL_2         = new Curse(R.string.lose_level, R.string.lose_level_desc, R.drawable.curse_lose_level);
+    public static final Card LOSE_HEADGEAR        = new Curse(R.string.lose_headgear, R.string.lose_headgear_desc, R.drawable.curse_lose_headgear);
+    public static final Card LOSE_FOOTGEAR        = new Curse(R.string.lose_footgear, R.string.lose_footgear_desc, R.drawable.curse_lose_footgear);
+    public static final Card LOSE_BIG_ITEM        = new Curse(R.string.lose_big_item, R.string.lose_big_item_desc, R.drawable.curse_lose_big_item);
+    public static final Card LOSE_ARMOR           = new Curse(R.string.lose_armor, R.string.lose_armor_desc, R.drawable.curse_lose_armor);
 
     //Monsterlevel Cards: 5
-    public static final Card INTELLIGENT          = new Monsterlevel(R.string.intelligent, R.string.intelligent_desc, R.drawable.intelligent, 5);
-    public static final Card ANCIENT          = new Monsterlevel(R.string.ancient, R.string.ancient_desc, R.drawable.ancient, 10);
-    public static final Card HUMONGOUS          = new Monsterlevel(R.string.humongous, R.string.humongous_desc, R.drawable.humongous, 10);
-    public static final Card BABY          = new Monsterlevel(R.string.baby, R.string.baby_desc, R.drawable.baby, -5);
-    public static final Card ENRAGED          = new Monsterlevel(R.string.enraged, R.string.enraged_desc, R.drawable.enraged, 5);
-
-
-
-
+    public static final Card INTELLIGENT            = new Monsterlevel(R.string.intelligent, R.string.intelligent_desc, R.drawable.intelligent, 5);
+    public static final Card ANCIENT                = new Monsterlevel(R.string.ancient, R.string.ancient_desc, R.drawable.ancient, 10);
+    public static final Card HUMONGOUS                  = new Monsterlevel(R.string.humongous, R.string.humongous_desc, R.drawable.humongous, 10);
+    public static final Card BABY                   = new Monsterlevel(R.string.baby, R.string.baby_desc, R.drawable.baby, -5);
+    public static final Card ENRAGED                = new Monsterlevel(R.string.enraged, R.string.enraged_desc, R.drawable.enraged, 5);
 }
