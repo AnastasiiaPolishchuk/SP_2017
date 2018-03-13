@@ -57,9 +57,9 @@
       4. Charity: If you have more than five cards in your hand, you must discard enough cards to get you to five or below.
 
       Combat: Fighting a monster means comparing its level with yours and adding the bonus from your table inventory to your
-      level. If your level is higher than the monster's, you win and draw as much as many treasure cards as the monster gives
+      level. If your level is higher than the monster's, you win this fight and draw as much as many treasure cards as the monster gives
       you. If it's a draw, roll the dice. 1-5 means, you win, otherwise you lose and must run away! Needless to say,
-      you also lose and must run away, if the monster's level is higher than yours.
+      you also lose and have to run away, if the monster's level is higher than yours.
 
       Running away: If the monster is too strong for you, you have to run away! So roll the dice. You need at least a 5 or
       higher to be successful. The Elf race gives you a +1 bonus, so you need a 4 or higher to run away. Of course, there are
@@ -70,21 +70,38 @@
       faced up. On your hand your are allowed to hold 5 cards as a maximum and 6 if you are a dwarf. Only the cards on your table
       are posing a bonus in combat, so be sure to decide what cards you want to place on the table.
 
-      Race: There are two special races in theh game: Elf and Dwarf. There can only be one race as a maximum simultaneously active,
+      Race: There are two special races in the game: Elf and Dwarf. There can only be one race as a maximum simultaneously active,
       shown by placing the race card on the table, faced up. If you are neither Elf nor Dwarf your race is human.
 
       Winning: The first player reaching player level 10 wins the game.
 
+      Equipment: On the hand, every equipment has no function. They only higher your level if they are placed on the table, faced up.
+        You are allowed to use an arbitrary number of small items but only one big item as a maximum. (All items that are not big, are
+        small.)
 
-
-
-
+      Card Management: Keep separate face-up discard piles for the two decks. You may not look through the discards unless you play a
+        card that allows you to! When a deck runs out, reshuffle its discards. If a deck runs out and there are no discards, nobody
+        can draw any of that kind of card!
       "</string>
 
     <!-- general messages -->
-    <string name="player_killed_monster">%player% has killed %card%</string>
+    <string name="YYYYYYYYYYY">%player% </string>
+    <!-- fight messages -->
+    <string name="player_fights_monster">%player% fights against %card%</string>
+    <string name="player_killed_monster">%player% has killed %card% and wins</string>
     <string name="player_gets_level">%player% goes up %integer% level</string>
+    <string name="player_looses_and_run_away">%player% looses against %card% and has to run away</string>
+    <string name="player_runs_away">%player% ran successfully away</string>
+    <string name="player_was_killed">%player% got killed by monster %card%</string>
     <string name="player_draws_treasure_cards">%player% is allowed to draw %integer% treasure cards</string>
+    <!-- card messages -->
+    <string name="player_draws_treasure">%player% draws treasure card: %card%</string>
+    <string name="player_draws_door">%player% draws door card: %card%</string>
+    <string name="player_discards_treasure">%player% discards treasure card: %card%</string>
+    <string name="player_discards_door">%player% discards door %card%</string>
+    <string name="player_moves_to_desk">%player% moves (equips) %card% from inventory to desk</string>
+    <string name="player_moves_to_inventory">%player% moves (removes) %card% from desk to inventory</string>
+
 
     <!-- Event messages -->
     <string name="ev_empty"> </string>
@@ -195,11 +212,21 @@
     <string name="wight_brothers">Wight Brothers</string>
     <string name="wight_brothers_desc"></string>
 
-    <string name="dwarf">Dwarf</string>
-    <string name="dwarf_desc"></string>
-    <string name="elf">Elf</string>
-    <string name="elf_desc"></string>
 
+    <!-- MonsterBonus Cards -->
+    <string name="intelligent">Intelligent</string>
+    <string name="intelligent_desc"></string>
+    <string name="ancient">ancient</string>
+    <string name="ancient_desc"></string>
+    <string name="humongous">Humongous</string>
+    <string name="humongous_desc"></string>
+    <string name="baby">Baby</string>
+    <string name="baby_desc"></string>
+    <string name="enraged">Enreaged</string>
+    <string name="enraged_desc"></string>
+
+
+    <!-- Curse cards -->
     <string name="duck_of_doom">Duck of Doom</string>
     <string name="duck_of_doom_desc"></string>
     <string name="change_race">Change Race</string>
@@ -222,17 +249,12 @@
     <string name="lose_armor">Lose Armor</string>
     <string name="lose_armor_desc"></string>
 
-    <string name="intelligent">Intelligent</string>
-    <string name="intelligent_desc"></string>
-    <string name="ancient">ancient</string>
-    <string name="ancient_desc"></string>
-    <string name="humongous">Humongous</string>
-    <string name="humongous_desc"></string>
-    <string name="baby">Baby</string>
-    <string name="baby_desc"></string>
-    <string name="enraged">Enreaged</string>
-    <string name="enraged_desc"></string>
 
+    <!-- Races cards -->
+    <string name="dwarf">Dwarf</string>
+    <string name="dwarf_desc"></string>
+    <string name="elf">Elf</string>
+    <string name="elf_desc"></string>
 
     <!-- Equipment cards -->
     <string name="pole">Eleven foot pole</string>
@@ -261,8 +283,6 @@
     <string name="swiss_army_polearm_desc"></string>
     <string name="singing_dancing_sword">Singing and dancing sword</string>
     <string name="singing_dancing_sword_desc"></string>
-    <string name="boots_of_running_really_fast">Boots of running really fast</string>
-    <string name="boots_of_running_really_fast_desc"></string>
     <string name="sandals_protection">Sandals of protection</string>
     <string name="sandals_protection_desc"></string>
     <string name="rat">Rat on the stick</string>
@@ -312,8 +332,12 @@
     <string name="bow_with_ribbons">Bow With Ribbons</string>
     <string name="bow_with_ribbons_desc"></string>
 
+
+    <!-- Special cards -->
     <string name="wishing_ring">Wishing Ring</string>
     <string name="wishing_ring_desc"></string>
+    <string name="boots_of_running_really_fast">Boots of running really fast</string>
+    <string name="boots_of_running_really_fast_desc"></string>
     <string name="tuba_of_charm">Tuba Of Charm</string>
     <string name="tuba_of_charm_desc"></string>
     <string name="loaded_die">loaded_die</string>
@@ -331,6 +355,9 @@
     <string name="pollymorph_potion_desc"></string>
     <string name="hoard">Hoard!</string>
     <string name="hoard_desc"></string>
+
+
+    <!-- BonusSide cards -->
     <string name="pretty_balloons">Pretty Balloons</string>
     <string name="pretty_balloons_desc"></string>
     <string name="magic_missle">Magic Missle</string>
