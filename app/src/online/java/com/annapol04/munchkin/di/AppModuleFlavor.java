@@ -4,7 +4,6 @@ import android.app.Application;
 import android.arch.persistence.room.Room;
 import android.util.Log;
 
-import com.annapol04.munchkin.data.AndroidMessageBook;
 import com.annapol04.munchkin.data.EventRepository;
 import com.annapol04.munchkin.db.AppDb;
 import com.annapol04.munchkin.db.EventDao;
