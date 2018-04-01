@@ -33,4 +33,14 @@ public class FakeMatch extends Match {
             );
         }
     }
+
+    @Override
+    public void finishRound(int playerNr) throws IllegalEngineStateException {
+        super.finishRound(playerNr);
+
+        if (current.getValue() != myself) {
+            if (state == State.HAND_CARDS)
+                drawInitialHandcards();
+        }
+    }
 }

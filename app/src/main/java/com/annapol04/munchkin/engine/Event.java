@@ -149,44 +149,26 @@ public class Event {
 
     @Override
     public String toString() {
-        String prevHashByteString = ByteString.of(previousHash).toString();
-        String hashByteString = ByteString.of(hash).toString();
-
-        return new StringBuilder()
-                .append("[")
-                .append(prevHashByteString.substring(5, prevHashByteString.length() - 1))
-                .append(", ")
-                .append(hashByteString.substring(5, hashByteString.length() - 1))
-                .append(", ")
-                .append(scope.toString())
-                .append(", ")
-                .append(action.toString())
-                .append(", ")
-                .append(data.toString())
-                .append(", ")
-                .append(messageId)
-                .append("]")
-                .toString();
+        return "(" +
+                scope.toString() +
+                ", " +
+                action.toString() +
+                ", " +
+                data.toString() +
+                ", " +
+                messageId +
+                ")";
     }
 
     public String toString(MessageBook messageBook, Player player, boolean anonymized) {
-        String prevHashByteString = ByteString.of(previousHash).toString();
-        String hashByteString = ByteString.of(hash).toString();
-
-        return new StringBuilder()
-                .append("[")
-                .append(prevHashByteString.substring(5, prevHashByteString.length() - 1))
-                .append(", ")
-                .append(hashByteString.substring(5, hashByteString.length() - 1))
-                .append(", ")
-                .append(scope.toString())
-                .append(", ")
-                .append(action.toString())
-                .append(", ")
-                .append(data.toString())
-                .append(", \"")
-                .append(getMessage(messageBook, player, anonymized))
-                .append("\"]")
-                .toString();
+        return "(" +
+                scope.toString() +
+                ", " +
+                action.toString() +
+                ", " +
+                data.toString() +
+                ", \"" +
+                getMessage(messageBook, player, anonymized) +
+                "\")";
     }
 }

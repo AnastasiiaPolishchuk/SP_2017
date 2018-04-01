@@ -202,13 +202,6 @@ public class Player extends LiveData<Player> {
         return scope;
     }
 
-    public void emitDrawTreasureCard() {
-        eventRepository.push(
-                new Event(scope, Action.DRAW_TREASURECARD, R.string.ev_draw_card,
-                        game.getRandomTreasureCards(1).get(0).getId())
-        );
-    }
-
     public void drawTreasureCard(Card card) throws IllegalEngineStateException {
         if (numberOfAllowedTreasureCardsToDraw == 0)
             throw new IllegalEngineStateException("not allowed to draw a treasure card!");
@@ -219,13 +212,6 @@ public class Player extends LiveData<Player> {
 
         handCards.getValue().add(card);
         update(handCards);
-    }
-
-    public void emitDrawDoorCard() {
-        eventRepository.push(
-                new Event(scope, Action.DRAW_DOORCARD, R.string.ev_draw_card,
-                    game.getRandomDoorCards(1).get(0).getId())
-        );
     }
 
     public void drawDoorCard(Card card) throws IllegalEngineStateException {

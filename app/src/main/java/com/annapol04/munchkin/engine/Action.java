@@ -23,7 +23,7 @@ public class Action {
         match.drawDoorCard(event.getScope(), Card.fromId(event.getInteger()));
     });
     public static final Action DRAW_TREASURECARD = new Action((match, game, event) -> {
-        match.getPlayer(event.getScope()).drawTreasureCard(Card.fromId((event.getInteger())));
+        match.drawTreasureCard(event.getScope(), Card.fromId(event.getInteger()));
     });
     public static final Action PICKUP_CARD = new Action((match, game, event) -> {
         match.getPlayer(event.getScope()).pickupCard(Card.fromId(event.getInteger()));

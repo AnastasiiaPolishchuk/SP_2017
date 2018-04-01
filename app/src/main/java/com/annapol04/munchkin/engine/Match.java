@@ -12,8 +12,6 @@ import com.annapol04.munchkin.data.EventRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -27,17 +25,18 @@ public class Match {
     protected static final int AMOUNT_OF_HAND_CARDS = 2;
     protected static final int MAX_AMOUNT_OF_HAND_CARDS = 4;
 
-    private static final String TAG = Match.class.getSimpleName();
+    protected static final String TAG = Match.class.getSimpleName();
 
     protected Game game;
     protected EventRepository eventRepository;
 
     protected MutableLiveData<String> log = new MutableLiveData<>();
     protected MutableLiveData<List<Player>> observablePlayers = new MutableLiveData<>();
-    protected MutableLiveData<Player> current = new MutableLiveData<>();
+    protected MutableLiveData<Player> currentPlayer = new MutableLiveData<>();
 
     protected List<Player> players = new ArrayList<>();
-    protected Player host = null;
+    protected Player current = null;
+    protected Player first = null;
     protected final Player myself;
     protected TurnPhase turnPhase;
 
@@ -45,10 +44,13 @@ public class Match {
     protected int amountOfPlayers = 0;
     protected int playersRenamed = 0;
 
+    protected boolean named = false;
+    protected boolean handCardsDrawn = false;
+
     protected enum State {
         JOINING,
         NAMING,
-        INITIAL,
+        HAND_CARDS,
         STARTED,
     }
 
@@ -63,9 +65,9 @@ public class Match {
         reset();
     }
 
-    private void reset() {
+    protected void reset() {
         players.clear();
-        current.setValue(null);
+        currentPlayer.setValue(null);
         playersRenamed = 0;
         observablePlayers.getValue().clear();
         log.setValue("");
@@ -75,6 +77,9 @@ public class Match {
 
         turnPhase = TurnPhase.IDLE;
         state = State.JOINING;
+
+        named = false;
+        handCardsDrawn = false;
     }
 
     public boolean isMyself(Player player) {
@@ -114,7 +119,7 @@ public class Match {
     }
 
     public LiveData<Player> getCurrentPlayer() {
-        return current;
+        return currentPlayer;
     }
 
     public void start(int amountOfPlayers) {
@@ -125,7 +130,7 @@ public class Match {
         eventRepository.push(new Event(Scope.GAME, Action.JOIN_PLAYER, 0, myself.getId()));
     }
 
-    private Player evaluateHost() {
+    protected Player evaluateHost() {
         Player highestId = null;
 
         for (Player player : players) {
@@ -138,7 +143,7 @@ public class Match {
         return highestId;
     }
 
-    private void specifyPlayerNumbers() {
+    protected void specifyPlayerNumbers() {
         myself.setScope(Scope.PLAYER1);
 
         eventRepository.push(
@@ -152,24 +157,30 @@ public class Match {
                         new Event(Scope.fromId(nr++), Action.ASSIGN_PLAYER_NUMBER, 0, player.getId()));
     }
 
-    private <T> void update(MutableLiveData<T> liveData) {
+    protected <T> void update(MutableLiveData<T> liveData) {
         liveData.setValue(liveData.getValue());
     }
 
     public void joinPlayer(int randomNumber) {
-        players.add(randomNumber == myself.getId() ?
-                myself : new Player(randomNumber, game, eventRepository));
+        Player player = randomNumber == myself.getId() ?
+                myself : new Player(randomNumber, game, eventRepository);
+
+        player.allowToDrawTreasureCards(AMOUNT_OF_HAND_CARDS);
+
+        players.add(player);
 
         if (players.size() == amountOfPlayers) {
             state = State.NAMING;
 
-            host = evaluateHost();
+            current = evaluateHost();
+            currentPlayer.setValue(current);
 
-            for (Player player : players)
-                player.allowToDrawTreasureCards(AMOUNT_OF_HAND_CARDS);
+            first = current;
 
-            if (host == myself) {
+            if (current == myself) {
                 specifyPlayerNumbers();
+
+                named = true;
 
                 namingRound();
             }
@@ -178,58 +189,68 @@ public class Match {
 
     protected void namingRound() {
         eventRepository.push(
-                new Event(myself.getScope(), Action.NAME_PLAYER, R.string.ev_join_player, myself.getName()),
-                new Event(myself.getScope(), Action.FINISH_ROUND, 0)
+                new Event(current.getScope(), Action.NAME_PLAYER, R.string.ev_join_player, myself.getName()),
+                new Event(current.getScope(), Action.FINISH_ROUND, 0)
         );
     }
 
-    private Player nextPlayer(int playerNr) {
+    protected Player nextPlayer(int playerNr) {
         return players.get(playerNr % players.size());
     }
 
-    private void handoutCards() {
-        List<Card> cards = game.getRandomTreasureCards(AMOUNT_OF_HAND_CARDS * amountOfPlayers);
+    protected void drawInitialHandcards() {
+        game.getRandomTreasureCards(AMOUNT_OF_HAND_CARDS)
+                .forEach(card -> {
+                    eventRepository.push(
+                            new Event(current.getScope(), Action.DRAW_TREASURECARD, 0, card.getId())
+                    );           });
 
-        for (Player player : players) {
-            for (int i = 0; i < AMOUNT_OF_HAND_CARDS; i++) {
-                Card card = cards.remove(0);
-
-                eventRepository.push(
-                        new Event(player.getScope(), Action.DRAW_TREASURECARD, 0, card.getId())
-                );
-            }
-        }
-    }
-
-    public void finishRound(int playerNr) throws IllegalEngineStateException {
-        current.setValue(nextPlayer(playerNr));
-
-        if (current.getValue() == myself) {
-            if (state == State.NAMING) {
-                namingRound();
-
-                state = State.INITIAL;
-            } else if (state == State.INITIAL && host == myself) {
-                handoutCards();
-
-                playRound();
-
-                state = State.STARTED;
-            } else if (state == State.STARTED && current.getValue() == myself)
-                playRound();
-
-        }
-    }
-
-    private void emitFinishRound(Scope scope) {
         eventRepository.push(
-                new Event(myself.getScope(), Action.FINISH_ROUND, 0)
+                new Event(current.getScope(), Action.FINISH_ROUND, 0)
         );
     }
 
-    private void playRound() throws IllegalEngineStateException {
+    public void finishRound(int playerNr) throws IllegalEngineStateException {
+        current = nextPlayer(playerNr);
+        currentPlayer.setValue(current);
+
+        switch (state) {
+            default:
+                throw new IllegalEngineStateException("Illegal state");
+            case NAMING:
+                if (!named && current == myself) {
+                    named = true;
+
+                    namingRound();
+                }
+                if (named && current == first)
+                    state = State.HAND_CARDS;
+                break;
+            case HAND_CARDS:
+                if (!handCardsDrawn && current == myself) {
+                    handCardsDrawn = true;
+
+                    Log.e(TAG, "" + handCardsDrawn);
+                    drawInitialHandcards();
+                }
+                if (handCardsDrawn && current == first)
+                    state = State.STARTED;
+                break;
+            case STARTED:
+                playRound();
+                break;
+        }
+    }
+
+    protected void emitFinishRound(Scope scope) {
+        eventRepository.push(
+                new Event(current.getScope(), Action.FINISH_ROUND, 0)
+        );
+    }
+
+    protected void playRound() throws IllegalEngineStateException {
         if (turnPhase == TurnPhase.IDLE)
-            emitEnterTurnPhase(host.getScope(), TurnPhase.EQUIPMENT);
+            emitEnterTurnPhase(current.getScope(), TurnPhase.EQUIPMENT);
         else
             throw new IllegalEngineStateException("We can start the turn only from \"idle\" turn phase");
     }
@@ -253,15 +274,12 @@ public class Match {
     public void namePlayer(int playerNr, String name) {
         players.get(playerNr - 1).rename(name);
 
-        if (++playersRenamed == amountOfPlayers) {
+        if (++playersRenamed == amountOfPlayers)
             observablePlayers.setValue(players);
-
-            state = State.INITIAL;
-        }
     }
 
-    private void testHost(Player player) throws IllegalEngineStateException {
-        if (player != host)
+    protected void testHost(Player player) throws IllegalEngineStateException {
+        if (player != current)
             throw new IllegalEngineStateException("can not play a card in another player's round");
     }
 
@@ -309,14 +327,16 @@ public class Match {
     public void drawTreasureCard(Scope scope, Card card) throws IllegalEngineStateException {
         testHost(getPlayer(scope));
 
-        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW,
+        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW || turnPhase == TurnPhase.IDLE,
                 "it's not allowed to draw treasure cards in \"" + turnPhase + "\" phase!");
         test(game.getDeskCards().getValue().size() == 0,
                 "you can not draw a treasure card from an empty deck!");
 
         getPlayer(scope).drawTreasureCard(card);
 
-        if (scope == myself.getScope() && !myself.isAllowedToDrawTreasureCard())
+        if (turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW
+                && scope == myself.getScope()
+                && !myself.isAllowedToDrawTreasureCard())
             emitEnterTurnPhase(scope, TurnPhase.CHARITY);
     }
 
@@ -373,6 +393,7 @@ public class Match {
         );
     }
 
+
     public void playCard(Scope scope, Card card) throws IllegalEngineStateException {
         testHost(getPlayer(scope));
 
@@ -383,12 +404,11 @@ public class Match {
     }
 
 
-    private void emitEnterTurnPhase(Scope scope, TurnPhase phase) {
+    protected void emitEnterTurnPhase(Scope scope, TurnPhase phase) {
         eventRepository.push(
                 new Event(scope, Action.ENTER_TURN_PHASE, R.string.ev_enter_turn_phase, phase.ordinal())
         );
     }
-
 
     public void enterTurnPhase(Scope scope, TurnPhase phase) throws IllegalEngineStateException {
         switch (turnPhase) {
