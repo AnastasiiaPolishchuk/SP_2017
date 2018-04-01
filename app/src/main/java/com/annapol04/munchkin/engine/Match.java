@@ -187,31 +187,54 @@ public class Match {
         }
     }
 
+    public boolean canPlayerFightMonster(Player player) {
+        return game.getDeskCards().getValue().size() > 0
+                && player.getFightLevel().getValue() >
+                ((Monster)game.getDeskCards().getValue().get(0)).getLevel();
+
+    }
+
     protected void namingRound() {
         eventRepository.push(
                 new Event(current.getScope(), Action.NAME_PLAYER, R.string.ev_join_player, myself.getName()),
-                new Event(current.getScope(), Action.FINISH_ROUND, 0)
+                new Event(current.getScope(), Action.HAND_OVER_TOKEN, 0, nextPlayer().getScope().ordinal())
         );
+    }
+
+    protected Player nextPlayer() {
+        return players.get((players.indexOf(current) + 1) % players.size());
     }
 
     protected Player nextPlayer(int playerNr) {
-        return players.get(playerNr % players.size());
+        System.err.println("scope-prev: " + current.getScope() + "   scope-cur: " + players.get(0).getScope());
+        System.err.println("playerNr:" + playerNr + "    size:" + players.size() + "   prev: "
+                + current.getId() + "   cur:" + players.get(playerNr % players.size()).getId());
+
+        return players.get(1);
     }
 
     protected void drawInitialHandcards() {
-        game.getRandomTreasureCards(AMOUNT_OF_HAND_CARDS)
-                .forEach(card -> {
-                    eventRepository.push(
-                            new Event(current.getScope(), Action.DRAW_TREASURECARD, 0, card.getId())
-                    );           });
 
-        eventRepository.push(
-                new Event(current.getScope(), Action.FINISH_ROUND, 0)
-        );
+        List<Event> events = game.getRandomTreasureCards(AMOUNT_OF_HAND_CARDS)
+                .stream()
+                .map(card -> new Event(current.getScope(), Action.DRAW_TREASURECARD, 0, card.getId()))
+                .collect(Collectors.toList());
+
+        eventRepository.push(events);
+
+        emitHandOverToken(current.getScope(), nextPlayer());
     }
 
-    public void finishRound(int playerNr) throws IllegalEngineStateException {
-        current = nextPlayer(playerNr);
+    private boolean areAllPlayersNamed() {
+        return playersRenamed == amountOfPlayers;
+    }
+
+    private boolean areAllInitialCardsDrawn() {
+        return !players.stream().anyMatch(Player::isAllowedToDrawTreasureCard);
+    }
+
+    public void handOverToken(Scope scope, int playerNr) throws IllegalEngineStateException {
+        current = getPlayer(playerNr);
         currentPlayer.setValue(current);
 
         switch (state) {
@@ -223,28 +246,33 @@ public class Match {
 
                     namingRound();
                 }
-                if (named && current == first)
+                if (areAllPlayersNamed())
                     state = State.HAND_CARDS;
-                break;
+                else
+                    break;
             case HAND_CARDS:
                 if (!handCardsDrawn && current == myself) {
                     handCardsDrawn = true;
 
-                    Log.e(TAG, "" + handCardsDrawn);
                     drawInitialHandcards();
                 }
-                if (handCardsDrawn && current == first)
+                if (areAllInitialCardsDrawn())
                     state = State.STARTED;
-                break;
+                else
+                    break;
             case STARTED:
-                playRound();
+                if (current == myself) {
+                    turnPhase = TurnPhase.IDLE;
+
+                    playRound();
+                }
                 break;
         }
     }
 
-    protected void emitFinishRound(Scope scope) {
+    protected void emitHandOverToken(Scope scope, Player player) {
         eventRepository.push(
-                new Event(current.getScope(), Action.FINISH_ROUND, 0)
+                new Event(current.getScope(), Action.HAND_OVER_TOKEN, 0, player.getScope().ordinal())
         );
     }
 
@@ -438,7 +466,7 @@ public class Match {
 
                 if (scope == myself.getScope()) {
                     emitEnterTurnPhase(scope, TurnPhase.IDLE);
-                    emitFinishRound(scope);
+                    emitHandOverToken(scope, nextPlayer());
                 }
                 break;
             case CHARITY:

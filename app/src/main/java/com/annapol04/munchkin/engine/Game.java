@@ -50,11 +50,11 @@ public class Game {
 
         try {
             for (Field field : doorCardFields)
-                if (field.getType() == Card.class)
+                if (field.getType() == Card.class && field.get(null) instanceof Monster)
                     doorDeck.add((Card) field.get(null));
 
             for (Field field : treasureCardFields)
-                if (field.getType() == Card.class)
+                if (field.getType() == Card.class && field.get(null) instanceof BonusWear)
                     treasureDeck.add((Card) field.get(null));
 
         } catch (IllegalAccessException e) { /* wont happen... */ }

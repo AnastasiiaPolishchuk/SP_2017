@@ -42,6 +42,6 @@ public class PlayClientDummy extends PlayClient {
 
     @Override
     public int getAmountOfPlayers() {
-        return 2;
+        return 3;
     }
 }

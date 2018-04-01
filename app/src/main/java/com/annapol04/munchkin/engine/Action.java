@@ -13,8 +13,8 @@ public class Action {
     public static final Action NAME_PLAYER = new Action((match, game, event) -> {
         match.namePlayer(event.getScope().ordinal(), event.getString());
     });
-    public static final Action FINISH_ROUND = new Action((match, game, event) -> {
-        match.finishRound(event.getScope().ordinal());
+    public static final Action HAND_OVER_TOKEN = new Action((match, game, event) -> {
+        match.handOverToken(event.getScope(), event.getInteger());
     });
     public static final Action LEAVE_PLAYER = new Action((match, game, event) -> {
         throw new UnsupportedOperationException();

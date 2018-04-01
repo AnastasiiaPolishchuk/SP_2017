@@ -16,6 +16,7 @@ public class Executor implements EventRepository.OnNewEventListener {
     private final Game game;
     private final EventRepository repository;
     private MessageBook messageBook;
+    private int errorCount = 0;
 
     @Inject
     public Executor(Match match, Game game, EventRepository repository, MessageBook messageBook) {
@@ -43,7 +44,9 @@ public class Executor implements EventRepository.OnNewEventListener {
                 event.execute(match, game);
             } catch (IllegalEngineStateException exception) {
                 match.undoLog();
-                
+
+                errorCount++;
+
                 Log.e(TAG, "ERROR: " + exception.getMessage());
             }
         } else {
@@ -64,5 +67,9 @@ public class Executor implements EventRepository.OnNewEventListener {
 
         if (message.length() > 0)
             match.log(message);
+    }
+
+    public int getErrorCount() {
+        return errorCount;
     }
 }

@@ -406,4 +406,9 @@ public class Player extends LiveData<Player> {
 
         return new Pair<>(monster, 1);
     }
+
+    @Override
+    public String toString() {
+        return name.getValue();
+    }
 }

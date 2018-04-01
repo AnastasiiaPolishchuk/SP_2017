@@ -5,11 +5,6 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.util.Arrays;
-
-import okio.ByteString;
-
 
 @Entity(tableName = "events")
 public class Event {

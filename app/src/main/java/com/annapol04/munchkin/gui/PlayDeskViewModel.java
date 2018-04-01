@@ -196,6 +196,9 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
          return isGreater;
     }
 
+    public boolean canFightMonster() {
+        return match.canPlayerFightMonster(visiblePlayer.getValue());
+    }
 
     public void quitGame() {
     //    throw new UnsupportedOperationException("Not implemented");

@@ -9,6 +9,7 @@ import com.annapol04.munchkin.engine.Event;
 import com.annapol04.munchkin.engine.HashUtil;
 import com.annapol04.munchkin.engine.PlayClient;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -51,6 +52,17 @@ public class EventRepository implements PlayClient.OnMessageReceivedListener {
 
     public void setTopHash(byte[] topHash) {
         this.topHash = topHash;
+    }
+
+    public void push(Collection<Event> events) {
+        for (Event event : events) {
+            event.setPreviousHash(pushTopHash);
+            pushTopHash = event.getHash();
+
+            Log.d(TAG, "pushig event: " + event);
+
+            client.sendToAll(event.getBytes());
+        }
     }
 
     public void push(Event... events) {
