@@ -12,6 +12,6 @@ public class ScopeTypeConverter {
 
     @TypeConverter
     public static Scope toScope(int id) {
-        return Scope.fromId(id);
+        return Scope.Companion.fromId(id);
     }
 }

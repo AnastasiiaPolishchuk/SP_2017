@@ -4,7 +4,6 @@ import android.app.Application
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
@@ -12,15 +11,7 @@ import android.support.test.runner.AndroidJUnit4
 import com.annapol04.munchkin.data.EventRepository
 import com.annapol04.munchkin.db.AppDb
 import com.annapol04.munchkin.db.EventDao
-import com.annapol04.munchkin.engine.Decoder
-import com.annapol04.munchkin.engine.Event
-import com.annapol04.munchkin.engine.Executor
-import com.annapol04.munchkin.engine.FakeMatch
-import com.annapol04.munchkin.engine.Game
-import com.annapol04.munchkin.engine.Match
-import com.annapol04.munchkin.engine.MessageBook
-import com.annapol04.munchkin.engine.PlayClient
-import com.annapol04.munchkin.engine.Player
+import com.annapol04.munchkin.engine.*
 import com.annapol04.munchkin.gui.PlayDeskViewModel
 import com.annapol04.munchkin.network.PlayClientDummy
 
@@ -29,11 +20,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 
 import java.util.ArrayList
 
-import org.hamcrest.Matchers.`is`
 import org.junit.Assert.*
 
 @RunWith(AndroidJUnit4::class)
@@ -98,18 +87,18 @@ class GameRuleTest {
 
     @Test
     fun playersJoinTheMatch() {
-        assertEquals(3, match.players.value!!.size)
+        assertEquals(3, match.getPlayers().value!!.size)
     }
 
     @Test
     fun playersHaveDrawnInitialCards() {
-        assertFalse(match.players.value!![0].isAllowedToDrawTreasureCard)
-        assertFalse(match.players.value!![1].isAllowedToDrawTreasureCard)
-        assertFalse(match.players.value!![2].isAllowedToDrawTreasureCard)
+        assertFalse(match.getPlayers().value!![0].isAllowedToDrawTreasureCard)
+        assertFalse(match.getPlayers().value!![1].isAllowedToDrawTreasureCard)
+        assertFalse(match.getPlayers().value!![2].isAllowedToDrawTreasureCard)
 
-        assertEquals(2, match.players.value!![0].handCards.value!!.size)
-        assertEquals(2, match.players.value!![1].handCards.value!!.size)
-        assertEquals(2, match.players.value!![2].handCards.value!!.size)
+        assertEquals(2, match.getPlayers().value!![0].handCards.value!!.size)
+        assertEquals(2, match.getPlayers().value!![1].handCards.value!!.size)
+        assertEquals(2, match.getPlayers().value!![2].handCards.value!!.size)
     }
 
     @Test

@@ -12,6 +12,6 @@ public class DataTypeConverter {
 
     @TypeConverter
     public static DataType toDataType(int id) {
-        return DataType.fromId(id);
+        return DataType.Companion.fromId(id);
     }
 }

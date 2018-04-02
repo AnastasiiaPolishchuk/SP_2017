@@ -13,6 +13,6 @@ public class ActionTypeConverter {
 
     @TypeConverter
     public static Action toAction(int id) {
-        return Action.fromId(id);
+        return Action.Companion.fromId(id);
     }
 }

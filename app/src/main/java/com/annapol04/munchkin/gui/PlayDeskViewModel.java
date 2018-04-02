@@ -11,9 +11,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.annapol04.munchkin.data.EventRepository;
-import com.annapol04.munchkin.engine.Action;
 import com.annapol04.munchkin.engine.Card;
-import com.annapol04.munchkin.engine.Event;
 import com.annapol04.munchkin.engine.Executor;
 import com.annapol04.munchkin.engine.Game;
 import com.annapol04.munchkin.engine.Match;
