@@ -7,94 +7,104 @@
     android:background="@drawable/dialog_bg"
     android:orientation="vertical">
 
-
-    <ScrollView
-        android:id="@+id/scrollAplicacoes"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="14">
+        android:layout_weight="10"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/player_card_image"
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:padding="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/warrior" />
 
-                <ImageButton
-                    android:id="@+id/player_card_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/warrior" />
+            <TextView
+                android:id="@+id/id_your_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/player_card_image"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/your_fightlevel"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                android:textStyle="italic" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="@string/your_fightlevel"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+            <TextView
+                android:id="@+id/your_fightlevel_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/player_card_image"
+                android:layout_toEndOf="@id/id_your_lvl"
+                android:fontFamily="sans-serif-condensed"
+                android:text="1"
+                android:textColor="@color/colorAccent"
+                android:textSize="24sp"
+                android:textStyle="italic" />
 
-                <TextView
-                    android:id="@+id/your_fightlevel_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="1"
-                    android:textSize="24sp"
-                    android:textStyle="italic" />
+        </RelativeLayout>
 
-            </LinearLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/monster_card_image"
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:padding="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter" />
 
-                <ImageButton
-                    android:id="@+id/monster_card_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitCenter" />
+            <TextView
+                android:id="@+id/id_monster_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:layout_below="@id/monster_card_image"
+                android:layout_centerHorizontal="true"
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="@string/monster_fightlevel"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/monster_fightlevel"
+                android:textSize="20sp"
+                android:textStyle="italic" />
 
-                <TextView
-                    android:id="@+id/monster_fightlevel_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
+            <TextView
+                android:id="@+id/monster_fightlevel_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/monster_card_image"
+                android:layout_toRightOf="@id/id_monster_lvl"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="@color/colorAccent"
+                android:text="1"
+                android:textSize="24sp"
+                android:textStyle="italic" />
+        </RelativeLayout>
 
-                    android:text="1"
-                    android:textSize="24sp"
-                    android:textStyle="italic" />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="2"
-        android:padding="4dp">
+        android:layout_weight="1"
+        android:layout_gravity="bottom">
 
         <Button
             android:id="@+id/fight_diaolog_fight_button"
@@ -103,11 +113,11 @@
             android:layout_gravity="bottom"
             android:layout_marginHorizontal="4dp"
             android:layout_weight="1"
+            android:background="@drawable/style_button"
             android:elevation="6dp"
             android:stateListAnimator="@null"
-            android:translationZ="4dp"
-            android:background="@drawable/style_button"
-            android:text="FIGHT" />
+            android:text="FIGHT"
+            android:translationZ="4dp" />
 
         <Button
             android:id="@+id/fight_diaolog_run_button_button"
@@ -118,6 +128,8 @@
             android:layout_weight="1"
             android:background="@drawable/style_button"
             android:text="RUN AWAY" />
+
     </LinearLayout>
+
 
 </LinearLayout>

@@ -184,6 +184,7 @@ public class PlayDeskActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
+
             case R.id.action_info:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle).setTitle("Game Rules").setMessage(R.string.game_rules);
                 // Get the layout inflater
@@ -237,16 +238,9 @@ public class PlayDeskActivity extends AppCompatActivity
         mNavigationView.getMenu().clear();
 
         for (int i = 0; i < players.size(); i++) {
-            final int j = i;
             Player p = players.get(i);
-            MenuItem item = mNavigationView.getMenu().add(R.id.players_group, i + 1, (i + 1) * 100, p.getName().getValue());
+            MenuItem item = mNavigationView.getMenu().add(R.id.players_group, i + 1, (i + 1) * 100, p.getName());
             item.setIcon(R.drawable.ic_menu_camera);
-
-            p.getName().observe(this, name -> {
-                mNavigationView.getMenu().removeItem(j + 1);
-                MenuItem it = mNavigationView.getMenu().add(R.id.players_group, j + 1, (j + 1) * 100, name);
-                it.setIcon(R.drawable.ic_menu_camera);
-            });
         }
 
         updateTitle();
