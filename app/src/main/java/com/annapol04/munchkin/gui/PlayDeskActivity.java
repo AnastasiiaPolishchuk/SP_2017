@@ -30,14 +30,12 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.di.ViewModelFactory;
 import com.annapol04.munchkin.engine.Card;
-import com.annapol04.munchkin.engine.Executor;
 import com.annapol04.munchkin.engine.Monster;
 import com.annapol04.munchkin.engine.Player;
 
@@ -46,7 +44,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import io.reactivex.internal.operators.maybe.MaybeOnErrorComplete;
 
 public class PlayDeskActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,14 +86,14 @@ public class PlayDeskActivity extends AppCompatActivity
         TextView name = header.findViewById(R.id.name_of_player_nav_header);
         name.setText(viewModel.getMyName().getValue() + ":  " + viewModel.getMyLevel().getValue());
 
-        // ProgressBar to show time for an action
+  /*      // ProgressBar to show time for an action
         // TODO: anschließen !
         ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.time_to_action_bar);
         ObjectAnimator progressAnimator = ObjectAnimator.ofInt(mProgressBar, "progress", 100, 0);
         progressAnimator.setDuration(400);
         progressAnimator.setInterpolator(new LinearInterpolator());
         progressAnimator.start();
-
+*/
         viewModel.getPlayers().observe(this, this::updatePlayers);
 
   //      viewModel.isMyself().observe(this, mRootView::setClickable);
