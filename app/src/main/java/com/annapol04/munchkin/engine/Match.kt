@@ -3,6 +3,7 @@ package com.annapol04.munchkin.engine
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.StringRes
+import android.util.Log
 
 import com.annapol04.munchkin.R
 import com.annapol04.munchkin.data.EventRepository
@@ -34,6 +35,7 @@ constructor(protected var game: Game,
 
     protected val canStartCombat_ by lazy { NonNullMutableLiveData(false) }
     val canStartCombat: NonNullLiveData<Boolean> get() = canStartCombat_
+
 
     protected var current: Player = myself
         set(value) {

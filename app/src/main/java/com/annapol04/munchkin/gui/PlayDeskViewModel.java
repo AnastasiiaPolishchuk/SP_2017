@@ -6,8 +6,10 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.annapol04.munchkin.data.EventRepository;
@@ -19,6 +21,7 @@ import com.annapol04.munchkin.engine.Player;
 import com.annapol04.munchkin.engine.PlayClient;
 import com.annapol04.munchkin.engine.TurnPhase;
 import com.annapol04.munchkin.util.NonNullLiveData;
+import com.annapol04.munchkin.util.NonNullMediatorLiveData;
 import com.annapol04.munchkin.util.NonNullMutableLiveData;
 import com.annapol04.munchkin.util.Transformations;
 
@@ -49,6 +52,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private LiveData<Boolean> isLeftHandEquiped;
 
     private NonNullLiveData<Boolean> canStartCombat;
+    private NonNullLiveData<Boolean> canFinishRound;
 
     private LiveData<Boolean> isMyself;
     private MutableLiveData<Boolean> isStarted = new MutableLiveData<>();
@@ -99,7 +103,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         canPlayOneHander = Transformations.switchMap(visiblePlayer, Player::getCanPlayOneHander);
         canPlayTwoHander = Transformations.switchMap(visiblePlayer, Player::getCanPlayTwoHander);
 
-        canStartCombat = Transformations.switchMap(false, visiblePlayer, x -> match.getCanStartCombat());
+        canStartCombat = match.getCanStartCombat();
+        canFinishRound = match.getCanFinishRound();
 
         isHeadgearEquiped = Transformations.switchMap(visiblePlayer, Player::getIsHeadgearEquiped);
         isArmorEquiped = Transformations.switchMap(visiblePlayer, Player::getIsArmorEquiped);
@@ -168,6 +173,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     public NonNullLiveData<Boolean> getCanStartCombat() {
         return canStartCombat;
+    }
+
+    public NonNullLiveData<Boolean> getCanFinishRound() {
+        return canFinishRound;
     }
 
   /*  public LiveData<List<Card>> getPlayedCards(int playerNr) {
