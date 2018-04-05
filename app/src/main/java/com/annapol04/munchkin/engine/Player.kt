@@ -285,6 +285,8 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
         numberOfAllowedCardsToDrop--
 
         handCards.value -= listOf(card)
+
+        game.pushAwayTreasureCard(card)
     }
 
     fun emitPickupCard(card: Card) {

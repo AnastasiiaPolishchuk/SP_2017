@@ -25,23 +25,27 @@ fun <T> build(clazz: Class<T>, types: List<String>): Deck {
                     is BonusSide -> side
                     else -> throw NotImplementedError("Card type is not implemented")
                 }
-            })
+            }.toSet())
 }
 
-open class Deck(private val allCards: List<Card>) {
+open class Deck(private val allCards: Set<Card>) {
     var stack = allCards
-    var inGame = listOf<Card>()
-    var played = listOf<Card>()
-    val random = Random()
+    var backStack = setOf<Card>()
+    open val random = Random()
 
     fun reset() {
         stack = allCards
-        played = listOf()
+        backStack = setOf()
     }
 
     open fun getRandomStackCards(amount: Int): List<Card> {
-        if (amount > stack.size)
-            throw IllegalArgumentException("Can not get " + amount + " cards with stack size: " + stack.size)
+        if (amount > stack.size) {
+            if (amount > stack.size + backStack.size)
+                throw IllegalArgumentException("Can not get " + amount + " cards with stack size: " + stack.size)
+            else {
+
+            }
+        }
 
         val randomCards = mutableListOf<Card>()
 
@@ -49,7 +53,7 @@ open class Deck(private val allCards: List<Card>) {
             var card: Card
 
             do {
-                card = stack[random.nextInt(stack.size)]
+                card = stack.elementAt(random.nextInt(stack.size))
             } while (card in randomCards)
 
             randomCards.add(card)
@@ -59,7 +63,16 @@ open class Deck(private val allCards: List<Card>) {
     }
 
     open fun draw(card: Card) {
-        stack -= listOf(card)
-        inGame += listOf(card)
+        if (card in backStack) {
+            stack += backStack
+
+            backStack = setOf()
+        }
+
+        stack -= card
+    }
+
+    open fun putBack(card: Card) {
+        backStack += card
     }
 }

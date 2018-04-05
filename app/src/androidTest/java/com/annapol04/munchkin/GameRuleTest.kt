@@ -2,29 +2,21 @@ package com.annapol04.munchkin
 
 import android.app.Application
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
-
 import com.annapol04.munchkin.data.EventRepository
 import com.annapol04.munchkin.db.AppDb
 import com.annapol04.munchkin.db.EventDao
 import com.annapol04.munchkin.engine.*
 import com.annapol04.munchkin.gui.PlayDeskViewModel
 import com.annapol04.munchkin.network.PlayClientDummy
-
 import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import java.util.ArrayList
-
-import org.junit.Assert.*
-import java.util.TreeSet
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -47,36 +39,11 @@ class GameRuleTest {
     lateinit var executor: Executor
     lateinit var vm: PlayDeskViewModel
 
-    internal inner class Events : EventDao {
-        val events: MutableList<Event> = ArrayList()
-        val d = MutableLiveData<List<Event>>()
-
-        override fun loadEntries(): LiveData<List<Event>> {
-            return d
-        }
-
-        override fun insert(event: Event) {
-            events.add(event)
-        }
-    }
-
-    internal inner class FakeDeck(private var allCards: List<Card>) : Deck(allCards) {
-        override fun getRandomStackCards(amount: Int): List<Card> {
-            if (allCards.size < amount)
-                throw IllegalStateException("Not enough cards in test deck")
-
-            val randomCards = allCards.subList(0, amount)
-            allCards = allCards.subList(amount, allCards.size)
-            return randomCards
-        }
-        override fun draw(card: Card) {}
-    }
-
     @Before
     fun setup() {
         app = InstrumentationRegistry.getTargetContext().applicationContext as Application
 
-        eventDao = Events()
+        eventDao = FakeEventDao()
 
         client = PlayClientDummy()
         executors = AppExecutors()
@@ -84,7 +51,7 @@ class GameRuleTest {
 
         repository = EventRepository(executors, eventDao, client, decoder)
 
-        treasureCards = FakeDeck(listOf(
+        treasureCards = DeterministicDeck(listOf(
                 TreasureCards.ELEVEN_FOOT_POLE,
                 TreasureCards.HELM_OF_COURAGE,
                 TreasureCards.LEATHER_ARMOR,
@@ -111,8 +78,32 @@ class GameRuleTest {
                 TreasureCards.SWISS_ARMY_POLEARM
         ))
 
-        doorCards = FakeDeck(listOf(
+        doorCards = DeterministicDeck(listOf(
                 DoorCards.LAME_GOBLIN,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.AMAZON,
+                DoorCards.BIGFOOT,
+                DoorCards.CRABS,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.AMAZON,
+                DoorCards.BIGFOOT,
+                DoorCards.LAME_GOBLIN,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
                 DoorCards.UNDEAD_HORSE,
                 DoorCards.HARPIES,
                 DoorCards.POTTED_PLANT,
@@ -306,5 +297,36 @@ class GameRuleTest {
 
         assertFalse(match.players.value[0].isAllowedToDropCard)
         assertTrue(match.canFinishRound.value)
+    }
+
+    @Test
+    fun playerWinsWithSpecificLevel() {
+        vm.displayPlayer(1)
+        vm.playCard(myself.handCards.value[0])
+        vm.playCard(myself.handCards.value[0])
+
+        for (j in 1..9) {
+            vm.displayPlayer(1)
+            vm.drawDoorCard()
+            vm.startCombat()
+            vm.fightMonster()
+            vm.drawTreasureCard()
+
+            if (match.players.value[0].isAllowedToDropCard)
+                vm.dropCard(match.players.value[0].handCards.value[0])
+
+            vm.finishRound()
+
+            for (i in 2..3) {
+                vm.displayPlayer(i)
+                vm.drawDoorCard()
+                vm.startCombat()
+                vm.runAwayFromMonster()
+                vm.finishRound()
+            }
+        }
+
+        assertEquals(10, match.players.value[0].getLevel().value)
+        assertTrue(game.gameFinished.value!!)
     }
 }

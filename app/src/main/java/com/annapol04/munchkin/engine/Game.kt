@@ -63,10 +63,6 @@ constructor(@Named("treasure") private val treasureDeck: Deck,
         treasureDeck.draw(card)
     }
 
-    private fun <T : Comparable<T>> hasElement(list: List<T>, element: T): Boolean {
-        return list.stream().anyMatch { it.compareTo(element) == 0 }
-    }
-
     fun getRandomDoorCards(amount: Int): List<Card> {
         return doorDeck.getRandomStackCards(amount)
     }
@@ -95,7 +91,15 @@ constructor(@Named("treasure") private val treasureDeck: Deck,
         if (_deskCards.value.size == 0)
             throw IllegalEngineStateException("There is no monster card to be pushed away")
 
+        val dropped = _deskCards.value[0]
+
         _deskCards.value = _deskCards.value.drop(1)
+
+        doorDeck.putBack(dropped)
+    }
+
+    fun pushAwayTreasureCard(card: Card) {
+        treasureDeck.putBack(card)
     }
 
     companion object {
