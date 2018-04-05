@@ -37,6 +37,7 @@ import android.widget.TextView;
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.di.ViewModelFactory;
 import com.annapol04.munchkin.engine.Card;
+import com.annapol04.munchkin.engine.Executor;
 import com.annapol04.munchkin.engine.Monster;
 import com.annapol04.munchkin.engine.Player;
 
@@ -347,6 +348,7 @@ public class PlayDeskActivity extends AppCompatActivity
         });
 
         Button nextPlayerButton = findViewById(R.id.next_player_button);
+        viewModel.getCanFinishRound().observe(this, nextPlayerButton::setEnabled);
         nextPlayerButton.setOnClickListener(v -> {
             viewModel.finishRound();
         });
