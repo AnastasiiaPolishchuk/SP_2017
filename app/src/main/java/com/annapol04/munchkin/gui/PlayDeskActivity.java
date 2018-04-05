@@ -300,8 +300,9 @@ public class PlayDeskActivity extends AppCompatActivity
         }));
 
         TextView power = findViewById(R.id.id_power);
-        viewModel.getPlayerFightLevel().observe(this, power::setText);
-        power.setText(viewModel.getPlayerFightLevel().getValue());
+        viewModel.getPlayerFightLevel().observe(this, fightLevel -> {
+            power.setText(Integer.toString(fightLevel));
+        });
 
         Button fightButton = findViewById(R.id.fight_button);
         viewModel.getCanStartCombat().observe(this, fightButton::setEnabled);
