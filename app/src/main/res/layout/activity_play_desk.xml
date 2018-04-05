@@ -68,7 +68,9 @@ h
                             android:layout_marginRight="8dp"
                             android:layout_marginStart="8dp"
                             android:fontFamily="sans-serif-condensed"
-                            android:text="Hand"
+                            android:text="Hand:"
+                            android:textColor="@color/colorAccent"
+                            android:gravity="center"
                             android:textSize="24sp"
                             android:textStyle="italic" />
 
@@ -93,7 +95,9 @@ h
                             android:layout_marginRight="8dp"
                             android:layout_marginStart="8dp"
                             android:fontFamily="sans-serif-condensed"
-                            android:text="Played"
+                            android:textColor="@color/colorAccent"
+
+                            android:text="Played:"
                             android:textSize="24sp"
                             android:textStyle="italic" />
 
@@ -267,6 +271,9 @@ h
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/fight"
+                        android:elevation="6dp"
+                        android:stateListAnimator="@null"
+                        android:translationZ="4dp"
                         android:background="@drawable/style_button" />
 
                     <Button
@@ -275,6 +282,9 @@ h
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/next_player"
+                        android:elevation="6dp"
+                        android:stateListAnimator="@null"
+                        android:translationZ="4dp"
                         android:background="@drawable/style_button" />
 
                 </LinearLayout>
@@ -326,8 +336,9 @@ h
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:adjustViewBounds="true"
+                        android:cropToPadding="true"
                         android:background="@android:color/transparent"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/treasure" />
                 </LinearLayout>
 

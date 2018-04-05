@@ -7,28 +7,37 @@
     android:orientation="vertical"
     android:padding="8dp"
     android:background="#EFEBE9"
+    android:gravity="center"
     tools:context="com.annapol04.munchkin.gui.MainActivity">
 
-
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Munchkin"
-            android:textStyle="italic"
-            android:gravity="center"
-            android:textSize="80sp"
-            android:textColor="#3E2723"
-            android:paddingTop="24sp"
-            android:layout_margin="28sp" />
+            android:layout_height="match_parent">
 
-        <ImageButton
-            android:layout_width="250dp"
-            android:layout_height="200dp"
-            android:src="@drawable/ic_play_circle_outline_black_48dp"
-            android:layout_gravity="center_horizontal"
-            android:background="@android:color/transparent"
-            android:tint="#3E2723"
-            android:onClick="start" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/munchkin_in"
+                    android:layout_alignParentTop="true"
+                    android:text="Munchkin"
+                    android:textStyle="italic"
+                    android:gravity="center"
+                    android:textSize="80sp"
+                    android:textColor="#3E2723"
+                    android:paddingTop="24sp" />
+
+                <ImageButton
+                    android:layout_width="250dp"
+                    android:layout_height="200dp"
+                    android:layout_below="@id/munchkin_in"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_play_circle_outline_black_48dp"
+                    android:background="@android:color/transparent"
+                    android:tint="#3E2723"
+                    android:onClick="start" />
+
+
+        </RelativeLayout>
 
 
 </LinearLayout>

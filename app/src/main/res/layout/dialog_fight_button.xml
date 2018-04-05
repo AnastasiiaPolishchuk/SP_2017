@@ -103,6 +103,9 @@
             android:layout_gravity="bottom"
             android:layout_marginHorizontal="4dp"
             android:layout_weight="1"
+            android:elevation="6dp"
+            android:stateListAnimator="@null"
+            android:translationZ="4dp"
             android:background="@drawable/style_button"
             android:text="FIGHT" />
 
