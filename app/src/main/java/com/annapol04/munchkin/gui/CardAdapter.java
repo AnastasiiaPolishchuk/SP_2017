@@ -30,7 +30,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     protected List<Card> cards;
     protected PlayDeskViewModel viewModel;
     private SelectableCardAdapter handAdapter;
-    private boolean visible = false;
+    private boolean visible = true;
 
     public enum ButtonSetup {
         HAND,
