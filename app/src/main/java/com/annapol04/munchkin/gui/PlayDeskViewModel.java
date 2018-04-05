@@ -269,6 +269,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         match.emitPlayCard(visiblePlayer.getValue().getScope(), card);
     }
 
+    public void dropCard(Card card) {
+        match.emitDropCard(visiblePlayer.getValue().getScope(), card);
+    }
+
     public void pickupCard(Card card) {
         visiblePlayer.getValue().emitPickupCard(card);
     }

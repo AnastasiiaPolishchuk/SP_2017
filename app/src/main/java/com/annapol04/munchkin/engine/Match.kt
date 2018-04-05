@@ -49,7 +49,7 @@ constructor(protected var game: Game,
             if (value == TurnPhase.FINISHED)
                 canFinishRound_.value = true
             else if (canFinishRound_.value)
-                canStartCombat_.value = false
+                canFinishRound_.value = false
 
             if (value == TurnPhase.KICK_OPEN_THE_DOOR)
                 canStartCombat_.value = true
@@ -208,6 +208,9 @@ constructor(protected var game: Game,
 
     @Throws(IllegalEngineStateException::class)
     open fun handOverToken(scope: Scope, playerNr: Int) {
+        if (state === Match.State.STARTED)
+            test(canFinishRound_.value,"You can hand over the control after doing the required steps")
+
         current = getPlayer(playerNr)
 
         turnPhase = TurnPhase.IDLE
@@ -424,7 +427,6 @@ constructor(protected var game: Game,
         )
     }
 
-
     @Throws(IllegalEngineStateException::class)
     fun playCard(scope: Scope, card: Card) {
         testHost(getPlayer(scope))
@@ -503,8 +505,6 @@ constructor(protected var game: Game,
     }
 */
     fun finishRound() {
-        test(canFinishRound_.value,"You can hand over the control after doing the required steps")
-
         emitHandOverToken(current.scope, nextPlayer())
     }
 

@@ -1,6 +1,5 @@
 package com.annapol04.munchkin.engine
 
-import java.lang.RuntimeException
 import java.util.*
 
 fun <T> build(clazz: Class<T>, types: List<String>): Deck {

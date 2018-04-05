@@ -24,6 +24,7 @@ import org.junit.runner.RunWith
 import java.util.ArrayList
 
 import org.junit.Assert.*
+import java.util.TreeSet
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -61,8 +62,11 @@ class GameRuleTest {
 
     internal inner class FakeDeck(private var allCards: List<Card>) : Deck(allCards) {
         override fun getRandomStackCards(amount: Int): List<Card> {
+            if (allCards.size < amount)
+                throw IllegalStateException("Not enough cards in test deck")
+
             val randomCards = allCards.subList(0, amount)
-            allCards -= randomCards
+            allCards = allCards.subList(amount, allCards.size)
             return randomCards
         }
         override fun draw(card: Card) {}
@@ -87,7 +91,24 @@ class GameRuleTest {
                 TreasureCards.SLIMY_ARMOR,
                 TreasureCards.SPIKY_KNEES,
                 TreasureCards.HORNY_HELMET,
-                TreasureCards.BOOTS_OF_BUTT_KICKING
+                TreasureCards.BOOTS_OF_BUTT_KICKING,
+                TreasureCards.DAGGER_OF_TREACHERY,
+                TreasureCards.RAPIER_OF_UNFAIRNESS,
+                TreasureCards.REALLY_IMPRESSIVE_TITLE,
+                TreasureCards.BAD_ASS_BANDANA,
+                TreasureCards.SWISS_ARMY_POLEARM,
+                TreasureCards.ELEVEN_FOOT_POLE,
+                TreasureCards.HELM_OF_COURAGE,
+                TreasureCards.LEATHER_ARMOR,
+                TreasureCards.SLIMY_ARMOR,
+                TreasureCards.SPIKY_KNEES,
+                TreasureCards.HORNY_HELMET,
+                TreasureCards.BOOTS_OF_BUTT_KICKING,
+                TreasureCards.DAGGER_OF_TREACHERY,
+                TreasureCards.RAPIER_OF_UNFAIRNESS,
+                TreasureCards.REALLY_IMPRESSIVE_TITLE,
+                TreasureCards.BAD_ASS_BANDANA,
+                TreasureCards.SWISS_ARMY_POLEARM
         ))
 
         doorCards = FakeDeck(listOf(
@@ -97,8 +118,25 @@ class GameRuleTest {
                 DoorCards.POTTED_PLANT,
                 DoorCards.AMAZON,
                 DoorCards.BIGFOOT,
-                DoorCards.BULLROG,
-                DoorCards.CRABS
+                DoorCards.CRABS,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.AMAZON,
+                DoorCards.BIGFOOT,
+                DoorCards.LAME_GOBLIN,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT
         ))
 
         game = Game(treasureCards, doorCards)
@@ -234,9 +272,10 @@ class GameRuleTest {
     fun playerHasToDropCards() {
         assertFalse(match.players.value[0].isAllowedToDropCard)
 
-        for (j in 1..2) {
+        vm.playCard(myself.handCards.value[0])
 
-            vm.playCard(myself.handCards.value[0])
+        for (j in 1..3) {
+            vm.displayPlayer(1)
             vm.drawDoorCard()
             vm.startCombat()
             vm.fightMonster()
@@ -259,8 +298,13 @@ class GameRuleTest {
         vm.startCombat()
         vm.fightMonster()
         vm.drawTreasureCard()
-        vm.finishRound()
 
         assertTrue(match.players.value[0].isAllowedToDropCard)
+        assertFalse(match.canFinishRound.value)
+
+        vm.dropCard(match.players.value[0].handCards.value[0])
+
+        assertFalse(match.players.value[0].isAllowedToDropCard)
+        assertTrue(match.canFinishRound.value)
     }
 }

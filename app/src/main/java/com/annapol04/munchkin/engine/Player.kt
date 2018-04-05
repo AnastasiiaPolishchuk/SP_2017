@@ -108,7 +108,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
 
     fun limitHandCards(max: Int) {
         if (max < 0)
-            throw IllegalArgumentException("There can only be a positive amount of cards")
+            throw IllegalArgumentException("There can only be a positive amount o")
 
         if (handCards.value.size > max) {
             numberOfAllowedCardsToDrop = handCards.value.size - max
