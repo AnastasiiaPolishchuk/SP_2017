@@ -4,16 +4,33 @@ import java.lang.RuntimeException
 import java.util.*
 
 fun <T> build(clazz: Class<T>, types: List<String>): Deck {
-    try {
-        return Deck(clazz.fields.filter { it.type == Card::class.java && it.name in types }
-                .map{ it.get(null) as Card })
-    } catch (e: IllegalAccessException) {
-        throw RuntimeException(e)
-    }
+    val race = Race::class.simpleName in types
+    val curse = Curse::class.simpleName in types
+    val level = Monsterlevel::class.simpleName in types
+    val wear = BonusWear::class.simpleName in types
+    val special = Special::class.simpleName in types
+    val side = BonusSide::class.simpleName in types
+    val monster = Monster::class.simpleName in types
+
+    return Deck(clazz.fields
+            .filter { it.type.simpleName == Card::class.java.simpleName }
+            .map { it.get(null) as Card }
+            .filter {
+                when(it) {
+                    is Monster -> monster
+                    is Race -> race
+                    is Curse -> curse
+                    is Monsterlevel -> level
+                    is BonusWear -> wear
+                    is Special -> special
+                    is BonusSide -> side
+                    else -> throw NotImplementedError("Card type is not implemented")
+                }
+            })
 }
 
 open class Deck(private val allCards: List<Card>) {
-    var stack = listOf<Card>()
+    var stack = allCards
     var inGame = listOf<Card>()
     var played = listOf<Card>()
     val random = Random()

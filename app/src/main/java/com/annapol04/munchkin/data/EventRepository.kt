@@ -23,7 +23,7 @@ constructor(private val executors: AppExecutors,
             6.toByte(), 7.toByte(), 8.toByte(), 9.toByte(), 10.toByte(), 11.toByte(), 12.toByte(),
             13.toByte(), 14.toByte(), 15.toByte(), 16.toByte())
 
-    private var pushTopHash: ByteArray? = topHash
+    private var pushTopHash = topHash
 
     private var listener: OnNewEventListener? = null
 
@@ -37,10 +37,8 @@ constructor(private val executors: AppExecutors,
 
     fun push(events: Collection<Event>) {
         for (event in events) {
-            event.setPreviousHash(pushTopHash!!)
+            event.setPreviousHash(pushTopHash)
             pushTopHash = event.hash
-
-            Log.d(TAG, "pushig event: $event")
 
             client.sendToAll(event.getBytes())
         }
@@ -48,10 +46,8 @@ constructor(private val executors: AppExecutors,
 
     fun push(vararg events: Event) {
         for (event in events) {
-            event.setPreviousHash(pushTopHash!!)
+            event.setPreviousHash(pushTopHash)
             pushTopHash = event.hash
-
-            Log.d(TAG, "pushig event: $event")
 
             client.sendToAll(event.getBytes())
         }

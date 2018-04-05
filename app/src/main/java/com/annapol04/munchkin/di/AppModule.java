@@ -6,10 +6,13 @@ import android.arch.persistence.room.Room;
 
 import com.annapol04.munchkin.db.AppDb;
 import com.annapol04.munchkin.db.EventDao;
+import com.annapol04.munchkin.engine.BonusWear;
 import com.annapol04.munchkin.engine.Deck;
 import com.annapol04.munchkin.engine.DeckKt;
+import com.annapol04.munchkin.engine.DoorCards;
 import com.annapol04.munchkin.engine.Event;
 import com.annapol04.munchkin.engine.MessageBook;
+import com.annapol04.munchkin.engine.Monster;
 import com.annapol04.munchkin.engine.TreasureCards;
 
 import java.util.Arrays;
@@ -67,8 +70,8 @@ public class AppModule {
     @Singleton
     @Provides
     @Named("treasure")
-    public Deck provideTreasueDeck() {
-        String[] cardTypes = {"BonusWear"};
+    public Deck provideTreasureDeck() {
+        String[] cardTypes = {BonusWear.class.getSimpleName() };
         return DeckKt.build(TreasureCards.class, Arrays.asList(cardTypes));
     }
 
@@ -76,7 +79,7 @@ public class AppModule {
     @Provides
     @Named("door")
     public Deck provideDoorDeck() {
-        String[] cardTypes = {"Monster"};
-        return DeckKt.build(TreasureCards.class, Arrays.asList(cardTypes));
+        String[] cardTypes = {Monster.class.getSimpleName()};
+        return DeckKt.build(DoorCards.class, Arrays.asList(cardTypes));
     }
 }

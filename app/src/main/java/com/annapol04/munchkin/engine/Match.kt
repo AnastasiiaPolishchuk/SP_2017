@@ -230,8 +230,7 @@ constructor(protected var game: Game,
                     if (areAllInitialCardsDrawn()) {
                         state = State.STARTED
 
-                        if (current == myself)
-                            playRound()
+                        playRound()
                     }
                 }
             }
@@ -243,11 +242,10 @@ constructor(protected var game: Game,
                 if (areAllInitialCardsDrawn()) {
                     state = State.STARTED
 
-                    if (current == myself)
-                        playRound()
+                    playRound()
                 }
             }
-            Match.State.STARTED -> if (current == myself) {
+            Match.State.STARTED -> {
                 playRound()
             }
             else -> throw IllegalEngineStateException("Illegal state")
