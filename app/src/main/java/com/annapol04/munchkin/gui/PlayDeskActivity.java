@@ -325,7 +325,7 @@ public class PlayDeskActivity extends AppCompatActivity
             monsterCardImageButton.setImageResource(monsterCard.getImageResourceID());
 
             TextView yourLevel = dialog.findViewById(R.id.your_fightlevel_value);
-            yourLevel.setText(viewModel.getMyLevel().getValue().toString());
+            yourLevel.setText(viewModel.getPlayerFightLevel().getValue().toString());
             TextView monsterLevel = dialog.findViewById(R.id.monster_fightlevel_value);
             monsterLevel.setText(Integer.toString(monster.getLevel()));
 
