@@ -164,7 +164,7 @@ constructor(private val application: Application) : PlayClient() {
         account = GoogleSignIn.getLastSignedInAccount(application)
     }
 
-    override fun setActivity(activity: Activity) {
+    override fun setActivity(activity: Activity?) {
         this.activity = activity
     }
 

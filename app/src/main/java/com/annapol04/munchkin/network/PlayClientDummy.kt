@@ -12,7 +12,7 @@ class PlayClientDummy : PlayClient() {
     override val amountOfPlayers: Int
         get() = 3
 
-    override fun setActivity(activity: Activity) {
+    override fun setActivity(activity: Activity?) {
 
     }
 

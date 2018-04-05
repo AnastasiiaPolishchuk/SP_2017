@@ -41,7 +41,7 @@ abstract class PlayClient {
             messageReceivedListener!!.onMessageReceived(data)
     }
 
-    abstract fun setActivity(activity: Activity)
+    abstract fun setActivity(activity: Activity?)
 
     abstract fun login()
 
