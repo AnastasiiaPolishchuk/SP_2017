@@ -92,10 +92,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
         visiblePlayer = new NonNullMutableLiveData<>(myself);
 
-        isMyself = Transformations.map(visiblePlayer, player -> {
-            Log.d("Executor", " " + player + " == " + myself); return player == myself;
-        });
-        playerName = Transformations.map(visiblePlayer, Player::getName);
+        isMyself = Transformations.map(visiblePlayer, player -> player == myself);
+        playerName = Transformations.switchMap(visiblePlayer, Player::getName);
         playerLevel = Transformations.switchMap(visiblePlayer, Player::getLevel);
         playerFightLevel = Transformations.switchMap(visiblePlayer, Player::getFightLevel);
         playerHand = Transformations.switchMap(visiblePlayer, Player::getHandCards);
@@ -207,9 +205,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public LiveData<String> getMyName() {
-        MutableLiveData<String> myName = new MutableLiveData<>();
-        myName.setValue(myself.getName());
-        return myName;
+        return myself.getName();
     }
 
     public LiveData<Integer> getMyLevel() {

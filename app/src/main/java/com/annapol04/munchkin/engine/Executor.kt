@@ -49,7 +49,10 @@ constructor(private val match: Match, private val game: Game, private val reposi
     }
 
     private fun isAnonymized(player: Player?, action: Action): Boolean {
-        return !match.isMyself(player) && action === Action.DRAW_TREASURECARD
+        return !match.isMyself(player) && (
+                   action === Action.DRAW_TREASURECARD
+                || action === Action.DROP_CARD
+                )
     }
 
     private fun logMessage(event: Event, player: Player?, anonymized: Boolean) {

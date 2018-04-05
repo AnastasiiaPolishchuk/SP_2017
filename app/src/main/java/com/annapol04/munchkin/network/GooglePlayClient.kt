@@ -200,6 +200,7 @@ constructor(private val application: Application) : PlayClient() {
                 // action is up to the game. You may choose to leave the room and cancel the
                 // match, or do something else like minimize the waiting room and
                 // continue to connect in the background.
+                leaveRoom()
                 changeMatchState(PlayClient.MatchState.ABORTED)
             } else if (resultCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                 // player wants to leave the room.
@@ -238,7 +239,7 @@ constructor(private val application: Application) : PlayClient() {
     }
 
     override fun startQuickGame() {
-        if (mJoinedRoomConfig != null)
+        if (mRoom != null)
             throw IllegalStateException("There is already a game started")
 
         // auto-match criteria to invite one random automatch opponent.

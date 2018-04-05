@@ -96,6 +96,13 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
         areShoesquiped.value = false
         isLeftHandEquiped.value = false
         isRightHandEquiped.value = false
+
+        headGeer = null
+        armor = null
+        shoes = null
+        firstOneHander = null
+        secondOneHander = null
+        twoHander = null
     }
 
     fun allowToDrawTreasureCards(amount: Int) {
@@ -131,8 +138,8 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
         liveData.value = liveData.value
     }
 
-    fun getName(): String {
-        return name.value!!
+    fun getName(): LiveData<String> {
+        return name
     }
 
     fun getLevel(): LiveData<Int> {

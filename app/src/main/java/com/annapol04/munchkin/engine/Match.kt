@@ -183,7 +183,7 @@ constructor(protected var game: Game,
         state = State.HAND_CARDS
 
         eventRepository.push(
-                Event(current.scope, Action.NAME_PLAYER, R.string.ev_join_player, myself.getName()),
+                Event(current.scope, Action.NAME_PLAYER, R.string.ev_join_player, myself.getName().value!!),
                 Event(current.scope, Action.HAND_OVER_TOKEN, 0, nextPlayer().scope.ordinal)
         )
     }
@@ -402,7 +402,7 @@ constructor(protected var game: Game,
         }
 
         if (player.getLevel().value!! >= WIN_LEVEL) {
-            result_.value = MatchResult(name = player.getName(), level = player.getLevel().value!!)
+            result_.value = MatchResult(name = player.getName().value!!, level = player.getLevel().value!!)
         } else {
             getPlayer(scope).allowToDrawTreasureCards(cardsToDraw)
 

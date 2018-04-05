@@ -29,10 +29,10 @@ constructor(private val application: Application,
             message = message.replace("%scope%", event.scope.toString())
 
         if (player != null && message.contains("%player%"))
-            message = message.replace("%player%", player.getName())
+            message = message.replace("%player%", player.getName().value!!)
 
         if (message.contains("%enemy%"))
-            message = message.replace("%enemy%", match.players.value[event.getInteger() - 1].getName())
+            message = message.replace("%enemy%", match.players.value[event.getInteger() - 1].getName().value!!)
 
         if (message.contains("%card%")) {
             if (anonymized)
