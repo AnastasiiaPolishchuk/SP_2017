@@ -262,6 +262,7 @@ public class PlayDeskActivity extends AppCompatActivity
         CardAdapter handAdapter = new CardAdapter(R.layout.card_item, R.id.card_item, CardAdapter.ButtonSetup.HAND,
                 viewModel.getPlayerHand().getValue(), viewModel);
         handOfPlayer.setAdapter(handAdapter);
+        viewModel.isMyself().observe(this, handAdapter::setCardVisibillity);
         viewModel.getPlayerHand().observe(this, handAdapter::setCards);
 
         RecyclerView playedCards = findViewById((R.id.recycler_view_played_cards));

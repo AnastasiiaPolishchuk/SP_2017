@@ -30,6 +30,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     protected List<Card> cards;
     protected PlayDeskViewModel viewModel;
     private SelectableCardAdapter handAdapter;
+    private boolean visible = false;
 
     public enum ButtonSetup {
         HAND,
@@ -53,6 +54,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             handAdapter = new SelectableCardAdapter(R.layout.card_item_zoom, R.id.card_item_zoom, setup, cards, viewModel);
 
         handAdapter.setCards(cards);
+    }
+
+    public void setCardVisibillity(boolean visible) {
+        this.visible = visible;
     }
 
     @Override
@@ -129,7 +134,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Card card = cards.get(position);
-        holder.imageButton.setImageResource(card.getImageResourceID());
+        holder.imageButton.setImageResource(visible ? card.getImageResourceID() : R.drawable.treasure);
     }
 
     @Override
