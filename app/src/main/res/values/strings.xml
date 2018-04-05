@@ -113,6 +113,7 @@
     <string name="ev_run_away">%player% runs away</string>
     <string name="ev_fight_monster">%player% fights against the monster</string>
     <string name="ev_enter_turn_phase">%player% %turn-phase%</string>
+    <string name="ev_hand_over_token">Now it\'s %enemy%\'s turn</string>
 
     <!-- Turn phases -->
     <string name="tp_idle">idles</string>

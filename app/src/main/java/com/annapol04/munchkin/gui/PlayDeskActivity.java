@@ -102,8 +102,8 @@ public class PlayDeskActivity extends AppCompatActivity
   //      viewModel.isMyself().observe(this, mRootView::setClickable);
 
         Activity activity = this;
-        viewModel.getGameFinished().observe(this, isFinished -> {
-            if (isFinished) {
+        viewModel.getMatchResult().observe(this, result -> {
+            if (result != null) {
                 final Dialog dialog = new Dialog(activity);
                 dialog.setContentView(R.layout.finish);
                 Button okButton = dialog.findViewById(R.id.finish_ok);

@@ -24,14 +24,9 @@ constructor(@Named("treasure") private val treasureDeck: Deck,
     private var _deskCards = NonNullMutableLiveData<List<Card>>(emptyList())
     val deskCards: NonNullLiveData<List<Card>> get() = _deskCards
 
-    private val isGameFinished = MutableLiveData<Boolean>()
-
     private val state = State.HAND_OUT_CARDS
     private val randomDoor = Random()
     private val randomTreasure = Random()
-
-    val gameFinished: LiveData<Boolean>
-        get() = isGameFinished
 
     val monster: Monster?
         get() = if (_deskCards.value.size == 0) null else _deskCards.value[0] as Monster
@@ -42,12 +37,10 @@ constructor(@Named("treasure") private val treasureDeck: Deck,
 
     init {
         _deskCards.value = emptyList()
-        isGameFinished.value = false
     }
 
     fun reset() {
         _deskCards.value = emptyList()
-        isGameFinished.setValue(false)
 
         doorDeck.reset()
         treasureDeck.reset()
@@ -81,8 +74,6 @@ constructor(@Named("treasure") private val treasureDeck: Deck,
                 .append(doorDeck)
                 .append(", treasure cards: ")
                 .append(treasureDeck)
-                .append(", finished: ")
-                .append(isGameFinished.value)
                 .toString()
     }
 

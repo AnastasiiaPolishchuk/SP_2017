@@ -135,7 +135,7 @@ class GameRuleTest {
         myself.rename("Marvin")
 
         match = FakeMatch(game, myself, repository)
-        executor = Executor(match, game, repository, MessageBook(app))
+        executor = Executor(match, game, repository, MessageBook(app, match))
 
         vm = PlayDeskViewModel(app, myself, client, match, game, repository, executor)
 
@@ -310,6 +310,10 @@ class GameRuleTest {
             vm.drawDoorCard()
             vm.startCombat()
             vm.fightMonster()
+
+            if (match.result.value != null)
+                break
+
             vm.drawTreasureCard()
 
             if (match.players.value[0].isAllowedToDropCard)
@@ -327,6 +331,6 @@ class GameRuleTest {
         }
 
         assertEquals(10, match.players.value[0].getLevel().value)
-        assertTrue(game.gameFinished.value!!)
+        assertNotNull(match.result)
     }
 }

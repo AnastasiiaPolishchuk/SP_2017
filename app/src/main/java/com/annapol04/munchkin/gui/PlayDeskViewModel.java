@@ -17,6 +17,7 @@ import com.annapol04.munchkin.engine.Card;
 import com.annapol04.munchkin.engine.Executor;
 import com.annapol04.munchkin.engine.Game;
 import com.annapol04.munchkin.engine.Match;
+import com.annapol04.munchkin.engine.MatchResult;
 import com.annapol04.munchkin.engine.Player;
 import com.annapol04.munchkin.engine.PlayClient;
 import com.annapol04.munchkin.engine.TurnPhase;
@@ -54,6 +55,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     private NonNullLiveData<Boolean> canStartCombat;
     private NonNullLiveData<Boolean> canFinishRound;
+
+    private LiveData<MatchResult> matchResult;
 
     private LiveData<Boolean> isMyself;
     private MutableLiveData<Boolean> isStarted = new MutableLiveData<>();
@@ -107,6 +110,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
         canStartCombat = match.getCanStartCombat();
         canFinishRound = match.getCanFinishRound();
+
+        matchResult = match.getResult();
 
         isHeadgearEquiped = Transformations.switchMap(visiblePlayer, Player::getIsHeadgearEquiped);
         isArmorEquiped = Transformations.switchMap(visiblePlayer, Player::getIsArmorEquiped);
@@ -185,10 +190,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return canFinishRound;
     }
 
-  /*  public LiveData<List<Card>> getPlayedCards(int playerNr) {
-        return getPlayer(playerNr).getPlayedCards();
+    public LiveData<MatchResult> getMatchResult() {
+        return matchResult;
     }
-*/
+
     public LiveData<List<Card>> getDeskCards() {
         return game.getDeskCards();
     }
@@ -196,8 +201,6 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     public LiveData<Boolean> getGameStarted() {
         return isStarted;
     }
-
-    public LiveData<Boolean> getGameFinished() { return game.getGameFinished(); }
 
     public LiveData<List<Player>> getPlayers(){
         return match.getPlayers();

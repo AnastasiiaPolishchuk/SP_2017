@@ -8,7 +8,8 @@ import com.annapol04.munchkin.R
 import javax.inject.Inject
 
 class MessageBook @Inject
-constructor(private val application: Application) {
+constructor(private val application: Application,
+            private val match: Match) {
 
     fun find(id: Int): String {
         return application.getString(id)
@@ -29,6 +30,9 @@ constructor(private val application: Application) {
 
         if (player != null && message.contains("%player%"))
             message = message.replace("%player%", player.getName())
+
+        if (message.contains("%enemy%"))
+            message = message.replace("%enemy%", match.players.value[event.getInteger() - 1].getName())
 
         if (message.contains("%card%")) {
             if (anonymized)
