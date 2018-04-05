@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Transformations;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -17,6 +17,10 @@ import com.annapol04.munchkin.engine.Game;
 import com.annapol04.munchkin.engine.Match;
 import com.annapol04.munchkin.engine.Player;
 import com.annapol04.munchkin.engine.PlayClient;
+import com.annapol04.munchkin.engine.TurnPhase;
+import com.annapol04.munchkin.util.NonNullLiveData;
+import com.annapol04.munchkin.util.NonNullMutableLiveData;
+import com.annapol04.munchkin.util.Transformations;
 
 import java.util.List;
 
@@ -44,12 +48,14 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private LiveData<Boolean> isRightHandEquiped;
     private LiveData<Boolean> isLeftHandEquiped;
 
+    private NonNullLiveData<Boolean> canStartCombat;
+
     private LiveData<Boolean> isMyself;
     private MutableLiveData<Boolean> isStarted = new MutableLiveData<>();
 
     private boolean isStartingAlready = false;
     private Player myself;
-    private MutableLiveData<Player> visiblePlayer = new MutableLiveData<>();
+    private NonNullMutableLiveData<Player> visiblePlayer;
     private PlayClient client;
     private Game game;
     private Match match;
@@ -76,7 +82,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         client.setMatchStateChangedListener(this);
         isStarted.setValue(false);
 
-        visiblePlayer.setValue(myself);
+        visiblePlayer = new NonNullMutableLiveData<>(myself);
 
         isMyself = Transformations.map(visiblePlayer, player -> {
             Log.d("Executor", " " + player + " == " + myself); return player == myself;
@@ -92,6 +98,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         canPlayShoes = Transformations.switchMap(visiblePlayer, Player::getCanPlayShoes);
         canPlayOneHander = Transformations.switchMap(visiblePlayer, Player::getCanPlayOneHander);
         canPlayTwoHander = Transformations.switchMap(visiblePlayer, Player::getCanPlayTwoHander);
+
+        canStartCombat = Transformations.switchMap(false, visiblePlayer, x -> match.getCanStartCombat());
 
         isHeadgearEquiped = Transformations.switchMap(visiblePlayer, Player::getIsHeadgearEquiped);
         isArmorEquiped = Transformations.switchMap(visiblePlayer, Player::getIsArmorEquiped);
@@ -158,10 +166,14 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return playedCards;
     }
 
-    public LiveData<List<Card>> getPlayedCards(int playerNr) {
-        return getPlayer(playerNr).getPlayedCards();
+    public NonNullLiveData<Boolean> getCanStartCombat() {
+        return canStartCombat;
     }
 
+  /*  public LiveData<List<Card>> getPlayedCards(int playerNr) {
+        return getPlayer(playerNr).getPlayedCards();
+    }
+*/
     public LiveData<List<Card>> getDeskCards() {
         return game.getDeskCards();
     }
@@ -261,6 +273,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         visiblePlayer.getValue().emitPickupCard(card);
     }
 
+    public void startCombat() {
+        match.startCombat();
+    }
+
     public void runAwayFromMonster() {
         match.emitRunAway(visiblePlayer.getValue().getScope());
     }
@@ -275,5 +291,9 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     public void displayPlayer(int id) {
         visiblePlayer.setValue(getPlayer(id));
+    }
+
+    public void finishRound() {
+        match.finishRound();
     }
 }

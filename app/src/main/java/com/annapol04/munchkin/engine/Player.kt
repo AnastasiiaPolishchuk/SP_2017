@@ -6,6 +6,7 @@ import android.util.Pair
 
 import com.annapol04.munchkin.R
 import com.annapol04.munchkin.data.EventRepository
+import com.annapol04.munchkin.util.NonNullMutableLiveData
 
 import java.util.ArrayList
 
@@ -13,6 +14,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
 
     private var numberOfAllowedTreasureCardsToDraw = 0
     private var numberOfAllowedDoorCardsToDraw = 0
+    private var numberOfAllowedCardsToDrop = 0
     private val name = MutableLiveData<String>()
     private val level = MutableLiveData<Int>()
     private val fightLevel = MutableLiveData<Int>()
@@ -40,15 +42,18 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
     private val canPlayOneHander = MutableLiveData<Boolean>()
     private val canPlayTwoHander = MutableLiveData<Boolean>()
 
-    val handCards = MutableLiveData<List<Card>>()
-    val playedCards = MutableLiveData<List<Card>>()
-    var scope: Scope? = null
+    val handCards = NonNullMutableLiveData<List<Card>>(emptyList())
+    val playedCards = NonNullMutableLiveData<List<Card>>(emptyList())
+    var scope = Scope.GAME
 
     val isAllowedToDrawTreasureCard: Boolean
         get() = numberOfAllowedTreasureCardsToDraw > 0
 
     val isAllowedToDrawDoorCard: Boolean
         get() = numberOfAllowedDoorCardsToDraw > 0
+
+    val isAllowedToDropCard: Boolean
+        get() = numberOfAllowedCardsToDrop > 0
 
     val areShoesEquiped: LiveData<Boolean>
         get() = areShoesquiped
@@ -69,6 +74,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
     fun reset() {
         numberOfAllowedTreasureCardsToDraw = 0
         numberOfAllowedDoorCardsToDraw = 0
+        numberOfAllowedCardsToDrop = 0
 
         level.value = 1
         fightLevel.value = 1
@@ -92,12 +98,21 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
         isRightHandEquiped.value = false
     }
 
-    fun allowToDrawTreasureCards(numberOfCards: Int) {
-        numberOfAllowedTreasureCardsToDraw = numberOfCards
+    fun allowToDrawTreasureCards(amount: Int) {
+        numberOfAllowedTreasureCardsToDraw = amount
     }
 
-    fun allowToDrawDoorCards(numberOfCards: Int) {
-        numberOfAllowedDoorCardsToDraw = numberOfCards
+    fun allowToDrawDoorCards(amount: Int) {
+        numberOfAllowedDoorCardsToDraw = amount
+    }
+
+    fun limitHandCards(max: Int) {
+        if (max < 0)
+            throw IllegalArgumentException("There can only be a positive amount of cards")
+
+        if (handCards.value.size > max) {
+            numberOfAllowedCardsToDrop = handCards.value.size - max
+        }
     }
 
     fun rename(name: String) {
@@ -105,7 +120,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
     }
 
     fun takePlayedCard(card: Card) {
-        playedCards.value = playedCards.value!!.filter { it === card }
+        playedCards.value = playedCards.value.filter { it === card }
     }
 
     fun levelUp() {
@@ -185,7 +200,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
 
         game.drawTreasureCard(card)
 
-        handCards.value = handCards.value!! + listOf(card)
+        handCards.value += listOf(card)
     }
 
     @Throws(IllegalEngineStateException::class)
@@ -259,13 +274,22 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
         } else
             throw IllegalArgumentException("Unknown card type $card")
 
-        handCards.value = handCards.value!! - listOf(card)
-        playedCards.value = playedCards.value!! + listOf(card)
+        handCards.value = handCards.value - listOf(card)
+        playedCards.value = playedCards.value + listOf(card)
+    }
+
+    fun dropCard(card: Card) {
+        test(card in handCards.value, "Can not drop a card not on the hand")
+        test(numberOfAllowedCardsToDrop > 0, "Not allowed to drop a card")
+
+        numberOfAllowedCardsToDrop--
+
+        handCards.value -= listOf(card)
     }
 
     fun emitPickupCard(card: Card) {
         eventRepository.push(
-                Event(scope!!, Action.PICKUP_CARD, R.string.ev_pickup_card, card.id)
+                Event(scope, Action.PICKUP_CARD, R.string.ev_pickup_card, card.id)
         )
     }
 
@@ -328,8 +352,8 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
         } else
             throw IllegalArgumentException("Unknown card type $card")
 
-        playedCards.value = playedCards.value!! - listOf(card)
-        handCards.value = handCards.value!! + listOf(card)
+        playedCards.value = playedCards.value - listOf(card)
+        handCards.value = handCards.value + listOf(card)
     }
 
     @Throws(IllegalEngineStateException::class)
@@ -339,7 +363,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
 
     @Throws(IllegalEngineStateException::class)
     fun fightMonster(): Pair<Monster, Int> {
-        val cards = game.getDeskCards().value!!
+        val cards = game.deskCards.value
 
         test(cards.size > 0,
                 "a monster has to be on the table to fight against it!")

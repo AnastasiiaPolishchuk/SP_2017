@@ -180,9 +180,6 @@ constructor(private val application: Application) : PlayClient() {
     }
 
     override fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent) {
-        if (data == null)
-            return
-
         if (requestCode == RC_SIGN_IN) {
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             if (result.isSuccess)

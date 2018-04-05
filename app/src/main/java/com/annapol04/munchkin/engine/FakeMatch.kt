@@ -32,8 +32,8 @@ constructor(game: Game,
         val events = ArrayList<Event>((amountOfPlayers - 1) * 2)
 
         for (i in 1 until amountOfPlayers) {
-            events.add(Event(current!!.scope!!, Action.NAME_PLAYER, R.string.ev_join_player, names[i - 1]))
-            events.add(Event(current!!.scope!!, Action.HAND_OVER_TOKEN, 0, players[(i + 1) % players.size].scope!!.ordinal))
+            events.add(Event(current.scope, Action.NAME_PLAYER, R.string.ev_join_player, names[i - 1]))
+            events.add(Event(current.scope, Action.HAND_OVER_TOKEN, 0, players_.value[(i + 1) % players_.value.size].scope.ordinal))
         }
 
         eventRepository.push(events)

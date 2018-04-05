@@ -38,7 +38,7 @@ public class SignInViewModel extends AndroidViewModel implements PlayClient.OnMa
 
     public void logout() {
         client.setMatchStateChangedListener(null);
-        client.setActivity(null);
+//        client.setActivity(null);
     }
 
     public void processActivityResults(int requestCode, int resultCode, Intent data) {

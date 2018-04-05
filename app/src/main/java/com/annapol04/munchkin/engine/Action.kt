@@ -36,9 +36,9 @@ class Action(private val modifier: (Match, Game, Event) -> Unit) {
         @JvmField val DRAW_TREASURECARD = Action({ match, game, event -> match.drawTreasureCard(event.scope, Card.fromId(event.getInteger())) })
         @JvmField val PICKUP_CARD = Action({ match, game, event -> match.getPlayer(event.scope).pickupCard(Card.fromId(event.getInteger())) })
         @JvmField val PLAY_CARD = Action({ match, game, event -> match.playCard(event.scope, Card.fromId(event.getInteger())) })
+        @JvmField val DROP_CARD = Action({ match, game, event -> match.dropCard(event.scope, Card.fromId(event.getInteger())) })
         @JvmField val FIGHT_MONSTER = Action({ match, game, event -> match.fightMonster(event.scope) })
-        @JvmField val RUN_AWAY = Action({ match, game, event -> match.getPlayer(event.scope).runAway() })
-        @JvmField val ENTER_TURN_PHASE = Action({ match, game, event -> match.enterTurnPhase(event.scope, TurnPhase.fromId(event.getInteger())) })
+        @JvmField val RUN_AWAY = Action({ match, game, event -> match.runAway(event.scope) })
 
         private val lookup = Action::class.java.fields
                     .filter { it.type == Action::class.java }

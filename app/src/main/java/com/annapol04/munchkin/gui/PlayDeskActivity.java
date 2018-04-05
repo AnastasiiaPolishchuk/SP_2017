@@ -302,9 +302,9 @@ public class PlayDeskActivity extends AppCompatActivity
         }));
 
         Button fightButton = findViewById(R.id.fight_button);
+        viewModel.getCanStartCombat().observe(this, fightButton::setEnabled);
         fightButton.setOnClickListener(v -> {
-            if (viewModel.getDeskCards().getValue().size() == 0)
-                return;
+            viewModel.startCombat();
 
             Card monsterCard = viewModel.getDeskCards().getValue().get(0);
 
@@ -332,14 +332,14 @@ public class PlayDeskActivity extends AppCompatActivity
 
 
             Button dialogFightButton = dialog.findViewById(R.id.fight_diaolog_fight_button);
-            dialogFightButton.setEnabled(viewModel.isMyLevelGreater().getValue());
+            dialogFightButton.setEnabled(viewModel.canFightMonster());
             dialogFightButton.setOnClickListener(vv -> {
                 viewModel.fightMonster();
                 dialog.dismiss();
             });
 
             Button dialogRunAwayButton = dialog.findViewById(R.id.fight_diaolog_run_button_button);
-            dialogRunAwayButton.setEnabled(!(viewModel.isMyLevelGreater().getValue()));
+            dialogRunAwayButton.setEnabled(!viewModel.canFightMonster());
             dialogRunAwayButton.setOnClickListener(vv -> {
                 viewModel.runAwayFromMonster();
                 dialog.dismiss();
@@ -348,7 +348,7 @@ public class PlayDeskActivity extends AppCompatActivity
 
         Button nextPlayerButton = findViewById(R.id.next_player_button);
         nextPlayerButton.setOnClickListener(v -> {
-
+            viewModel.finishRound();
         });
 
     }

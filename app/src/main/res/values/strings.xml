@@ -108,6 +108,7 @@
     <string name="ev_join_player">player %string% joined the game</string>
     <string name="ev_draw_card">%player% draws %card%</string>
     <string name="ev_play_card">%player% plays %card%</string>
+    <string name="ev_drop_card">%player% drops %card%</string>
     <string name="ev_pickup_card">%player% picks %card% up</string>
     <string name="ev_run_away">%player% runs away</string>
     <string name="ev_fight_monster">%player% fights against the monster</string>

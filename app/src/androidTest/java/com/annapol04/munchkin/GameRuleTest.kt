@@ -38,6 +38,8 @@ class GameRuleTest {
     lateinit var client: PlayClient
     lateinit var decoder: Decoder
     lateinit var repository: EventRepository
+    lateinit var treasureCards: Deck
+    lateinit var doorCards: Deck
     lateinit var game: Game
     lateinit var myself: Player
     lateinit var match: Match
@@ -57,6 +59,15 @@ class GameRuleTest {
         }
     }
 
+    internal inner class FakeDeck(private var allCards: List<Card>) : Deck(allCards) {
+        override fun getRandomStackCards(amount: Int): List<Card> {
+            val randomCards = allCards.subList(0, amount)
+            allCards -= randomCards
+            return randomCards
+        }
+        override fun draw(card: Card) {}
+    }
+
     @Before
     fun setup() {
         app = InstrumentationRegistry.getTargetContext().applicationContext as Application
@@ -68,7 +79,29 @@ class GameRuleTest {
         decoder = Decoder()
 
         repository = EventRepository(executors, eventDao, client, decoder)
-        game = Game(repository)
+
+        treasureCards = FakeDeck(listOf(
+                TreasureCards.ELEVEN_FOOT_POLE,
+                TreasureCards.HELM_OF_COURAGE,
+                TreasureCards.LEATHER_ARMOR,
+                TreasureCards.SLIMY_ARMOR,
+                TreasureCards.SPIKY_KNEES,
+                TreasureCards.HORNY_HELMET,
+                TreasureCards.BOOTS_OF_BUTT_KICKING
+        ))
+
+        doorCards = FakeDeck(listOf(
+                DoorCards.LAME_GOBLIN,
+                DoorCards.UNDEAD_HORSE,
+                DoorCards.HARPIES,
+                DoorCards.POTTED_PLANT,
+                DoorCards.AMAZON,
+                DoorCards.BIGFOOT,
+                DoorCards.BULLROG,
+                DoorCards.CRABS
+        ))
+
+        game = Game(treasureCards, doorCards)
         myself = Player(Int.MAX_VALUE, game, repository)
         myself.rename("Marvin")
 
@@ -87,47 +120,147 @@ class GameRuleTest {
 
     @Test
     fun playersJoinTheMatch() {
-        assertEquals(3, match.getPlayers().value!!.size)
+        assertEquals(3, match.players.value.size)
     }
 
     @Test
     fun playersHaveDrawnInitialCards() {
-        assertFalse(match.getPlayers().value!![0].isAllowedToDrawTreasureCard)
-        assertFalse(match.getPlayers().value!![1].isAllowedToDrawTreasureCard)
-        assertFalse(match.getPlayers().value!![2].isAllowedToDrawTreasureCard)
+        assertFalse(match.players.value[0].isAllowedToDrawTreasureCard)
+        assertFalse(match.players.value[1].isAllowedToDrawTreasureCard)
+        assertFalse(match.players.value[2].isAllowedToDrawTreasureCard)
 
-        assertEquals(2, match.getPlayers().value!![0].handCards.value!!.size)
-        assertEquals(2, match.getPlayers().value!![1].handCards.value!!.size)
-        assertEquals(2, match.getPlayers().value!![2].handCards.value!!.size)
+        assertEquals(2, match.players.value[0].handCards.value.size)
+        assertEquals(2, match.players.value[1].handCards.value.size)
+        assertEquals(2, match.players.value[2].handCards.value.size)
     }
 
     @Test
     fun playerDrawsTreasureCardInRound() {
-        vm.displayPlayer(1)
         vm.drawDoorCard()
 
-        assertEquals(1, game.deskCards.value!!.size)
+        assertEquals(1, game.deskCards.value.size)
     }
 
     @Test
     fun playerEquipsInRound() {
-        vm.displayPlayer(1)
-        vm.playCard(myself.handCards.value!![0])
+        vm.playCard(myself.handCards.value[0])
 
-        assertEquals(1, myself.playedCards.value!!.size)
+        assertEquals(1, myself.playedCards.value.size)
     }
 
- /*   @Test
+    @Test
     fun playerFinishesFirstRound() {
-        vm.displayPlayer(1)
-        vm.playCard(myself.handCards.value!![0])
+        vm.playCard(myself.handCards.value[0])
         vm.drawDoorCard()
+        vm.startCombat()
+        vm.fightMonster()
+        vm.drawTreasureCard()
+        vm.finishRound()
 
-        if (vm.canFightMonster())
+        assertEquals(match.players.value[1], match.currentPlayer.value)
+    }
+
+    @Test
+    fun playerCanFinishRound() {
+        assertFalse(match.canFinishRound.value)
+
+        vm.playCard(myself.handCards.value[0])
+        assertFalse(match.canFinishRound.value)
+
+        vm.drawDoorCard()
+        assertFalse(match.canFinishRound.value)
+
+        vm.startCombat()
+        assertFalse(match.canFinishRound.value)
+
+        vm.fightMonster()
+        assertFalse(match.canFinishRound.value)
+
+        vm.drawTreasureCard()
+        assertTrue(match.canFinishRound.value)
+
+        vm.finishRound()
+    }
+
+    @Test
+    fun playerCanStartCombat() {
+        assertFalse(match.canStartCombat.value)
+
+        vm.playCard(myself.handCards.value[0])
+        assertFalse(match.canStartCombat.value)
+
+        vm.drawDoorCard()
+        assertTrue(match.canStartCombat.value)
+
+        vm.startCombat()
+        assertTrue(match.canStartCombat.value)
+
+        vm.fightMonster()
+        assertFalse(match.canStartCombat.value)
+
+        vm.drawTreasureCard()
+        assertFalse(match.canStartCombat.value)
+
+        vm.finishRound()
+
+        assertEquals(match.players.value[1], match.currentPlayer.value)
+    }
+
+    @Test
+    fun playerGetsLevelWhenBeatingMonster() {
+        assertEquals(1, match.players.value[0].getLevel().value)
+
+        vm.playCard(myself.handCards.value[0])
+        vm.drawDoorCard()
+        vm.startCombat()
+        vm.fightMonster()
+
+        assertEquals(2, match.players.value[0].getLevel().value)
+    }
+
+    @Test
+    fun playerGetsTreasuresWhenBeatingMonster() {
+        assertFalse(match.players.value[0].isAllowedToDrawTreasureCard)
+
+        vm.playCard(myself.handCards.value[0])
+        vm.drawDoorCard()
+        vm.startCombat()
+        vm.fightMonster()
+
+        assertTrue(match.players.value[0].isAllowedToDrawTreasureCard)
+    }
+
+    @Test
+    fun playerHasToDropCards() {
+        assertFalse(match.players.value[0].isAllowedToDropCard)
+
+        for (j in 1..2) {
+
+            vm.playCard(myself.handCards.value[0])
+            vm.drawDoorCard()
+            vm.startCombat()
             vm.fightMonster()
-        else
-            vm.runAwayFromMonster()
+            vm.drawTreasureCard()
+            vm.finishRound()
 
-        assertEquals(match.players.value!![1], match.currentPlayer.value!!)
-    }*/
+            assertFalse(match.players.value[0].isAllowedToDropCard)
+
+            for (i in 2..3) {
+                vm.displayPlayer(i)
+                vm.drawDoorCard()
+                vm.startCombat()
+                vm.runAwayFromMonster()
+                vm.finishRound()
+            }
+        }
+
+        vm.displayPlayer(1)
+        vm.drawDoorCard()
+        vm.startCombat()
+        vm.fightMonster()
+        vm.drawTreasureCard()
+        vm.finishRound()
+
+        assertTrue(match.players.value[0].isAllowedToDropCard)
+    }
 }

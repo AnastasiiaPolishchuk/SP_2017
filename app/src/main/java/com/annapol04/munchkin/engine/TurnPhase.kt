@@ -9,15 +9,15 @@ enum class TurnPhase private constructor(@param:StringRes @field:StringRes val s
     IDLE(R.string.tp_idle),
     EQUIPMENT(R.string.tp_equipment),
     KICK_OPEN_THE_DOOR(R.string.tp_kick_open_the_door),
-    KICK_OPEN_THE_DOOR_AND_FIGHT(R.string.tp_kick_open_the_door_and_fight),
     KICK_OPEN_THE_DOOR_AND_DRAW(R.string.tp_kick_open_the_door_and_draw),
     LOOK_FOR_TROUBLE(R.string.tp_look_for_trouble),
     LOOT_THE_ROOM(R.string.tp_loot_the_room),
-    CHARITY(R.string.tp_charity);
+    CHARITY(R.string.tp_charity),
+    FINISHED(R.string.ev_empty);
 
 
     companion object {
-        private val lookup = arrayOf(IDLE, EQUIPMENT, KICK_OPEN_THE_DOOR, KICK_OPEN_THE_DOOR_AND_FIGHT, KICK_OPEN_THE_DOOR_AND_DRAW, LOOK_FOR_TROUBLE, LOOT_THE_ROOM, CHARITY)
+        private val lookup = arrayOf(IDLE, EQUIPMENT, KICK_OPEN_THE_DOOR, KICK_OPEN_THE_DOOR_AND_DRAW, LOOK_FOR_TROUBLE, LOOT_THE_ROOM, CHARITY)
 
         fun fromId(id: Int): TurnPhase {
             if (id >= lookup.size)

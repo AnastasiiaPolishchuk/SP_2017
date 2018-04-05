@@ -7,11 +7,12 @@ import android.support.annotation.StringRes
 import com.annapol04.munchkin.R
 import com.annapol04.munchkin.data.EventRepository
 
-import java.util.stream.Collectors
+import com.annapol04.munchkin.util.*
 
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
+import kotlin.math.E
 
 @Singleton
 open class Match @Inject
@@ -19,15 +20,42 @@ constructor(protected var game: Game,
             @param:Named("myself") protected val myself: Player,
             protected var eventRepository: EventRepository) {
 
-    protected var log = MutableLiveData<String>()
-    protected var observablePlayers = MutableLiveData<List<Player>>()
-    protected var currentPlayer = MutableLiveData<Player>()
+    protected val log_ by lazy { NonNullMutableLiveData<String>("") }
+    val log: NonNullLiveData<String> get() = log_
 
-    protected var players: List<Player> = emptyList()
+    protected val players_ by lazy { NonNullMutableLiveData<List<Player>>(emptyList()) }
+    val players: NonNullLiveData<List<Player>> get() = players_
 
-    protected var current: Player? = null
-    protected var first: Player? = null
-    protected var turnPhase: TurnPhase? = null
+    protected val currentPlayer_ by lazy { NonNullMutableLiveData(myself) }
+    val currentPlayer: NonNullLiveData<Player> get() = currentPlayer_
+
+    protected val canFinishRound_ by lazy { NonNullMutableLiveData(false) }
+    val canFinishRound: NonNullLiveData<Boolean> get() = canFinishRound_
+
+    protected val canStartCombat_ by lazy { NonNullMutableLiveData(false) }
+    val canStartCombat: NonNullLiveData<Boolean> get() = canStartCombat_
+
+    protected var current: Player = myself
+        set(value) {
+            field = value
+            currentPlayer_.value = field
+        }
+
+    protected var first = myself
+    protected var turnPhase = TurnPhase.IDLE
+        set(value) {
+            field = value
+
+            if (value == TurnPhase.FINISHED)
+                canFinishRound_.value = true
+            else if (canFinishRound_.value)
+                canStartCombat_.value = false
+
+            if (value == TurnPhase.KICK_OPEN_THE_DOOR)
+                canStartCombat_.value = true
+            else if (canStartCombat_.value)
+                canStartCombat_.value = false
+        }
 
     protected var state = State.JOINING
     var amountOfPlayers = 0
@@ -45,18 +73,13 @@ constructor(protected var game: Game,
     }
 
     init {
-
-        observablePlayers.value = emptyList()
-
         reset()
     }
 
     protected fun reset() {
-        players = emptyList()
-        currentPlayer.setValue(null)
+        players_.value = emptyList()
         playersRenamed = 0
-        observablePlayers.value = emptyList()
-        log.setValue("")
+        log_.value = ""
 
         game.reset()
         myself.reset()
@@ -66,6 +89,7 @@ constructor(protected var game: Game,
 
         named = false
         handCardsDrawn = false
+        current = myself
     }
 
     fun isMyself(player: Player?): Boolean {
@@ -73,35 +97,23 @@ constructor(protected var game: Game,
     }
 
     fun log(message: String) {
-        log.setValue(StringBuilder()
-                .append(log.value)
+        log_.value = StringBuilder()
+                .append(log_.value)
                 .append(message)
                 .append("\n")
-                .toString())
+                .toString()
     }
 
     fun undoLog() {
-        log.setValue(log.value!!.replace("\n[^\n]+\n+$".toRegex(), "\n"))
-    }
-
-    fun getLog(): LiveData<String> {
-        return log
-    }
-
-    fun getPlayers(): LiveData<List<Player>> {
-        return observablePlayers
+        log_.value = log_.value.replace("\n[^\n]+\n+$".toRegex(), "\n")
     }
 
     fun getPlayer(playerNr: Int): Player {
-        return players[playerNr - 1]
+        return players_.value[playerNr - 1]
     }
 
     fun getPlayer(scope: Scope): Player {
         return getPlayer(scope.ordinal)
-    }
-
-    fun getCurrentPlayer(): LiveData<Player> {
-        return currentPlayer
     }
 
     open fun start(amountOfPlayers: Int) {
@@ -112,35 +124,22 @@ constructor(protected var game: Game,
         eventRepository.push(Event(Scope.GAME, Action.JOIN_PLAYER, 0, myself.id))
     }
 
-    protected fun evaluateHost(): Player? {
-        var highestId: Player? = null
-
-        for (player in players) {
-            if (highestId == null)
-                highestId = player
-            else if (player.id > highestId.id)
-                highestId = player
-        }
-
-        return highestId
+    protected fun evaluateHost(): Player {
+        return players_.value.maxBy { it.id } ?: myself
     }
 
     protected fun specifyPlayerNumbers() {
         myself.scope = Scope.PLAYER1
 
         eventRepository.push(
-                Event(myself.scope!!, Action.ASSIGN_PLAYER_NUMBER, 0, myself.id))
+                Event(myself.scope, Action.ASSIGN_PLAYER_NUMBER, 0, myself.id))
 
         var nr = 2
 
-        for (player in players)
+        for (player in players_.value)
             if (player != myself)
                 eventRepository.push(
                         Event(Scope.fromId(nr++), Action.ASSIGN_PLAYER_NUMBER, 0, player.id))
-    }
-
-    protected fun <T> update(liveData: MutableLiveData<T>) {
-        liveData.setValue(liveData.value)
     }
 
     fun joinPlayer(randomNumber: Int) {
@@ -151,14 +150,12 @@ constructor(protected var game: Game,
 
         player.allowToDrawTreasureCards(AMOUNT_OF_HAND_CARDS)
 
-        players += player
+        players_.value += player
 
-        if (players.size == amountOfPlayers) {
+        if (players_.value.size == amountOfPlayers) {
             state = State.NAMING
 
             current = evaluateHost()
-            currentPlayer.setValue(current)
-
             first = current
 
             if (current == myself) {
@@ -172,27 +169,27 @@ constructor(protected var game: Game,
     }
 
     fun canPlayerFightMonster(player: Player): Boolean {
-        return game.getDeskCards().value!!.size > 0
-                && player.getFightLevel().value!! > (game.getDeskCards().value!![0] as Monster).level
+        return game.deskCards.value.size > 0
+                && player.getFightLevel().value!! > (game.deskCards.value[0] as Monster).level
 
     }
 
     protected open fun namingRound() {
         eventRepository.push(
-                Event(current!!.scope!!, Action.NAME_PLAYER, R.string.ev_join_player, myself.getName()),
-                Event(current!!.scope!!, Action.HAND_OVER_TOKEN, 0, nextPlayer().scope!!.ordinal)
+                Event(current.scope, Action.NAME_PLAYER, R.string.ev_join_player, myself.getName()),
+                Event(current.scope, Action.HAND_OVER_TOKEN, 0, nextPlayer().scope.ordinal)
         )
     }
 
     protected fun nextPlayer(): Player {
-        return players[(players.indexOf(current) + 1) % players.size]
+        return players_.value[(players_.value.indexOf(current) + 1) % players_.value.size]
     }
 
     protected fun drawInitialHandcards() {
         eventRepository.push(game.getRandomTreasureCards(AMOUNT_OF_HAND_CARDS)
-                .map{ Event(current!!.scope!!, Action.DRAW_TREASURECARD, 0, it.id) })
+                .map{ Event(current.scope, Action.DRAW_TREASURECARD, 0, it.id) })
 
-        emitHandOverToken(current!!.scope, nextPlayer())
+        emitHandOverToken(current.scope, nextPlayer())
     }
 
     private fun areAllPlayersNamed(): Boolean {
@@ -200,13 +197,20 @@ constructor(protected var game: Game,
     }
 
     private fun areAllInitialCardsDrawn(): Boolean {
-        return !players.stream().anyMatch{ it.isAllowedToDrawTreasureCard }
+        return players_.value.all{ !it.isAllowedToDrawTreasureCard }
+    }
+
+    protected fun emitHandOverToken(scope: Scope, player: Player) {
+        eventRepository.push(
+                Event(current.scope, Action.HAND_OVER_TOKEN, 0, player.scope.ordinal)
+        )
     }
 
     @Throws(IllegalEngineStateException::class)
     open fun handOverToken(scope: Scope, playerNr: Int) {
         current = getPlayer(playerNr)
-        currentPlayer.setValue(current)
+
+        turnPhase = TurnPhase.IDLE
 
         when (state) {
             Match.State.NAMING -> {
@@ -226,11 +230,8 @@ constructor(protected var game: Game,
                     if (areAllInitialCardsDrawn()) {
                         state = State.STARTED
 
-                        if (current == myself) {
-                            turnPhase = TurnPhase.IDLE
-
+                        if (current == myself)
                             playRound()
-                        }
                     }
                 }
             }
@@ -242,65 +243,61 @@ constructor(protected var game: Game,
                 if (areAllInitialCardsDrawn()) {
                     state = State.STARTED
 
-                    if (current == myself) {
-                        turnPhase = TurnPhase.IDLE
+                    if (current == myself)
                         playRound()
-                    }
                 }
             }
             Match.State.STARTED -> if (current == myself) {
-                turnPhase = TurnPhase.IDLE
                 playRound()
             }
             else -> throw IllegalEngineStateException("Illegal state")
         }
     }
 
-    protected fun emitHandOverToken(scope: Scope?, player: Player) {
-        eventRepository.push(
-                Event(current!!.scope!!, Action.HAND_OVER_TOKEN, 0, player.scope!!.ordinal)
-        )
-    }
-
-    @Throws(IllegalEngineStateException::class)
     protected fun playRound() {
-        if (turnPhase == TurnPhase.IDLE)
-            emitEnterTurnPhase(current!!.scope, TurnPhase.EQUIPMENT)
-        else
-            throw IllegalEngineStateException("We can start the turn only from \"idle\" turn phase")
+        turnPhase = TurnPhase.EQUIPMENT
+        current.allowToDrawDoorCards(1)
     }
 
     fun assignPlayerNumber(playerNr: Int, randomNumber: Int) {
         var allScopesAssigned = true
 
-        for (player in players) {
+        for (player in players_.value) {
             if (player.id == randomNumber)
                 player.scope = Scope.fromId(playerNr)
-            if (player.scope == null)
+            if (player.scope === Scope.GAME)
                 allScopesAssigned = false
         }
 
         if (allScopesAssigned)
-            players = players.sortedBy{ it.scope!!.ordinal }
+            players_.value = players_.value.sortedBy{ it.scope.ordinal }
     }
 
     fun namePlayer(playerNr: Int, name: String) {
-        players[playerNr - 1].rename(name)
-
-        if (++playersRenamed == amountOfPlayers)
-            observablePlayers.setValue(players)
+        players_.value[playerNr - 1].rename(name)
+        ++playersRenamed
     }
 
     @Throws(IllegalEngineStateException::class)
     protected fun testHost(player: Player) {
-        if (player != current)
+        if (player !== current)
             throw IllegalEngineStateException("can not play a card in another player's round")
+    }
+
+    fun startCombat() {
+        emitMessage(current.scope, R.string.tp_kick_open_the_door_and_fight);
     }
 
 
     /****************************************************************************************
      * ==== Action implementations ====
      */
+
+    fun emitMessage(scope: Scope, @StringRes message: Int) {
+        eventRepository.push(
+                Event(scope, Action.MESSAGE, message)
+        )
+    }
 
     fun emitMessage(scope: Scope, @StringRes message: Int, integer: Int) {
         eventRepository.push(
@@ -311,7 +308,7 @@ constructor(protected var game: Game,
     fun emitDrawDoorCard(scope: Scope) {
         val card = game.getRandomDoorCards(1)[0]
 
-        emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR)
+        emitMessage(scope, R.string.tp_kick_open_the_door)
 
         eventRepository.push(
                 Event(scope, Action.DRAW_DOORCARD, R.string.ev_draw_card, card.id)
@@ -322,9 +319,12 @@ constructor(protected var game: Game,
     fun drawDoorCard(scope: Scope, card: Card) {
         testHost(getPlayer(scope))
 
+        if (turnPhase == TurnPhase.EQUIPMENT)
+            turnPhase = TurnPhase.KICK_OPEN_THE_DOOR
+
         test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR,
                 "it's not allowed to draw door cards in \"$turnPhase\" phase!")
-        test(game.getDeskCards().value!!.size == 0,
+        test(game.deskCards.value.size == 0,
                 "you can not draw a door card from an empty deck!")
 
         getPlayer(scope).drawDoorCard(card)
@@ -345,21 +345,33 @@ constructor(protected var game: Game,
 
         test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW || turnPhase == TurnPhase.IDLE,
                 "it's not allowed to draw treasure cards in \"$turnPhase\" phase!")
-        test(game.getDeskCards().value!!.size == 0,
+        test(game.deskCards.value.size == 0,
                 "you can not draw a treasure card from an empty deck!")
 
         getPlayer(scope).drawTreasureCard(card)
 
         if (turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW
-                && scope == myself.scope
-                && !myself.isAllowedToDrawTreasureCard)
-            emitEnterTurnPhase(scope, TurnPhase.CHARITY)
+        && !current.isAllowedToDrawTreasureCard) {
+            current.limitHandCards(max = MAX_AMOUNT_OF_HAND_CARDS)
+
+            startCharitingOrFinish();
+        }
+    }
+
+    private fun startCharitingOrFinish() {
+        if (current.isAllowedToDropCard) {
+            if (current == myself) {
+                if (myself.handCards.value.size > MAX_AMOUNT_OF_HAND_CARDS)
+                    emitMessage(current.scope, R.string.tp_charity)
+            }
+
+            turnPhase = TurnPhase.CHARITY
+        } else
+            turnPhase = TurnPhase.FINISHED
     }
 
 
     fun emitFightMonster(scope: Scope) {
-        emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT)
-
         eventRepository.push(
                 Event(scope, Action.FIGHT_MONSTER, R.string.ev_fight_monster)
         )
@@ -369,7 +381,7 @@ constructor(protected var game: Game,
     fun fightMonster(scope: Scope) {
         testHost(getPlayer(scope))
 
-        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT,
+        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR,
                 "monsters can not fought in \"$turnPhase\" phase!")
 
         val result = getPlayer(scope).fightMonster()
@@ -379,12 +391,13 @@ constructor(protected var game: Game,
         if (scope == myself.scope) {
             emitMessage(scope, R.string.player_killed_monster, result.first.id)
             emitMessage(scope, R.string.player_gets_level, result.second)
-
-            emitEnterTurnPhase(scope, TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW)
+            emitMessage(scope, R.string.tp_kick_open_the_door_and_draw)
             emitMessage(scope, R.string.player_draws_treasure_cards, cardsToDraw)
         }
 
         getPlayer(scope).allowToDrawTreasureCards(cardsToDraw)
+
+        turnPhase = TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW
     }
 
 
@@ -398,10 +411,12 @@ constructor(protected var game: Game,
     fun runAway(scope: Scope) {
         testHost(getPlayer(scope))
 
-        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_FIGHT,
+        test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR,
                 "can not run away from monster in \"$turnPhase\" phase!")
 
         getPlayer(scope).runAway()
+
+        startCharitingOrFinish()
     }
 
 
@@ -423,20 +438,39 @@ constructor(protected var game: Game,
     }
 
 
-    protected fun emitEnterTurnPhase(scope: Scope?, phase: TurnPhase) {
+    fun emitDropCard(scope: Scope, card: Card) {
         eventRepository.push(
-                Event(scope!!, Action.ENTER_TURN_PHASE, R.string.ev_enter_turn_phase, phase.ordinal)
+                Event(scope, Action.DROP_CARD, R.string.ev_drop_card, card.id)
         )
     }
 
-    @Throws(IllegalEngineStateException::class)
+    fun dropCard(scope: Scope, card: Card) {
+        testHost(getPlayer(scope))
+
+        test(turnPhase == TurnPhase.CHARITY,
+                "can not drop cards in \"$turnPhase\" phase!")
+
+        getPlayer(scope).dropCard(card)
+
+        if (turnPhase == TurnPhase.CHARITY && !current.isAllowedToDropCard)
+            turnPhase = TurnPhase.FINISHED
+    }
+
+
+   /* private fun emitEnterTurnPhase(scope: Scope, phase: TurnPhase) {
+        eventRepository.push(
+                Event(scope, Action.ENTER_TURN_PHASE, R.string.ev_enter_turn_phase, phase.ordinal)
+        )
+    }*/
+
+ /*   @Throws(IllegalEngineStateException::class)
     fun enterTurnPhase(scope: Scope, phase: TurnPhase) {
         when (turnPhase) {
             TurnPhase.IDLE -> {
                 test(phase == TurnPhase.EQUIPMENT,
                         "it is not allowed to enter phase \"$phase\" from \"$turnPhase\"")
 
-                getPlayer(scope).allowToDrawDoorCards(1)
+
             }
             TurnPhase.EQUIPMENT -> test(phase == TurnPhase.KICK_OPEN_THE_DOOR,
                     "it is not allowed to enter phase \"$phase\" from \"$turnPhase\"")
@@ -449,7 +483,7 @@ constructor(protected var game: Game,
                         "it is not allowed to enter phase \"$phase\" from \"$turnPhase\"")
 
                 if (scope == myself.scope) {
-                    emitEnterTurnPhase(scope, TurnPhase.IDLE)
+       //             emitEnterTurnPhase(scope, TurnPhase.IDLE)
                     emitHandOverToken(scope, nextPlayer())
                 }
             }
@@ -458,6 +492,22 @@ constructor(protected var game: Game,
         }
 
         turnPhase = phase
+
+        if (turnPhase == TurnPhase.CHARITY)
+            canFinishRound_.value = true
+        else if (canFinishRound_.value)
+            canFinishRound_.value = false
+
+        if (turnPhase == TurnPhase.KICK_OPEN_THE_DOOR)
+            canStartCombat_.value = true
+        else if (canStartCombat_.value)
+            canStartCombat_.value = false
+    }
+*/
+    fun finishRound() {
+        test(canFinishRound_.value,"You can hand over the control after doing the required steps")
+
+        emitHandOverToken(current.scope, nextPlayer())
     }
 
     companion object {

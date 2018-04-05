@@ -6,11 +6,17 @@ import android.arch.persistence.room.Room;
 
 import com.annapol04.munchkin.db.AppDb;
 import com.annapol04.munchkin.db.EventDao;
+import com.annapol04.munchkin.engine.Deck;
+import com.annapol04.munchkin.engine.DeckKt;
 import com.annapol04.munchkin.engine.Event;
 import com.annapol04.munchkin.engine.MessageBook;
+import com.annapol04.munchkin.engine.TreasureCards;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -58,4 +64,19 @@ public class AppModule {
         };//db.eventDao();
     }
 
+    @Singleton
+    @Provides
+    @Named("treasure")
+    public Deck provideTreasueDeck() {
+        String[] cardTypes = {"BonusWear"};
+        return DeckKt.build(TreasureCards.class, Arrays.asList(cardTypes));
+    }
+
+    @Singleton
+    @Provides
+    @Named("door")
+    public Deck provideDoorDeck() {
+        String[] cardTypes = {"Monster"};
+        return DeckKt.build(TreasureCards.class, Arrays.asList(cardTypes));
+    }
 }
