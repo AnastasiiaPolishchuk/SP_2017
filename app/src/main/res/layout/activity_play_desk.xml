@@ -51,107 +51,87 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:orientation="vertical">
-h
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2">
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginStart="8dp"
-                            android:fontFamily="sans-serif-condensed"
-                            android:text="Hand:"
-                            android:textColor="@color/colorAccent"
-                            android:gravity="center"
-                            android:textSize="24sp"
-                            android:textStyle="italic" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#6D4C41" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="horizontal">
+                        android:padding="8dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:gravity="right">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginRight="8dp"
-                            android:layout_marginStart="8dp"
-                            android:fontFamily="sans-serif-condensed"
-                            android:textColor="@color/colorAccent"
-
-                            android:text="Played:"
-                            android:textSize="24sp"
-                            android:textStyle="italic" />
-
-                        <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                        <ImageView
+                            android:id="@+id/id_man"
+                            android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:gravity="fill_vertical">
+                            android:src="@drawable/man" />
 
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/man" />
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/man_shoes"
+                            android:id="@+id/man_shoes"
+                            android:visibility="invisible" />
 
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/man_shoes"
-                                android:id="@+id/man_shoes"
-                                android:visibility="invisible" />
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/man_armor"
+                            android:id="@+id/man_armor"
+                            android:visibility="invisible" />
 
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/man_armor"
-                                android:id="@+id/man_armor"
-                                android:visibility="invisible" />
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/man_head"
+                            android:id="@+id/man_head"
+                            android:visibility="invisible" />
 
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/man_head"
-                                android:id="@+id/man_head"
-                                android:visibility="invisible" />
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/man_left_hand"
+                            android:id="@+id/man_left_hand"
+                            android:visibility="invisible" />
 
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/man_left_hand"
-                                android:id="@+id/man_left_hand"
-                                android:visibility="invisible" />
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/man_right_hand"
+                            android:id="@+id/man_right_hand"
+                            android:visibility="invisible" />
+                    </RelativeLayout>
 
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/man_right_hand"
-                                android:id="@+id/man_right_hand"
-                                android:visibility="invisible" />
-                        </RelativeLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:gravity="center"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textColor="@color/colorAccent"
+                        android:text="Power:"
+                        android:textSize="24sp"
+                        android:textStyle="italic" />
 
-
-                    </LinearLayout>
-
-
+                    <TextView
+                        android:id="@+id/id_power"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textColor="@color/colorAccent"
+                        android:text="1"
+                        android:textSize="24sp"
+                        android:textStyle="italic" />
 
                 </LinearLayout>
 
@@ -160,10 +140,52 @@ h
                     android:layout_height="1dp"
                     android:background="#6D4C41" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#8D6E63" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="10">
+                    android:layout_weight="1"
+                    android:padding="4dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Hand" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#6D4C41" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Played" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#6D4C41" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#8D6E63" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="11">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -222,7 +244,7 @@ h
                         android:fontFamily="sans-serif-condensed"
                         android:gravity="center"
                         android:text="Spieltisch"
-
+                        android:textColor="@color/colorAccent"
                         android:textAllCaps="true"
                         android:textSize="24sp"
                         android:textStyle="italic" />
@@ -241,10 +263,15 @@ h
                     android:layout_height="1dp"
                     android:background="#6D4C41" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#8D6E63" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="7">
+                    android:layout_weight="6">
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_view_desk"
@@ -254,11 +281,6 @@ h
                         android:layout_weight="1" />
 
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#6D4C41" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -293,6 +315,11 @@ h
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#6D4C41" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#8D6E63" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
