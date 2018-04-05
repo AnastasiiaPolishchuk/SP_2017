@@ -35,6 +35,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     private LiveData<String> playerName;
     private LiveData<Integer> playerLevel;
+    private LiveData<Integer> playerFightLevel;
     private LiveData<List<Card>> playerHand;
     private LiveData<List<Card>> playedCards;
 
@@ -93,6 +94,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         });
         playerName = Transformations.map(visiblePlayer, Player::getName);
         playerLevel = Transformations.switchMap(visiblePlayer, Player::getLevel);
+        playerFightLevel = Transformations.switchMap(visiblePlayer, Player::getFightLevel);
         playerHand = Transformations.switchMap(visiblePlayer, Player::getHandCards);
         playedCards = Transformations.switchMap(visiblePlayer, Player::getPlayedCards);
 
@@ -161,6 +163,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     public LiveData<Integer> getPlayerLevel() {
         return playerLevel;
+    }
+
+    public LiveData<Integer> getPlayerFightLevel() {
+        return playerFightLevel;
     }
 
     public LiveData<List<Card>> getPlayerHand() {
