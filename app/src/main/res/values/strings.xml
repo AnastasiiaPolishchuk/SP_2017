@@ -40,8 +40,9 @@
     <string name="action_exit">EXIT</string>
     <string name="fight">Start combat</string>
     <string name="next_player">Next Player</string>
-    <string name="your_fightlevel">Your fightLevel is:</string>
-    <string name="monster_fightlevel">Monster fightLevel is:</string>
+    <string name="your_fightlevel">You
+        :</string>
+    <string name="monster_fightlevel">Monster:</string>
 
     <!-- game rules -->
     <string name="game_rules">"The card game Munchkin is partitioned into four big phases.
