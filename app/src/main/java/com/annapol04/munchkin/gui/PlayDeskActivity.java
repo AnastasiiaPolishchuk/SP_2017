@@ -93,7 +93,7 @@ public class PlayDeskActivity extends AppCompatActivity
         // TODO: anschließen !
         ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.time_to_action_bar);
         ObjectAnimator progressAnimator = ObjectAnimator.ofInt(mProgressBar, "progress", 100, 0);
-        progressAnimator.setDuration(300);
+        progressAnimator.setDuration(400);
         progressAnimator.setInterpolator(new LinearInterpolator());
         progressAnimator.start();
 
@@ -299,6 +299,10 @@ public class PlayDeskActivity extends AppCompatActivity
             viewModel.drawTreasureCard();
         }));
 
+        TextView power = findViewById(R.id.id_power);
+        viewModel.getPlayerFightLevel().observe(this, power::setText);
+        power.setText(viewModel.getPlayerFightLevel().getValue());
+
         Button fightButton = findViewById(R.id.fight_button);
         viewModel.getCanStartCombat().observe(this, fightButton::setEnabled);
         fightButton.setOnClickListener(v -> {
@@ -310,7 +314,6 @@ public class PlayDeskActivity extends AppCompatActivity
                 return;
 
             Monster monster = (Monster) monsterCard;
-
 
             final Dialog dialog = new Dialog(activity);
             dialog.setContentView(R.layout.dialog_fight_button);
@@ -327,7 +330,6 @@ public class PlayDeskActivity extends AppCompatActivity
 
             dialog.show();
             dialog.setCancelable(false);
-
 
             Button dialogFightButton = dialog.findViewById(R.id.fight_diaolog_fight_button);
             dialogFightButton.setEnabled(viewModel.canFightMonster());

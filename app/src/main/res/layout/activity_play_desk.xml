@@ -63,8 +63,7 @@
                         android:layout_weight="1"
                         android:padding="8dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:gravity="right">
+                        android:layout_gravity="center">
 
                         <ImageView
                             android:id="@+id/id_man"
