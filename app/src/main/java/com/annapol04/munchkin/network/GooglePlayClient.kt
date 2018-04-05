@@ -179,7 +179,7 @@ constructor(private val application: Application) : PlayClient() {
             signInSilently()
     }
 
-    override fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_SIGN_IN) {
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             if (result.isSuccess)

@@ -22,7 +22,7 @@ class PlayClientDummy : PlayClient() {
         changeMatchState(PlayClient.MatchState.LOGGED_IN)
     }
 
-    override fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent?) {
 
     }
 

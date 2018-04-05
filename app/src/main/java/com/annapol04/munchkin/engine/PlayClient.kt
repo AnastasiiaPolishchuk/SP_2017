@@ -45,7 +45,7 @@ abstract class PlayClient {
 
     abstract fun login()
 
-    abstract fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent)
+    abstract fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent?)
 
     abstract fun startQuickGame()
 
