@@ -84,6 +84,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 recyclerView.setAdapter(handAdapter);
 
                 Button moveToPlayed = dialog.findViewById(R.id.move_to_played_button);      // test setEnabled = false - die Taste wird grau
+                moveToPlayed.setVisibility(setup == ButtonSetup.DESK ? View.INVISIBLE : View.VISIBLE);
                 moveToPlayed.setEnabled(setup == ButtonSetup.HAND ? true : false);
                 moveToPlayed.setOnClickListener(v2 -> {
                     Card selected = handAdapter.getSelected();
@@ -94,6 +95,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 });
 
                 Button moveToHand = dialog.findViewById(R.id.move_to_hand_button);
+                moveToHand.setVisibility(setup == ButtonSetup.DESK ? View.INVISIBLE : View.VISIBLE);
                 moveToHand.setEnabled(setup == ButtonSetup.PLAYED ? true : false);
                 moveToHand.setOnClickListener(v2 -> {
                     Card selected = handAdapter.getSelected();
@@ -104,7 +106,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 });
 
                 Button moveToPlayDesk = dialog.findViewById(R.id.move_to_desk_buton);
-                moveToPlayDesk.setEnabled(setup == ButtonSetup.DESK ? true : false);
+                moveToPlayDesk.setVisibility(setup == ButtonSetup.DESK ? View.INVISIBLE : View.VISIBLE);
+                moveToPlayDesk.setEnabled(setup == ButtonSetup.HAND ? true : false);
                 moveToPlayDesk.setOnClickListener(v2 -> {
                     Card selected = handAdapter.getSelected();
                     if (selected != null) {
@@ -112,6 +115,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                         handAdapter.resetSelected();
                     }
                 });
+
+                Button dropTheCard = dialog.findViewById(R.id.move_to_passive_card_deck);
+                dropTheCard.setVisibility(setup == ButtonSetup.DESK ? View.INVISIBLE : View.VISIBLE);
 
                 dialog.show();
 

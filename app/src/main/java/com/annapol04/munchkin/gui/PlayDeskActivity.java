@@ -92,7 +92,7 @@ public class PlayDeskActivity extends AppCompatActivity
         // TODO: anschließen !
         ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.time_to_action_bar);
         ObjectAnimator progressAnimator = ObjectAnimator.ofInt(mProgressBar, "progress", 100, 0);
-        progressAnimator.setDuration(30000);
+        progressAnimator.setDuration(300);
         progressAnimator.setInterpolator(new LinearInterpolator());
         progressAnimator.start();
 
@@ -113,10 +113,7 @@ public class PlayDeskActivity extends AppCompatActivity
             }
         });
 
-//        TextView headgear = findViewById(R.id.headgear);
-//        viewModel.getIsHeadgearEquiped().observe(this, equiped -> {
-//            headgear.setTextColor(equiped ? Color.BLACK : Color.GRAY);
-//        });
+//
         ImageView headgear_ = findViewById(R.id.man_head);
         viewModel.getIsHeadgearEquiped().observe(this, equiped -> {
             headgear_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
