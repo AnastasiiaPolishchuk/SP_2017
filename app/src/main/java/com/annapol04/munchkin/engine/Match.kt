@@ -472,7 +472,7 @@ constructor(protected var game: Game,
     companion object {
         protected val AMOUNT_OF_HAND_CARDS = 2
         protected val MAX_AMOUNT_OF_HAND_CARDS = 4
-        protected val WIN_LEVEL = 10
+        protected val WIN_LEVEL = 6
 
         protected val TAG = Match::class.java.simpleName
     }

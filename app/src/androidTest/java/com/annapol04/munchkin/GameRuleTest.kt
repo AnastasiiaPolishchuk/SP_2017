@@ -305,7 +305,7 @@ class GameRuleTest {
         vm.playCard(myself.handCards.value[0])
         vm.playCard(myself.handCards.value[0])
 
-        for (j in 1..9) {
+        for (j in 1..5) {
             vm.displayPlayer(1)
             vm.drawDoorCard()
             vm.startCombat()
