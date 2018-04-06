@@ -1,11 +1,8 @@
 package com.annapol04.munchkin.gui;
 
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,18 +16,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.annapol04.munchkin.R;
@@ -254,8 +250,16 @@ public class PlayDeskActivity extends AppCompatActivity
         viewModel.getPlayerName().observe(this, name -> updateTitle());
         viewModel.getPlayerLevel().observe(this, lvl -> updateTitle());
 
+        ScrollView logScroll = findViewById(R.id.id_log_scroll);
+
         TextView logView = findViewById(R.id.log);
-        viewModel.getLog().observe(this, logView::setText);
+        logView.setMovementMethod(new ScrollingMovementMethod());
+        viewModel.getLog().observe(this, log -> {
+            logView.setText(log);
+            logScroll.scrollBy(0, 20);
+        });
+
+
 
         RecyclerView handOfPlayer = findViewById(R.id.recycler_view_hand_of_player);
         RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
