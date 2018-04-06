@@ -16,7 +16,6 @@ object TreasureCards {
     @JvmField val REALLY_IMPRESSIVE_TITLE: Card = BonusWear(R.string.really_impressive_title, R.string.really_impressive_title_desc, R.drawable.really_impressive_title, 3, BonusWear.Blocking.NOTHING, BonusWear.Size.SMALL)
     @JvmField val SWISS_ARMY_POLEARM: Card = BonusWear(R.string.swiss_army_polearm, R.string.swiss_army_polearm_desc, R.drawable.swiss_army_polearm, 4, BonusWear.Blocking.TWOHANDS, BonusWear.Size.BIG)
     @JvmField val SINGING_DANCING_SWORD: Card = BonusWear(R.string.singing_dancing_sword, R.string.singing_dancing_sword_desc, R.drawable.singing_dancing_sowrd, 2, BonusWear.Blocking.NOTHING, BonusWear.Size.SMALL)
-    @JvmField val SANDALS_OF_PROTECTION: Card = BonusWear(R.string.sandals_protection, R.string.sandals_protection_desc, R.drawable.sandals_of_protection, 0, BonusWear.Blocking.SHOES, BonusWear.Size.SMALL)
     @JvmField val RAT_ON_STICK: Card = BonusWear(R.string.rat, R.string.rat_desc, R.drawable.rat_on_a_stick, 1, BonusWear.Blocking.ONEHAND, BonusWear.Size.SMALL)
     @JvmField val POINTY_HAT_OF_POWER: Card = BonusWear(R.string.pointy_hat, R.string.pointy_hat_desc, R.drawable.pointy_hat_of_power, 3, BonusWear.Blocking.HEAD, BonusWear.Size.SMALL)
     @JvmField val STAFF_OF_NAPALM: Card = BonusWear(R.string.staff_napalm, R.string.staff_napalm_desc, R.drawable.staff_of_napalm, 5, BonusWear.Blocking.ONEHAND, BonusWear.Size.SMALL)
