@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
+import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.GamesActivityResultCodes
 import com.google.android.gms.games.GamesCallbackStatusCodes
@@ -23,12 +24,15 @@ import com.google.android.gms.games.RealTimeMultiplayerClient
 import com.google.android.gms.games.multiplayer.Participant
 import com.google.android.gms.games.multiplayer.realtime.*
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.common.api.ApiException
+
+
 
 @Singleton
 class GooglePlayClient @Inject
 constructor(private val application: Application) : PlayClient() {
     private var activity: Activity? = null
-    private val account: GoogleSignInAccount?
+    private var account: GoogleSignInAccount? = null
     private var mJoinedRoomConfig: RoomConfig? = null
     private var mMyParticipantId: String? = null
     private var mRoom: Room? = null
@@ -57,7 +61,7 @@ constructor(private val application: Application) : PlayClient() {
                 Log.d(TAG, "Room " + room.roomId + " created.")
                 showWaitingRoom(room, MIN_PLAYERS)
             } else {
-                Log.w(TAG, "Error creating room: $code")
+                Log.w(TAG, "Error creating room: ${CommonStatusCodes.getStatusCodeString(code)}")
                 changeMatchState(PlayClient.MatchState.ABORTED)
             }
         }
@@ -161,7 +165,7 @@ constructor(private val application: Application) : PlayClient() {
 
     init {
 
-        account = GoogleSignIn.getLastSignedInAccount(application)
+      //  account = GoogleSignIn.getLastSignedInAccount(application)
     }
 
     override fun setActivity(activity: Activity?) {
@@ -175,16 +179,25 @@ constructor(private val application: Application) : PlayClient() {
     override fun login() {
         if (isLoggedIn)
             loggedIn()
-        else
-            signInSilently()
+        else {
+            account = GoogleSignIn.getLastSignedInAccount(activity!!)
+
+            if (account != null)
+                loggedIn()
+            else
+                signInSilently()
+        }
     }
 
     override fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_SIGN_IN) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+            account = GoogleSignIn.getSignedInAccountFromIntent(data!!)
+                    .getResult(ApiException::class.java)
+
+         /*   val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             if (result.isSuccess)
                 loggedIn()
-
+*/
         } else if (requestCode == RC_WAITING_ROOM) {
 
             // Look for finishing the waiting room from code, for example if a
@@ -219,9 +232,10 @@ constructor(private val application: Application) : PlayClient() {
         val signInClient = GoogleSignIn.getClient(activity!!, buildSignInOptions())
         signInClient.silentSignIn().addOnCompleteListener(activity!!
         ) { task ->
-            if (task.isSuccessful)
+            if (task.isSuccessful) {
+             //   account = GoogleSignIn.getLastSignedInAccount(activity!!)
                 loggedIn()
-            else
+            }else
                 startSignInIntent()
         }
     }

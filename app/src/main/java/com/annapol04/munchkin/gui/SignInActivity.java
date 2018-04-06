@@ -27,6 +27,11 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SignInViewModel.class);
+
+        viewModel.getLoggedIn().observe(this, isLoggedIn -> {
+            if (isLoggedIn != null && isLoggedIn)
+                startMainActivity();
+        });
     }
 
     private void startMainActivity() {
@@ -37,17 +42,12 @@ public class SignInActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        viewModel.getLoggedIn().observe(this, isLoggedIn -> {
-            if (isLoggedIn)
-                startMainActivity();
-        });
-
         viewModel.login(this);
     }
 
     @Override
     protected void onPause() {
-        viewModel.logout();
+    //    viewModel.logout();
 
         super.onPause();
     }

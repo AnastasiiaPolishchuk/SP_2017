@@ -83,6 +83,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
         handCards.value = ArrayList()
         playedCards.value = ArrayList()
         bonus.value = 0
+        scope = Scope.GAME
 
         canPlayBigEquipment.value = true
         canPlayHeadgeer.value = true
