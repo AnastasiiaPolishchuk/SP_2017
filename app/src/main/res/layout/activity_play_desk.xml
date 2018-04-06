@@ -245,7 +245,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed"
                         android:gravity="center"
-                        android:text="Spieltisch"
+                        android:text="PLAYDESK"
                         android:textColor="@color/colorAccent"
                         android:textAllCaps="true"
                         android:textSize="24sp"
