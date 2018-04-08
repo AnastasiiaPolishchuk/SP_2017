@@ -1,12 +1,9 @@
 package com.annapol04.munchkin.data
 
-import android.util.Log
-
 import com.annapol04.munchkin.AppExecutors
 import com.annapol04.munchkin.db.EventDao
 import com.annapol04.munchkin.engine.Decoder
 import com.annapol04.munchkin.engine.Event
-import com.annapol04.munchkin.engine.HashUtil
 import com.annapol04.munchkin.engine.PlayClient
 
 import javax.inject.Singleton
@@ -66,7 +63,7 @@ constructor(private val executors: AppExecutors,
         val received = decoder.decode(data, 0, data.size)
 
         for (event in received) {
-            executors.diskIO().execute { dao.insert(event) }
+            executors.diskIO.execute { dao.insert(event) }
 
             newEvent(event)
         }

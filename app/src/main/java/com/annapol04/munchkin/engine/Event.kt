@@ -6,8 +6,8 @@ import android.arch.persistence.room.PrimaryKey
 
 import java.nio.ByteBuffer
 
-//@Entity(tableName = "events")
-class Event(//@PrimaryKey(autoGenerate = true)
+@Entity(tableName = "events")
+class Event(@PrimaryKey(autoGenerate = true)
             var id: Long = 0,
             val scope: Scope,
             val action: Action,
