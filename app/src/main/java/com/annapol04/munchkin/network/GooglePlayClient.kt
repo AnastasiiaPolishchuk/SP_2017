@@ -278,7 +278,7 @@ constructor(private val application: Application) : PlayClient() {
     override fun sendToAll(message: ByteArray) {
         Games.getRealTimeMultiplayerClient(application, account!!)
                 .sendUnreliableMessageToOthers(message, mRoom!!.roomId)
-                .addOnCompleteListener { task1 ->
+                .addOnCompleteListener { _ ->
                     messageReceived(message)
                     // Keep track of which messages are sent, if desired.
                     //     recordMessageToken(task.getResult());
