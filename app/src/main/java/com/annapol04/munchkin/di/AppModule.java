@@ -48,23 +48,13 @@ public class AppModule {
     @Singleton
     @Provides
     public AppDb provideDb(Application app) {
-        return new AppDb();//Room.databaseBuilder(app, AppDb.class, "munchkin_app.db").build();
+        return Room.databaseBuilder(app, AppDb.class, "munchkin_app.db").build();
     }
 
     @Singleton
     @Provides
     public EventDao provideEventDao(AppDb db) {
-        return new EventDao() {
-            @Override
-            public LiveData<List<Event>> loadEntries() {
-                return null;
-            }
-
-            @Override
-            public void insert(Event event) {
-
-            }
-        };//db.eventDao();
+        return db.eventDao();
     }
 
     @Singleton
