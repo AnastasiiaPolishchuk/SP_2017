@@ -16,7 +16,7 @@ constructor(private val match: Match, private val desk: Desk, private val reposi
         private set
 
     init {
-        this.repository.setNewEventListener(this)
+        repository.newEventListener = this
     }
 
     override fun onNewEvent(event: Event) {

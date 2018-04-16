@@ -6,6 +6,7 @@ import android.util.Pair
 
 import com.annapol04.munchkin.R
 import com.annapol04.munchkin.data.EventRepository
+import com.annapol04.munchkin.util.NonNullLiveData
 import com.annapol04.munchkin.util.NonNullMutableLiveData
 
 import java.util.ArrayList
@@ -13,8 +14,26 @@ import java.util.ArrayList
 class Player(val id: Int, private val desk: Desk, private val eventRepository: EventRepository) : LiveData<Player>() {
 
     private var numberOfAllowedTreasureCardsToDraw = 0
+        set(value) {
+            field = value
+            if (field > 0 && isAllowedToDrawTreasureCard_.value != true)
+                isAllowedToDrawTreasureCard_.value = true
+            else if (field == 0 && isAllowedToDrawTreasureCard_.value != false)
+                isAllowedToDrawTreasureCard_.value = false
+        }
+
     private var numberOfAllowedDoorCardsToDraw = 0
+        set(value) {
+            field = value
+            if (field > 0 && isAllowedToDrawDoorCard_.value != true)
+                isAllowedToDrawDoorCard_.value = true
+            else if (field == 0 && isAllowedToDrawDoorCard_.value != false)
+                isAllowedToDrawDoorCard_.value = false
+        }
+
     private var numberOfAllowedCardsToDrop = 0
+
+
     private val name = MutableLiveData<String>()
     private val level = MutableLiveData<Int>()
     private val fightLevel = MutableLiveData<Int>()
@@ -46,11 +65,13 @@ class Player(val id: Int, private val desk: Desk, private val eventRepository: E
     val playedCards = NonNullMutableLiveData<List<Card>>(emptyList())
     var scope = Scope.GAME
 
-    val isAllowedToDrawTreasureCard: Boolean
-        get() = numberOfAllowedTreasureCardsToDraw > 0
+    private val isAllowedToDrawTreasureCard_ = MutableLiveData<Boolean>()
+    val isAllowedToDrawTreasureCard: LiveData<Boolean>
+        get() = isAllowedToDrawTreasureCard_
 
-    val isAllowedToDrawDoorCard: Boolean
-        get() = numberOfAllowedDoorCardsToDraw > 0
+    private val isAllowedToDrawDoorCard_ = MutableLiveData<Boolean>()
+    val isAllowedToDrawDoorCard: LiveData<Boolean>
+        get() = isAllowedToDrawDoorCard_
 
     val isAllowedToDropCard: Boolean
         get() = numberOfAllowedCardsToDrop > 0

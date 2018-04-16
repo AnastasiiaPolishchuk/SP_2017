@@ -299,11 +299,13 @@ public class PlayDeskActivity extends AppCompatActivity
         Activity activity = this;
 
         ImageButton doorButton = findViewById(R.id.deck_doors);
+        viewModel.getCanDrawDoorCard().observe(this, doorButton::setEnabled);
         doorButton.setOnClickListener(v -> {
             viewModel.drawDoorCard();
         });
 
         ImageButton treasureButton = findViewById(R.id.deck_treasure);
+        viewModel.getCanDrawTreasureCard().observe(this, treasureButton::setEnabled);
         treasureButton.setOnClickListener((v -> {
             viewModel.drawTreasureCard();
         }));

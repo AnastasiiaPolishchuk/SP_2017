@@ -8,7 +8,7 @@ import java.nio.ByteBuffer
 
 @Entity(tableName = "events")
 class Event(@PrimaryKey(autoGenerate = true)
-            val id: Long? = null,
+            var id: Long? = null,
             val scope: Scope,
             val action: Action,
             val messageId: Int,

@@ -202,7 +202,7 @@ constructor(protected var desk: Desk,
     }
 
     fun areAllInitialCardsDrawn(): Boolean {
-        return players_.value.all{ !it.isAllowedToDrawTreasureCard }
+        return players_.value.all{ !it.isAllowedToDrawTreasureCard.value!! }
     }
 
     protected fun emitHandOverToken(scope: Scope, player: Player, displayMessage: Boolean = false) {
@@ -353,7 +353,7 @@ constructor(protected var desk: Desk,
         getPlayer(scope).drawTreasureCard(card)
 
         if (turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW
-        && !current.isAllowedToDrawTreasureCard) {
+        && current.isAllowedToDrawTreasureCard.value != true) {
             current.limitHandCards(max = MAX_AMOUNT_OF_HAND_CARDS)
 
             startCharitingOrFinish();

@@ -2,6 +2,7 @@ package com.annapol04.munchkin.db
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 
@@ -14,4 +15,7 @@ interface EventDao {
 
     @Insert
     fun insert(event: Event)
+
+    @Query("DELETE FROM events")
+    fun deleteAll()
 }

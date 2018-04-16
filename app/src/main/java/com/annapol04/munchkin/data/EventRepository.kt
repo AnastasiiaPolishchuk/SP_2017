@@ -16,20 +16,19 @@ constructor(private val executors: AppExecutors,
             private val client: PlayClient,
             private val decoder: Decoder)
     : PlayClient.OnMessageReceivedListener {
-    var topHash = byteArrayOf(1.toByte(), 2.toByte(), 3.toByte(), 4.toByte(), 5.toByte(),
-            6.toByte(), 7.toByte(), 8.toByte(), 9.toByte(), 10.toByte(), 11.toByte(), 12.toByte(),
-            13.toByte(), 14.toByte(), 15.toByte(), 16.toByte())
-
+    var topHash = (1..16).map { it.toByte() }.toByteArray()
     private var pushTopHash = topHash
 
-    private var listener: OnNewEventListener? = null
+    var newEventListener: OnNewEventListener? = null
 
     interface OnNewEventListener {
         fun onNewEvent(event: Event)
     }
 
     init {
-        this.client.messageReceivedListener = this
+        client.messageReceivedListener = this
+
+        executors.diskIO.execute { dao.deleteAll() }
     }
 
     fun push(events: Collection<Event>) {
@@ -50,23 +49,14 @@ constructor(private val executors: AppExecutors,
         }
     }
 
-    fun setNewEventListener(listener: OnNewEventListener) {
-        this.listener = listener
-    }
-
-    fun newEvent(event: Event) {
-        if (listener != null)
-            listener!!.onNewEvent(event)
-    }
-
     override fun onMessageReceived(data: ByteArray) {
-        val received = decoder.decode(data, 0, data.size)
+        decoder.decode(data, 0, data.size)
+            .forEach {
+                it.id = null
+                executors.diskIO.execute { dao.insert(it) }
 
-        for (event in received) {
-            executors.diskIO.execute { dao.insert(event) }
-
-            newEvent(event)
-        }
+                newEventListener?.onNewEvent(it)
+            }
     }
 
     companion object {
