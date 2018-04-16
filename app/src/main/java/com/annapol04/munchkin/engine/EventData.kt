@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets
 class EventData private constructor(val type: DataType, val data: Any?) {
 
     fun getBytes(): ByteArray {
-        val buffer = ByteBuffer.allocate(size() + 1)
+        val buffer = ByteBuffer.allocate(size())
         buffer.put(type.ordinal.toByte())
 
         when (type) {

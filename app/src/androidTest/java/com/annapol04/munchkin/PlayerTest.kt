@@ -5,18 +5,15 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
-import com.annapol04.munchkin.AppExecutors
 import com.annapol04.munchkin.data.EventRepository
 import com.annapol04.munchkin.db.EventDao
 import com.annapol04.munchkin.engine.*
 import com.annapol04.munchkin.network.PlayClientDummy
-import junit.framework.Assert.assertEquals
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 import java.util.ArrayList
 
 @RunWith(AndroidJUnit4::class)
@@ -25,7 +22,7 @@ class PlayerTest {
     @get:Rule
     val instantExecutor = InstantTaskExecutorRule()
 
-    lateinit var game: Game
+    lateinit var desk: Desk
     lateinit var repository: EventRepository
     lateinit var player: Player
 
@@ -107,8 +104,8 @@ class PlayerTest {
                 DoorCards.POTTED_PLANT
         ))
 
-        game = Game(treasureCards, doorCards)
-        player = Player(0, game, repository)
+        desk = Desk(treasureCards, doorCards)
+        player = Player(0, desk, repository)
     }
 
     @Test

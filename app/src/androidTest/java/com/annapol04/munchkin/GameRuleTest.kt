@@ -33,7 +33,7 @@ class GameRuleTest {
     lateinit var repository: EventRepository
     lateinit var treasureCards: Deck
     lateinit var doorCards: Deck
-    lateinit var game: Game
+    lateinit var desk: Desk
     lateinit var myself: Player
     lateinit var match: Match
     lateinit var executor: Executor
@@ -130,14 +130,14 @@ class GameRuleTest {
                 DoorCards.POTTED_PLANT
         ))
 
-        game = Game(treasureCards, doorCards)
-        myself = Player(Int.MAX_VALUE, game, repository)
+        desk = Desk(treasureCards, doorCards)
+        myself = Player(Int.MAX_VALUE, desk, repository)
         myself.rename("Marvin")
 
-        match = FakeMatch(game, myself, repository)
-        executor = Executor(match, game, repository, MessageBook(app, match))
+        match = FakeMatch(desk, myself, repository)
+        executor = Executor(match, desk, repository, MessageBook(app, match))
 
-        vm = PlayDeskViewModel(app, myself, client, match, game, repository, executor)
+        vm = PlayDeskViewModel(app, myself, client, match, desk, repository, executor)
 
         client.startQuickGame()
     }
@@ -167,7 +167,7 @@ class GameRuleTest {
     fun playerDrawsTreasureCardInRound() {
         vm.drawDoorCard()
 
-        assertEquals(1, game.deskCards.value.size)
+        assertEquals(1, desk.deskCards.value.size)
     }
 
     @Test

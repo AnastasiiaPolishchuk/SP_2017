@@ -2,7 +2,7 @@ package com.annapol04.munchkin.engine
 
 private var idSource = 0
 
-class Action(private val modifier: (Match, Game, Event) -> Unit) {
+class Action(private val modifier: (Match, Desk, Event) -> Unit) {
 
     val id: Int
     private var name: String? = null
@@ -12,8 +12,8 @@ class Action(private val modifier: (Match, Game, Event) -> Unit) {
     }
 
     @Throws(IllegalEngineStateException::class)
-    operator fun invoke(match: Match, game: Game, data: Event) {
-        modifier(match, game, data)
+    operator fun invoke(match: Match, desk: Desk, data: Event) {
+        modifier(match, desk, data)
     }
 
     private fun initialize(name: String): Action {

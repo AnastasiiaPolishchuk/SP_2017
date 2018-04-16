@@ -107,7 +107,7 @@ constructor(private val application: Application) : PlayClient() {
         }
 
         override fun onPeerDeclined(room: Room?, list: List<String>) {
-            // Peer declined invitation, see if game should be canceled
+            // Peer declined invitation, see if desk should be canceled
             if (!mPlaying && shouldCancelGame(room))
                 leaveRoom()
         }
@@ -117,7 +117,7 @@ constructor(private val application: Application) : PlayClient() {
         }
 
         override fun onPeerLeft(room: Room?, list: List<String>) {
-            // Peer left, see if game should be canceled.
+            // Peer left, see if desk should be canceled.
             if (!mPlaying && shouldCancelGame(room))
                 leaveRoom()
         }
@@ -130,26 +130,26 @@ constructor(private val application: Application) : PlayClient() {
         }
 
         override fun onDisconnectedFromRoom(room: Room?) {
-            // This usually happens due to a network error, leave the game
+            // This usually happens due to a network error, leave the desk
             // show error message and return to main screen
             changeMatchState(PlayClient.MatchState.DISCONNECTED)
         }
 
         override fun onPeersConnected(room: Room?, list: List<String>) {
             if (mPlaying) {
-                // add new player to an ongoing game
+                // add new player to an ongoing desk
             } else if (shouldStartGame(room)) {
-                // start game!
+                // start desk!
             }
         }
 
         override fun onPeersDisconnected(room: Room?, list: List<String>) {
             if (mPlaying) {
-                // do game-specific handling of this -- remove player's avatar
+                // do desk-specific handling of this -- remove player's avatar
                 // from the screen, etc. If not enough players are left for
-                // the game to go on, end the game and leave the room.
+                // the desk to go on, end the desk and leave the room.
             } else if (shouldCancelGame(room)) {
-                // cancel the game
+                // cancel the desk
                 changeMatchState(PlayClient.MatchState.ABORTED)
             }
         }
@@ -201,7 +201,7 @@ constructor(private val application: Application) : PlayClient() {
         } else if (requestCode == RC_WAITING_ROOM) {
 
             // Look for finishing the waiting room from code, for example if a
-            // "start game" message is received.  In this case, ignore the result.
+            // "start desk" message is received.  In this case, ignore the result.
             if (mWaitingRoomFinishedFromCode) {
                 return
             }
@@ -210,7 +210,7 @@ constructor(private val application: Application) : PlayClient() {
                 changeMatchState(PlayClient.MatchState.STARTED)
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // Waiting room was dismissed with the back button. The meaning of this
-                // action is up to the game. You may choose to leave the room and cancel the
+                // action is up to the desk. You may choose to leave the room and cancel the
                 // match, or do something else like minimize the waiting room and
                 // continue to connect in the background.
                 leaveRoom()
@@ -254,7 +254,7 @@ constructor(private val application: Application) : PlayClient() {
 
     override fun startQuickGame() {
         if (mRoom != null)
-            throw IllegalStateException("There is already a game started")
+            throw IllegalStateException("There is already a desk started")
 
         // auto-match criteria to invite one random automatch opponent.
         // You can also specify more opponents (up to 3).
@@ -285,7 +285,7 @@ constructor(private val application: Application) : PlayClient() {
                 }
     }
 
-    // returns whether there are enough players to start the game
+    // returns whether there are enough players to start the desk
     internal fun shouldStartGame(room: Room?): Boolean {
         var connectedPlayers = 0
         for (p in room!!.participants) {
@@ -296,12 +296,12 @@ constructor(private val application: Application) : PlayClient() {
         return connectedPlayers >= MIN_PLAYERS
     }
 
-    // Returns whether the room is in a state where the game should be canceled.
+    // Returns whether the room is in a state where the desk should be canceled.
     internal fun shouldCancelGame(room: Room?): Boolean {
-        // TODO: Your game-specific cancellation logic here. For example, you might decide to
-        // cancel the game if enough people have declined the invitation or left the room.
+        // TODO: Your desk-specific cancellation logic here. For example, you might decide to
+        // cancel the desk if enough people have declined the invitation or left the room.
         // You can check a participant's status with Participant.getStatus().
-        // (Also, your UI should have a Cancel button that cancels the game too)
+        // (Also, your UI should have a Cancel button that cancels the desk too)
         return true
     }
 
@@ -321,7 +321,7 @@ constructor(private val application: Application) : PlayClient() {
         private val RC_SIGN_IN = 9001
         private val RC_WAITING_ROOM = 9007
 
-        // at least 2 players required for our game
+        // at least 2 players required for our desk
         internal val MIN_PLAYERS = 1
     }
 }

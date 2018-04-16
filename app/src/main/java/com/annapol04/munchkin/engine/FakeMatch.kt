@@ -5,17 +5,15 @@ import com.annapol04.munchkin.data.EventRepository
 
 import java.util.ArrayList
 import java.util.Arrays
-import java.util.Collections
-import java.util.Random
 
 import javax.inject.Inject
 import javax.inject.Named
 
 class FakeMatch @Inject
-constructor(game: Game,
+constructor(desk: Desk,
             @Named("myself") myself: Player,
             eventRepository: EventRepository)
-    : Match(game, myself, eventRepository) {
+    : Match(desk, myself, eventRepository) {
 
     override fun start(amountOfPlayers: Int) {
         super.start(amountOfPlayers)

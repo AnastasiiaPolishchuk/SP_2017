@@ -8,36 +8,42 @@ import java.nio.ByteBuffer
 
 @Entity(tableName = "events")
 class Event(@PrimaryKey(autoGenerate = true)
-            var id: Long = 0,
+            val id: Long? = null,
             val scope: Scope,
             val action: Action,
             val messageId: Int,
             val data: EventData,
             private var previousHash: ByteArray,
             var hash: ByteArray) {
-    @Ignore
-    constructor(scope: Scope, action: Action, messageId: Int, data: Int) : this(scope, action, messageId, EventData(data)) {
-    }
 
     @Ignore
-    constructor(scope: Scope, action: Action, messageId: Int, data: String) : this(scope, action, messageId, EventData(data)) {
-    }
+    constructor(scope: Scope, action: Action, messageId: Int, data: EventData, prevHash: ByteArray, hash: ByteArray)
+            : this(null, scope, action, messageId, data, prevHash, hash)
+
 
     @Ignore
-    @JvmOverloads constructor(scope: Scope, action: Action, messageId: Int, data: EventData = EventData()) : this(0, scope, action, messageId, data, ByteArray(16), ByteArray(16)) {
-    }
+    constructor(scope: Scope, action: Action, messageId: Int, data: Int)
+            : this(scope, action, messageId, EventData(data))
 
     @Ignore
-    constructor(scope: Scope, action: Action, messageId: Int, previousHash: ByteArray, hash: ByteArray) : this(0, scope, action, messageId, EventData(), previousHash, hash) {
-    }
+    constructor(scope: Scope, action: Action, messageId: Int, data: String)
+            : this(scope, action, messageId, EventData(data))
+
+    @Ignore
+    @JvmOverloads constructor(scope: Scope, action: Action, messageId: Int, data: EventData = EventData())
+            : this(0, scope, action, messageId, data, ByteArray(16), ByteArray(16))
+
+    @Ignore
+    constructor(scope: Scope, action: Action, messageId: Int, previousHash: ByteArray, hash: ByteArray)
+            : this(0, scope, action, messageId, EventData(), previousHash, hash)
 
     @Throws(IllegalEngineStateException::class)
-    fun execute(match: Match, game: Game) {
-        action.invoke(match, game, this)
+    fun execute(match: Match, desk: Desk) {
+        action.invoke(match, desk, this)
     }
 
     fun size(): Int {
-        return 41 + data.size()
+        return 16 + 16 + 1 + 4 + 4 + data.size()
     }
 
     fun getDataType() = data.type

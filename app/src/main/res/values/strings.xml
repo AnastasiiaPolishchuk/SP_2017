@@ -44,8 +44,9 @@
         :</string>
     <string name="monster_fightlevel">Monster:</string>
 
-    <!-- game rules -->
-    <string name="game_rules">"The card game Munchkin is partitioned into four big phases.
+    <!-- desk rules -->
+    <string name="game_rules_title">Game Rules</string>
+    <string name="game_rules">"The card desk Munchkin is partitioned into four big phases.
       Those embody one round of one player.
       1. Kick the Door: Draw one card from the Door deck and turn it face up.
         a. Monster: fight it! (see combat)
@@ -71,10 +72,10 @@
       faced up. On your hand your are allowed to hold 5 cards as a maximum and 6 if you are a dwarf. Only the cards on your table
       are posing a bonus in combat, so be sure to decide what cards you want to place on the table.
 
-      Race: There are two special races in the game: Elf and Dwarf. There can only be one race as a maximum simultaneously active,
+      Race: There are two special races in the desk: Elf and Dwarf. There can only be one race as a maximum simultaneously active,
       shown by placing the race card on the table, faced up. If you are neither Elf nor Dwarf your race is human.
 
-      Winning: The first player reaching player level 10 wins the game.
+      Winning: The first player reaching player level 10 wins the desk.
 
       Equipment: On the hand, every equipment has no function. They only higher your level if they are placed on the table, faced up.
         You are allowed to use an arbitrary number of small items but only one big item as a maximum. (All items that are not big, are
@@ -106,7 +107,7 @@
 
     <!-- Event messages -->
     <string name="ev_empty"> </string>
-    <string name="ev_join_player">player %string% joined the game</string>
+    <string name="ev_join_player">player %string% joined the desk</string>
     <string name="ev_draw_card">%player% draws %card%</string>
     <string name="ev_play_card">%player% plays %card%</string>
     <string name="ev_drop_card">%player% drops %card%</string>

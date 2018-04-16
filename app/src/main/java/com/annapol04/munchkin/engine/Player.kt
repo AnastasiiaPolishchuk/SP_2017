@@ -10,7 +10,7 @@ import com.annapol04.munchkin.util.NonNullMutableLiveData
 
 import java.util.ArrayList
 
-class Player(val id: Int, private val game: Game, private val eventRepository: EventRepository) : LiveData<Player>() {
+class Player(val id: Int, private val desk: Desk, private val eventRepository: EventRepository) : LiveData<Player>() {
 
     private var numberOfAllowedTreasureCardsToDraw = 0
     private var numberOfAllowedDoorCardsToDraw = 0
@@ -206,7 +206,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
 
         numberOfAllowedTreasureCardsToDraw--
 
-        game.drawTreasureCard(card)
+        desk.drawTreasureCard(card)
 
         handCards.value += listOf(card)
     }
@@ -218,7 +218,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
 
         numberOfAllowedDoorCardsToDraw--
 
-        game.drawDoorCard(card)
+        desk.drawDoorCard(card)
     }
 
     @Throws(IllegalEngineStateException::class)
@@ -294,7 +294,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
 
         handCards.value -= listOf(card)
 
-        game.pushAwayTreasureCard(card)
+        desk.pushAwayTreasureCard(card)
     }
 
     fun emitPickupCard(card: Card) {
@@ -368,12 +368,12 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
 
     @Throws(IllegalEngineStateException::class)
     fun runAway() {
-        game.pushAwayMonsterCard()
+        desk.pushAwayMonsterCard()
     }
 
     @Throws(IllegalEngineStateException::class)
     fun fightMonster(): Pair<Monster, Int> {
-        val cards = game.deskCards.value
+        val cards = desk.deskCards.value
 
         test(cards.size > 0,
                 "a monster has to be on the table to fight against it!")
@@ -389,7 +389,7 @@ class Player(val id: Int, private val game: Game, private val eventRepository: E
                 "can not fight against a monster with greater or equal fight level!")
 
         level.setValue(level.value!! + 1)
-        game.pushAwayMonsterCard()
+        desk.pushAwayMonsterCard()
 
         return Pair(monster, 1)
     }

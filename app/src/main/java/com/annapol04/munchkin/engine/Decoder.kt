@@ -112,14 +112,14 @@ constructor() {
                         val stringBuffer = ByteArray(length)
                         System.arraycopy(data, endOfheader, stringBuffer, 0, length)
                         val string = String(stringBuffer, StandardCharsets.UTF_8)
-                        decodedEvents!!.add(Event(0, scope, action, messageId, EventData(string), previousHash, hash))
+                        decodedEvents!!.add(Event(scope, action, messageId, EventData(string), previousHash, hash))
                         endOfheader += length + 1
                     }
                 } else if (dataType === DataType.INTEGER) {
                     if (endOfheader + 4 > end)
                         throw IllegalStateException("Unknown integer format")
                     else
-                        decodedEvents!!.add(Event(0, scope, action, messageId,
+                        decodedEvents!!.add(Event(scope, action, messageId,
                                 EventData(parseInteger(data, endOfheader)), previousHash, hash))
                 } else
                     throw IllegalStateException("Unknown event data type $dataTypeId")

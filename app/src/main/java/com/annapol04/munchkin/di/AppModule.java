@@ -48,7 +48,7 @@ public class AppModule {
     @Singleton
     @Provides
     public AppDb provideDb(Application app) {
-        return Room.databaseBuilder(app, AppDb.class, "munchkin_app.db").build();
+        return Room.databaseBuilder(app, AppDb.class, "app.db").build();
     }
 
     @Singleton

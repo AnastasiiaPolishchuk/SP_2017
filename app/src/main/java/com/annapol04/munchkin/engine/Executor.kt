@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class Executor @Inject
-constructor(private val match: Match, private val game: Game, private val repository: EventRepository, private val messageBook: MessageBook) : EventRepository.OnNewEventListener {
+constructor(private val match: Match, private val desk: Desk, private val repository: EventRepository, private val messageBook: MessageBook) : EventRepository.OnNewEventListener {
     var errorCount = 0
         private set
 
@@ -31,7 +31,7 @@ constructor(private val match: Match, private val game: Game, private val reposi
             logMessage(event, player, anonymized)
 
             try {
-                event.execute(match, game)
+                event.execute(match, desk)
             } catch (exception: IllegalEngineStateException) {
                 match.undoLog()
 

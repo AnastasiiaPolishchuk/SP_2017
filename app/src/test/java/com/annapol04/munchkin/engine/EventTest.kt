@@ -16,10 +16,15 @@ class EventTest {
 
         val b = byteArrayOf(
                 // previous hash
-                0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 2.toByte(), // player 2 scope
-                0.toByte(), 0.toByte(), 0.toByte(), 1.toByte(), // action id JOIN_PLAYER
-                0.toByte(), 0.toByte(), 0.toByte(), 3.toByte(), // message id 3
-                0.toByte())// data type empty
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, // player 2 scope
+                0, 0, 0, 1, // action id JOIN_PLAYER
+                0, 0, 0, 3, // message id 3
+                0)// data type empty
+
+        println("test")
+        println(Arrays.toString(b))
+        println("real")
+        println(Arrays.toString(event.getBytes()))
 
         Assert.assertTrue(Arrays.equals(b, event.getBytes()))
     }
@@ -32,7 +37,8 @@ class EventTest {
         val outputStream = ByteArrayOutputStream()
         outputStream.write(byteArrayOf(
                 // previous hash
-                0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 2.toByte(), // player 2 scope
+                0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(),
+                2.toByte(), // player 2 scope
                 0.toByte(), 0.toByte(), 0.toByte(), 1.toByte(), // action id JOING_PLAYER
                 0.toByte(), 0.toByte(), 0.toByte(), 3.toByte(), // message id 3
                 2.toByte())// data type STRING

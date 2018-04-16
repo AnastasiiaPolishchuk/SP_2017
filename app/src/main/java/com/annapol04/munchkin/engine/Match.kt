@@ -3,7 +3,6 @@ package com.annapol04.munchkin.engine
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.StringRes
-import android.util.Log
 
 import com.annapol04.munchkin.R
 import com.annapol04.munchkin.data.EventRepository
@@ -13,11 +12,10 @@ import com.annapol04.munchkin.util.*
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
-import kotlin.math.E
 
 @Singleton
 open class Match @Inject
-constructor(protected var game: Game,
+constructor(protected var desk: Desk,
             @param:Named("myself") protected val myself: Player,
             protected var eventRepository: EventRepository) {
 
@@ -86,7 +84,7 @@ constructor(protected var game: Game,
         playersRenamed = 0
         log_.value = ""
 
-        game.reset()
+        desk.reset()
         myself.reset()
 
         turnPhase = TurnPhase.IDLE
@@ -151,7 +149,7 @@ constructor(protected var game: Game,
         val player = if (randomNumber == myself.id)
             myself
         else
-            Player(randomNumber, game, eventRepository)
+            Player(randomNumber, desk, eventRepository)
 
         player.allowToDrawTreasureCards(AMOUNT_OF_HAND_CARDS)
 
@@ -174,8 +172,8 @@ constructor(protected var game: Game,
     }
 
     fun canPlayerFightMonster(player: Player): Boolean {
-        return game.deskCards.value.size > 0
-                && player.getFightLevel().value!! > (game.deskCards.value[0] as Monster).level
+        return desk.deskCards.value.size > 0
+                && player.getFightLevel().value!! > (desk.deskCards.value[0] as Monster).level
 
     }
 
@@ -193,7 +191,7 @@ constructor(protected var game: Game,
     }
 
     protected fun drawInitialHandcards() {
-        eventRepository.push(game.getRandomTreasureCards(AMOUNT_OF_HAND_CARDS)
+        eventRepository.push(desk.getRandomTreasureCards(AMOUNT_OF_HAND_CARDS)
                 .map{ Event(current.scope, Action.DRAW_TREASURECARD, 0, it.id) })
 
         emitHandOverToken(current.scope, nextPlayer())
@@ -310,7 +308,7 @@ constructor(protected var game: Game,
     }
 
     fun emitDrawDoorCard(scope: Scope) {
-        val card = game.getRandomDoorCards(1)[0]
+        val card = desk.getRandomDoorCards(1)[0]
 
         emitMessage(scope, R.string.tp_kick_open_the_door)
 
@@ -328,7 +326,7 @@ constructor(protected var game: Game,
 
         test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR,
                 "it's not allowed to draw door cards in \"$turnPhase\" phase!")
-        test(game.deskCards.value.size == 0,
+        test(desk.deskCards.value.size == 0,
                 "you can not draw a door card from an empty deck!")
 
         getPlayer(scope).drawDoorCard(card)
@@ -336,7 +334,7 @@ constructor(protected var game: Game,
 
 
     fun emitDrawTreasureCard(scope: Scope) {
-        val card = game.getRandomTreasureCards(1)[0]
+        val card = desk.getRandomTreasureCards(amount = 1)[0]
 
         eventRepository.push(
                 Event(scope, Action.DRAW_TREASURECARD, R.string.ev_draw_card, card.id)
@@ -349,7 +347,7 @@ constructor(protected var game: Game,
 
         test(turnPhase == TurnPhase.KICK_OPEN_THE_DOOR_AND_DRAW || turnPhase == TurnPhase.IDLE,
                 "it's not allowed to draw treasure cards in \"$turnPhase\" phase!")
-        test(game.deskCards.value.size == 0,
+        test(desk.deskCards.value.size == 0,
                 "you can not draw a treasure card from an empty deck!")
 
         getPlayer(scope).drawTreasureCard(card)
