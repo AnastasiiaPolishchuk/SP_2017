@@ -182,7 +182,10 @@ public class PlayDeskActivity extends AppCompatActivity
         switch (item.getItemId()) {
 
             case R.id.action_info:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle).setTitle("Game Rules").setMessage(R.string.game_rules);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle(R.string.game_rules_title)
+                        .setMessage(R.string.game_rules);
+
                 // Get the layout inflater
                 LayoutInflater inflater = this.getLayoutInflater();
 
