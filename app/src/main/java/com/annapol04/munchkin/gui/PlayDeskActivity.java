@@ -263,15 +263,19 @@ public class PlayDeskActivity extends AppCompatActivity
         });
 
 
+        viewModel.isMyself().observe(this, myself -> {
 
-        RecyclerView handOfPlayer = findViewById(R.id.recycler_view_hand_of_player);
-        RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        handOfPlayer.setLayoutManager(handLayoutManager);
-        CardAdapter handAdapter = new CardAdapter(R.layout.card_item, R.id.card_item, CardAdapter.ButtonSetup.HAND,
-                viewModel.getPlayerHand().getValue(), viewModel);
-        handOfPlayer.setAdapter(handAdapter);
-        viewModel.isMyself().observe(this, handAdapter::setCardVisibillity);
-        viewModel.getPlayerHand().observe(this, handAdapter::setCards);
+            RecyclerView handOfPlayer = findViewById(R.id.recycler_view_hand_of_player);
+            RecyclerView.LayoutManager handLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            handOfPlayer.setLayoutManager(handLayoutManager);
+            CardAdapter handAdapter = new CardAdapter(R.layout.card_item, R.id.card_item, CardAdapter.ButtonSetup.HAND,
+                    viewModel.getPlayerHand().getValue(), viewModel);
+
+            handOfPlayer.setAdapter(handAdapter);
+
+            viewModel.isMyself().observe(this, handAdapter::setCardVisibillity);
+            viewModel.getPlayerHand().observe(this, handAdapter::setCards);
+        });
 
         RecyclerView playedCards = findViewById((R.id.recycler_view_played_cards));
         playedCards.setHasFixedSize(true);
@@ -290,7 +294,10 @@ public class PlayDeskActivity extends AppCompatActivity
         playDesk.setAdapter(deskCardsAdapter);
         viewModel.getDeskCards().observe(this, deskCardsAdapter::setCards);
 
-        addListenerOnButton();
+        viewModel.isMyself().observe(this, myself -> {
+            addListenerOnButton();
+        });
+
 
         mRootView.setVisibility(View.VISIBLE);
     }
