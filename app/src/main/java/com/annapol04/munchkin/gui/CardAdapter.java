@@ -7,13 +7,11 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.engine.Card;
@@ -66,6 +64,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 .inflate(resLayout, parent, false);
         ViewHolder holder = new ViewHolder(view, resId);
 
+
         view.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -110,7 +109,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     }
                 });
 
-                Button moveToPlayDesk = dialog.findViewById(R.id.move_to_desk_buton);
+      /*          Button moveToPlayDesk = dialog.findViewById(R.id.move_to_desk_buton);
                 moveToPlayDesk.setVisibility(setup == ButtonSetup.DESK ? View.INVISIBLE : View.VISIBLE);
                 moveToPlayDesk.setEnabled(setup == ButtonSetup.HAND ? true : false);
                 moveToPlayDesk.setOnClickListener(v2 -> {
@@ -119,7 +118,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                         viewModel.moveToPlayDesk(selected);
                         handAdapter.resetSelected();
                     }
-                });
+                }); */
 
                 Button dropTheCard = dialog.findViewById(R.id.move_to_passive_card_deck);
                 dropTheCard.setVisibility(setup == ButtonSetup.DESK ? View.INVISIBLE : View.VISIBLE);

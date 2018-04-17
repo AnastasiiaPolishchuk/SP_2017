@@ -35,13 +35,13 @@
             android:background="@drawable/style_button"
             android:text="Move to Hand" />
 
-        <Button
-            android:id="@+id/move_to_desk_buton"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/button_margin"
-            android:background="@drawable/style_button"
-            android:text="Move to desk" />
+        <!--  <Button
+              android:id="@+id/move_to_desk_buton"
+              android:layout_width="130dp"
+              android:layout_height="wrap_content"
+              android:layout_margin="@dimen/button_margin"
+              android:background="@drawable/style_button"
+              android:text="Move to desk" /> -->
 
         <Button
             android:id="@+id/move_to_passive_card_deck"
