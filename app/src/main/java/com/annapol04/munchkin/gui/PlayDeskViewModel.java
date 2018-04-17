@@ -51,6 +51,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private NonNullLiveData<Boolean> canFinishRound;
     private LiveData<Boolean> canDrawDoorCard;
     private LiveData<Boolean> canDrawTreasureCard;
+    private LiveData<Boolean> canDropCard;
 
     private LiveData<MatchResult> matchResult;
 
@@ -103,6 +104,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         canPlayTwoHander = Transformations.switchMap(visiblePlayer, Player::getCanPlayTwoHander);
         canDrawDoorCard = Transformations.switchMap(visiblePlayer, Player::isAllowedToDrawDoorCard);
         canDrawTreasureCard = Transformations.switchMap(visiblePlayer, Player::isAllowedToDrawTreasureCard);
+        canDropCard = Transformations.switchMap(visiblePlayer, Player::isAllowedToDropCard);
 
         canStartCombat = match.getCanStartCombat();
         canFinishRound = match.getCanFinishRound();
@@ -184,6 +186,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     public LiveData<Boolean> getCanDrawTreasureCard() {
         return canDrawTreasureCard;
+    }
+
+    public LiveData<Boolean> getCanDropCard() {
+        return canDropCard;
     }
 
     public NonNullLiveData<Boolean> getCanStartCombat() {

@@ -1,6 +1,8 @@
 package com.annapol04.munchkin.gui;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.IdRes;
@@ -88,8 +90,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
                 recyclerView.setAdapter(handAdapter);
 
-                Button moveToPlayed = dialog.findViewById(R.id.move_to_played_button);      // test setEnabled = false - die Taste wird grau
-                moveToPlayed.setVisibility(setup == ButtonSetup.DESK ? View.INVISIBLE : View.VISIBLE);
+                Button moveToPlayed = dialog.findViewById(R.id.move_to_played_button);
+                moveToPlayed.setVisibility(setup == ButtonSetup.HAND ? View.VISIBLE : View.INVISIBLE);
                 moveToPlayed.setEnabled(setup == ButtonSetup.HAND ? true : false);
                 moveToPlayed.setOnClickListener(v2 -> {
                     Card selected = handAdapter.getSelected();
@@ -98,7 +100,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                         handAdapter.resetSelected();
                     }
                 });
-
+/*
                 Button moveToHand = dialog.findViewById(R.id.move_to_hand_button);
                 moveToHand.setVisibility(setup == ButtonSetup.DESK ? View.INVISIBLE : View.VISIBLE);
                 moveToHand.setEnabled(setup == ButtonSetup.PLAYED ? true : false);
@@ -120,9 +122,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                         handAdapter.resetSelected();
                     }
                 });
-
+*/
                 Button dropTheCard = dialog.findViewById(R.id.move_to_passive_card_deck);
-                dropTheCard.setVisibility(setup == ButtonSetup.DESK ? View.INVISIBLE : View.VISIBLE);
+                dropTheCard.setVisibility(setup == ButtonSetup.HAND ? View.VISIBLE : View.INVISIBLE);
+                viewModel.getCanDropCard().observeForever(dropTheCard::setEnabled);
 
                 dialog.show();
 

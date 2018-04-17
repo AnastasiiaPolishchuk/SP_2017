@@ -80,7 +80,7 @@ public class PlayDeskActivity extends AppCompatActivity
         mNavigationView.setNavigationItemSelectedListener(this);
         View header = mNavigationView.getHeaderView(0);
         TextView name = header.findViewById(R.id.name_of_player_nav_header);
-        name.setText(viewModel.getMyName().getValue() + ":  " + viewModel.getMyLevel().getValue());
+        name.setText(viewModel.getMyName().getValue());
 
   /*      // ProgressBar to show time for an action
         // TODO: anschließen !

@@ -361,7 +361,7 @@ constructor(protected var desk: Desk,
     }
 
     private fun startCharitingOrFinish() {
-        if (current.isAllowedToDropCard) {
+        if (current.isAllowedToDropCard.value!!) {
             if (current == myself) {
                 if (myself.handCards.value.size > MAX_AMOUNT_OF_HAND_CARDS)
                     emitMessage(current.scope, R.string.tp_charity)
@@ -459,7 +459,7 @@ constructor(protected var desk: Desk,
 
         getPlayer(scope).dropCard(card)
 
-        if (turnPhase == TurnPhase.CHARITY && !current.isAllowedToDropCard)
+        if (turnPhase == TurnPhase.CHARITY && !current.isAllowedToDropCard.value!!)
             turnPhase = TurnPhase.FINISHED
     }
 

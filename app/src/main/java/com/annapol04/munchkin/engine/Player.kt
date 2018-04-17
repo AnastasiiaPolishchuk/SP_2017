@@ -16,22 +16,20 @@ class Player(val id: Int, private val desk: Desk, private val eventRepository: E
     private var numberOfAllowedTreasureCardsToDraw = 0
         set(value) {
             field = value
-            if (field > 0 && isAllowedToDrawTreasureCard_.value != true)
-                isAllowedToDrawTreasureCard_.value = true
-            else if (field == 0 && isAllowedToDrawTreasureCard_.value != false)
-                isAllowedToDrawTreasureCard_.value = false
+            isAllowedToDrawTreasureCard_.value = field > 0
         }
 
     private var numberOfAllowedDoorCardsToDraw = 0
         set(value) {
             field = value
-            if (field > 0 && isAllowedToDrawDoorCard_.value != true)
-                isAllowedToDrawDoorCard_.value = true
-            else if (field == 0 && isAllowedToDrawDoorCard_.value != false)
-                isAllowedToDrawDoorCard_.value = false
+            isAllowedToDrawDoorCard_.value = field > 0
         }
 
     private var numberOfAllowedCardsToDrop = 0
+        set(value) {
+            field = value
+            isAllowedToDropCard_.value = field > 0
+        }
 
 
     private val name = MutableLiveData<String>()
@@ -73,8 +71,9 @@ class Player(val id: Int, private val desk: Desk, private val eventRepository: E
     val isAllowedToDrawDoorCard: LiveData<Boolean>
         get() = isAllowedToDrawDoorCard_
 
-    val isAllowedToDropCard: Boolean
-        get() = numberOfAllowedCardsToDrop > 0
+    private val isAllowedToDropCard_ = MutableLiveData<Boolean>()
+    val isAllowedToDropCard: LiveData<Boolean>
+        get() = isAllowedToDropCard_
 
     val areShoesEquiped: LiveData<Boolean>
         get() = areShoesquiped
