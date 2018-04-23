@@ -20,7 +20,7 @@ constructor(private val match: Match, private val desk: Desk, private val reposi
     }
 
     override fun onNewEvent(event: Event) {
-        val player = if (event.scope == Scope.GAME) null else match.getPlayer(event.scope)
+        val player = if (event.scope == Scope.GAME || event.action == Action.ASSIGN_PLAYER_NUMBER) null else match.getPlayer(event.scope)
         val anonymized = isAnonymized(player, event.action)
 
         if (Arrays.equals(repository.topHash, event.getPreviousHash())) {

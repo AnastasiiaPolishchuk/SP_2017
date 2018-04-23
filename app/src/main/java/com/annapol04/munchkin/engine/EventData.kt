@@ -29,7 +29,7 @@ class EventData private constructor(val type: DataType, val data: Any?) {
 
     fun size(): Int {
         when (type) {
-            DataType.STRING -> return getString().length + 1 + 1
+            DataType.STRING -> return getString().toByteArray().size + 1 + 1
             DataType.INTEGER -> return 4 + 1
             DataType.EMPTY -> return 1
         }

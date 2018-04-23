@@ -21,11 +21,6 @@ class EventTest {
                 0, 0, 0, 3, // message id 3
                 0)// data type empty
 
-        println("test")
-        println(Arrays.toString(b))
-        println("real")
-        println(Arrays.toString(event.getBytes()))
-
         Assert.assertTrue(Arrays.equals(b, event.getBytes()))
     }
 
@@ -44,6 +39,27 @@ class EventTest {
                 2.toByte())// data type STRING
         )
         outputStream.write("Hello World!".toByteArray(StandardCharsets.UTF_8))
+        outputStream.write(byteArrayOf(0.toByte()))
+        val b = outputStream.toByteArray()
+
+        Assert.assertTrue(Arrays.equals(b, event.getBytes()))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun serializeEventWithStringNotMatchingUtf8() {
+        val event = Event(Scope.PLAYER2, Action.JOIN_PLAYER, 3, "Christian Mösl")
+
+        val outputStream = ByteArrayOutputStream()
+        outputStream.write(byteArrayOf(
+                // previous hash
+                0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(), 0.toByte(),
+                2.toByte(), // player 2 scope
+                0.toByte(), 0.toByte(), 0.toByte(), 1.toByte(), // action id JOING_PLAYER
+                0.toByte(), 0.toByte(), 0.toByte(), 3.toByte(), // message id 3
+                2.toByte())// data type STRING
+        )
+        outputStream.write("Christian Mösl".toByteArray(StandardCharsets.UTF_8))
         outputStream.write(byteArrayOf(0.toByte()))
         val b = outputStream.toByteArray()
 
