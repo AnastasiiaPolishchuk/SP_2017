@@ -86,6 +86,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 if (handAdapter == null)
                     handAdapter = new SelectableCardAdapter(R.layout.card_item_zoom, R.id.card_item_zoom, setup, cards, viewModel);
 
+                handAdapter.setCardVisibillity(visible);
                 handAdapter.resetSelected();
 
                 recyclerView.setAdapter(handAdapter);
