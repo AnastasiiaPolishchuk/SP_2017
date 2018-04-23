@@ -1,5 +1,8 @@
 package com.annapol04.munchkin.gui;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,6 +26,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -54,6 +60,7 @@ public class PlayDeskActivity extends AppCompatActivity
     private View mRootView;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
+    private ObjectAnimator animator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +106,24 @@ public class PlayDeskActivity extends AppCompatActivity
             if (result != null) {
                 final Dialog dialog = new Dialog(activity);
                 dialog.setContentView(R.layout.finish);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                TextView finischText = dialog.findViewById(R.id.finish_text);
+                ObjectAnimator.ofObject(
+                        finischText, // Object to animating
+                        "textColor", // Property to animate
+                        new ArgbEvaluator(), // Interpolation function
+                        Color.DKGRAY, // Start color
+                        Color.RED // End color
+                ).setDuration(5000).start();
+
+                ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 1.2f, 1f, 1.2f,
+                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                scaleAnimation.setInterpolator(new LinearInterpolator());
+                scaleAnimation.setDuration(2800);
+
+                finischText.startAnimation(scaleAnimation);
+
                 Button okButton = dialog.findViewById(R.id.finish_ok);
                 okButton.setOnClickListener(v -> {
                     activity.finish();

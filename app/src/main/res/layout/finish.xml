@@ -2,12 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/finish_layout">
+    android:id="@+id/finish_layout"
+    android:background="@drawable/dialog_bg">
 
     <TextView
+        android:id="@+id/finish_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="You WON !"
+        android:textColor="#3E2723"
         android:textSize="80sp"
         android:textStyle="bold"
         android:layout_gravity="center"
@@ -22,6 +25,10 @@
         android:text="OK"
         android:layout_gravity="center"
         android:padding="16dp"
+        android:elevation="6dp"
+        android:stateListAnimator="@null"
+        android:translationZ="4dp"
+        android:background="@drawable/style_button"
         />
 
 </LinearLayout>
