@@ -154,9 +154,9 @@ class GameRuleTest {
 
     @Test
     fun playersHaveDrawnInitialCards() {
-        assertFalse(match.players.value[0].isAllowedToDrawTreasureCard)
-        assertFalse(match.players.value[1].isAllowedToDrawTreasureCard)
-        assertFalse(match.players.value[2].isAllowedToDrawTreasureCard)
+        assertFalse(match.players.value[0].isAllowedToDrawTreasureCard.value!!)
+        assertFalse(match.players.value[1].isAllowedToDrawTreasureCard.value!!)
+        assertFalse(match.players.value[2].isAllowedToDrawTreasureCard.value!!)
 
         assertEquals(2, match.players.value[0].handCards.value.size)
         assertEquals(2, match.players.value[1].handCards.value.size)
@@ -249,19 +249,19 @@ class GameRuleTest {
 
     @Test
     fun playerGetsTreasuresWhenBeatingMonster() {
-        assertFalse(match.players.value[0].isAllowedToDrawTreasureCard)
+        assertFalse(match.players.value[0].isAllowedToDrawTreasureCard.value!!)
 
         vm.playCard(myself.handCards.value[0])
         vm.drawDoorCard()
         vm.startCombat()
         vm.fightMonster()
 
-        assertTrue(match.players.value[0].isAllowedToDrawTreasureCard)
+        assertTrue(match.players.value[0].isAllowedToDrawTreasureCard.value!!)
     }
 
     @Test
     fun playerHasToDropCards() {
-        assertFalse(match.players.value[0].isAllowedToDropCard)
+        assertFalse(match.players.value[0].isAllowedToDropCard.value!!)
 
         vm.playCard(myself.handCards.value[0])
 
@@ -273,7 +273,7 @@ class GameRuleTest {
             vm.drawTreasureCard()
             vm.finishRound()
 
-            assertFalse(match.players.value[0].isAllowedToDropCard)
+            assertFalse(match.players.value[0].isAllowedToDropCard.value!!)
 
             for (i in 2..3) {
                 vm.displayPlayer(i)
@@ -290,12 +290,12 @@ class GameRuleTest {
         vm.fightMonster()
         vm.drawTreasureCard()
 
-        assertTrue(match.players.value[0].isAllowedToDropCard)
+        assertTrue(match.players.value[0].isAllowedToDropCard.value!!)
         assertFalse(match.canFinishRound.value)
 
         vm.dropCard(match.players.value[0].handCards.value[0])
 
-        assertFalse(match.players.value[0].isAllowedToDropCard)
+        assertFalse(match.players.value[0].isAllowedToDropCard.value!!)
         assertTrue(match.canFinishRound.value)
     }
 
@@ -316,7 +316,7 @@ class GameRuleTest {
 
             vm.drawTreasureCard()
 
-            if (match.players.value[0].isAllowedToDropCard)
+            if (match.players.value[0].isAllowedToDropCard.value!!)
                 vm.dropCard(match.players.value[0].handCards.value[0])
 
             vm.finishRound()
@@ -330,7 +330,14 @@ class GameRuleTest {
             }
         }
 
-        assertEquals(10, match.players.value[0].getLevel().value)
+        assertEquals(6, match.players.value[0].getLevel().value)
         assertNotNull(match.result)
+    }
+
+    @Test
+    fun playerCantSeeOtherPlayersCards() {
+        vm.displayPlayer(2)
+
+        assertFalse(vm.canFinishRound.value)
     }
 }

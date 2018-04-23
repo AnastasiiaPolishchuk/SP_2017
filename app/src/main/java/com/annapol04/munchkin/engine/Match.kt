@@ -151,6 +151,7 @@ constructor(protected var desk: Desk,
         else
             Player(randomNumber, desk, eventRepository)
 
+        player.reset()
         player.allowToDrawTreasureCards(AMOUNT_OF_HAND_CARDS)
 
         players_.value += player

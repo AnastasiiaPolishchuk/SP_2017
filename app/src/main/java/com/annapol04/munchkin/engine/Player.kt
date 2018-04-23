@@ -96,6 +96,10 @@ class Player(val id: Int, private val desk: Desk, private val eventRepository: E
         numberOfAllowedDoorCardsToDraw = 0
         numberOfAllowedCardsToDrop = 0
 
+        isAllowedToDrawDoorCard_.value = false
+        isAllowedToDrawTreasureCard_.value = false
+        isAllowedToDropCard_.value = false
+
         level.value = 1
         fightLevel.value = 1
         race.value = PlayerRace.HUMAN

@@ -7,6 +7,10 @@ import com.annapol04.munchkin.engine.Event
 import java.util.ArrayList
 
 class FakeEventDao: EventDao {
+    override fun deleteAll() {
+        events.clear()
+    }
+
     val events: MutableList<Event> = ArrayList()
     val d = MutableLiveData<List<Event>>()
 

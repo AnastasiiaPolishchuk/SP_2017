@@ -27,6 +27,10 @@ class PlayerTest {
     lateinit var player: Player
 
     internal inner class Events : EventDao {
+        override fun deleteAll() {
+            events.clear()
+        }
+
         val events: MutableList<Event> = ArrayList()
         val d = MutableLiveData<List<Event>>()
 
