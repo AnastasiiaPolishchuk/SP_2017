@@ -32,16 +32,32 @@ import com.google.android.gms.common.api.ApiException
 class GooglePlayClient @Inject
 constructor(private val application: Application) : PlayClient() {
     private var activity: Activity? = null
-    private var account: GoogleSignInAccount? = null
     private var mJoinedRoomConfig: RoomConfig? = null
     private var mMyParticipantId: String? = null
     private var mRoom: Room? = null
+
+    private var account: GoogleSignInAccount? = null
+        set(value) {
+            field = value
+
+            when (matchState) {
+                in arrayOf(MatchState.ABORTED, MatchState.LOGGED_OUT, MatchState.DISCONNECTED) -> {
+                    if (value != null)
+                        matchState = MatchState.LOGGED_IN
+                }
+                in arrayOf(MatchState.LOGGED_IN, MatchState.STARTED, MatchState.MATCHMAKING) -> {
+                    if (value == null)
+                        matchState = MatchState.LOGGED_OUT
+                }
+                else -> Error("Case not implemented")
+            }
+        }
 
     override val isLoggedIn: Boolean
         get() = account != null
 
     override val amountOfPlayers: Int
-        get() = mRoom!!.participantIds.size
+        get() = if (mRoom == null) 0 else mRoom!!.participantIds.size
 
     private val mMessageReceivedHandler = { realTimeMessage: RealTimeMessage ->
         messageReceived(realTimeMessage.getMessageData())
@@ -62,7 +78,7 @@ constructor(private val application: Application) : PlayClient() {
                 showWaitingRoom(room, MIN_PLAYERS)
             } else {
                 Log.w(TAG, "Error creating room: ${CommonStatusCodes.getStatusCodeString(code)}")
-                changeMatchState(PlayClient.MatchState.ABORTED)
+                matchState = MatchState.ABORTED
             }
         }
 
@@ -72,7 +88,7 @@ constructor(private val application: Application) : PlayClient() {
                 Log.d(TAG, "Room " + room.roomId + " joined.")
             } else {
                 Log.w(TAG, "Error joining room: $code")
-                changeMatchState(PlayClient.MatchState.ABORTED)
+                matchState = MatchState.ABORTED
             }
         }
 
@@ -85,7 +101,7 @@ constructor(private val application: Application) : PlayClient() {
                 Log.d(TAG, "Room " + room.roomId + " connected.")
             } else {
                 Log.w(TAG, "Error connecting to room: $code")
-                changeMatchState(PlayClient.MatchState.ABORTED)
+                matchState = MatchState.ABORTED
             }
         }
     }
@@ -132,7 +148,7 @@ constructor(private val application: Application) : PlayClient() {
         override fun onDisconnectedFromRoom(room: Room?) {
             // This usually happens due to a network error, leave the desk
             // show error message and return to main screen
-            changeMatchState(PlayClient.MatchState.DISCONNECTED)
+            matchState = MatchState.DISCONNECTED
         }
 
         override fun onPeersConnected(room: Room?, list: List<String>) {
@@ -150,7 +166,7 @@ constructor(private val application: Application) : PlayClient() {
                 // the desk to go on, end the desk and leave the room.
             } else if (shouldCancelGame(room)) {
                 // cancel the desk
-                changeMatchState(PlayClient.MatchState.ABORTED)
+                matchState = MatchState.ABORTED
             }
         }
 
@@ -163,41 +179,29 @@ constructor(private val application: Application) : PlayClient() {
         }
     }
 
-    init {
-
-      //  account = GoogleSignIn.getLastSignedInAccount(application)
-    }
-
     override fun setActivity(activity: Activity?) {
         this.activity = activity
     }
 
-    private fun loggedIn() {
-        changeMatchState(PlayClient.MatchState.LOGGED_IN)
-    }
-
     override fun login() {
-        if (isLoggedIn)
-            loggedIn()
-        else {
-            account = GoogleSignIn.getLastSignedInAccount(activity!!)
+        account = GoogleSignIn.getLastSignedInAccount(activity!!)
 
-            if (account != null)
-                loggedIn()
-            else
-                signInSilently()
-        }
+        if (!isLoggedIn)
+            signInSilently()
     }
 
     override fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_SIGN_IN) {
-            account = GoogleSignIn.getSignedInAccountFromIntent(data!!)
-                    .getResult(ApiException::class.java)
+            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
 
-         /*   val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             if (result.isSuccess)
-                loggedIn()
-*/
+                account = result.signInAccount
+            else {
+                Log.e(TAG, "Failed to log into google play games services")
+                Log.i(TAG, "Retry sign in procedure");
+
+                startSignInIntent()
+            }
         } else if (requestCode == RC_WAITING_ROOM) {
 
             // Look for finishing the waiting room from code, for example if a
@@ -207,17 +211,17 @@ constructor(private val application: Application) : PlayClient() {
             }
 
             if (resultCode == Activity.RESULT_OK) {
-                changeMatchState(PlayClient.MatchState.STARTED)
+                matchState = MatchState.STARTED
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // Waiting room was dismissed with the back button. The meaning of this
                 // action is up to the desk. You may choose to leave the room and cancel the
                 // match, or do something else like minimize the waiting room and
                 // continue to connect in the background.
                 leaveRoom()
-                changeMatchState(PlayClient.MatchState.ABORTED)
+                matchState = MatchState.ABORTED
             } else if (resultCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                 // player wants to leave the room.
-                changeMatchState(PlayClient.MatchState.ABORTED)
+                matchState = MatchState.ABORTED
             }
         }
     }
@@ -233,23 +237,26 @@ constructor(private val application: Application) : PlayClient() {
         signInClient.silentSignIn().addOnCompleteListener(activity!!
         ) { task ->
             if (task.isSuccessful) {
-             //   account = GoogleSignIn.getLastSignedInAccount(activity!!)
-                loggedIn()
+                account = GoogleSignIn.getLastSignedInAccount(activity!!)
             }else
                 startSignInIntent()
         }
     }
 
     private fun startSignInIntent() {
-        val signInClient = GoogleSignIn.getClient(activity!!, buildSignInOptions())
-        val intent = signInClient.signInIntent
-        activity!!.startActivityForResult(intent, RC_SIGN_IN)
+        if (activity != null) {
+            val signInClient = GoogleSignIn.getClient(activity!!, buildSignInOptions())
+            val intent = signInClient.signInIntent
+            activity!!.startActivityForResult(intent, RC_SIGN_IN)
+        }
     }
 
     private fun showWaitingRoom(room: Room?, maxPlayersToStartGame: Int) {
+        matchState = MatchState.MATCHMAKING
+
         Games.getRealTimeMultiplayerClient(application, account!!)
                 .getWaitingRoomIntent(room!!, maxPlayersToStartGame)
-                .addOnSuccessListener { intent -> activity!!.startActivityForResult(intent, RC_WAITING_ROOM) }
+                .addOnSuccessListener { intent -> activity?.startActivityForResult(intent, RC_WAITING_ROOM) }
     }
 
     override fun startQuickGame() {

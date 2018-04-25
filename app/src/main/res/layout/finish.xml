@@ -9,7 +9,7 @@
         android:id="@+id/finish_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You WON !"
+        android:text="@string/won"
         android:textColor="#3E2723"
         android:textSize="80sp"
         android:textStyle="bold"

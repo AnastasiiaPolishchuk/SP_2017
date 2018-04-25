@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.data.EventRepository;
 import com.annapol04.munchkin.engine.Card;
 import com.annapol04.munchkin.engine.Executor;
@@ -26,6 +28,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.OnMatchStateChangedListener {
+    public interface OnAbortedListener {
+        void onAborted();
+    }
+
     private static final String TAG = PlayDeskViewModel.class.getName();
 
     private LiveData<String> playerName;
@@ -66,6 +72,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private Match match;
     private EventRepository eventRepository;
     private Executor executor;
+
+    private OnAbortedListener abortedListener = null;
 
     @Inject
     public PlayDeskViewModel(@NonNull Application application,
@@ -121,6 +129,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     @Override
     protected void onCleared() {
         client.setMatchStateChangedListener(null);
+        this.abortedListener = null;
         super.onCleared();
     }
 
@@ -224,7 +233,6 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         return myself.getLevel();
     }
 
-
     public boolean canFightMonster() {
         return match.canPlayerFightMonster(visiblePlayer.getValue());
     }
@@ -233,8 +241,9 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     //    throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void resume(Activity fromActivity) {
+    public void resume(Activity fromActivity, OnAbortedListener abortedListener) {
         client.setActivity(fromActivity);
+        this.abortedListener = abortedListener;
 
         if (!client.isLoggedIn())
             client.login();
@@ -268,6 +277,9 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
             case ABORTED:
                 isStarted.setValue(false);
                 isStartingAlready = false;
+
+                if (abortedListener != null)
+                    abortedListener.onAborted();
                 break;
             case DISCONNECTED:
                 isStarted.setValue(false);

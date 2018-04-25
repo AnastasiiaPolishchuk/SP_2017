@@ -17,9 +17,7 @@ class PlayClientDummy : PlayClient() {
     }
 
     override fun login() {
-        isLoggedIn = true
-
-        changeMatchState(PlayClient.MatchState.LOGGED_IN)
+        matchState = MatchState.LOGGED_IN
     }
 
     override fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -27,7 +25,7 @@ class PlayClientDummy : PlayClient() {
     }
 
     override fun startQuickGame() {
-        changeMatchState(PlayClient.MatchState.STARTED)
+        matchState = MatchState.STARTED
     }
 
     override fun sendToAll(message: ByteArray) {

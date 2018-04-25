@@ -3,6 +3,7 @@ package com.annapol04.munchkin.engine
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.StringRes
+import android.util.Log
 
 import com.annapol04.munchkin.R
 import com.annapol04.munchkin.data.EventRepository
@@ -43,6 +44,7 @@ constructor(protected var desk: Desk,
             currentPlayer_.value = field
         }
 
+    protected var joined = emptyList<Player>()
     protected var first = myself
     protected var turnPhase = TurnPhase.IDLE
         set(value) {
@@ -80,12 +82,15 @@ constructor(protected var desk: Desk,
     }
 
     protected fun reset() {
+        joined = emptyList()
         players_.value = emptyList()
+        Log.e(TAG, "Cleared players")
         playersRenamed = 0
         log_.value = ""
 
         desk.reset()
         myself.reset()
+        eventRepository.reset()
 
         turnPhase = TurnPhase.IDLE
         state = State.JOINING
@@ -124,11 +129,11 @@ constructor(protected var desk: Desk,
 
         this.amountOfPlayers = amountOfPlayers
 
-        eventRepository.push(Event(Scope.GAME, Action.JOIN_PLAYER, 0, myself.id))
+        eventRepository.push(Event(Scope.GAME, Action.JOIN_PLAYER, 0, myself.id), ignoreHash = true)
     }
 
     protected fun evaluateHost(): Player {
-        return players_.value.maxBy { it.id } ?: myself
+        return joined.maxBy { it.id } ?: myself
     }
 
     protected fun specifyPlayerNumbers() {
@@ -139,10 +144,15 @@ constructor(protected var desk: Desk,
 
         var nr = 2
 
-        for (player in players_.value)
-            if (player != myself)
+        for (player in joined)
+            if (player != myself) {
+                player.scope = Scope.fromId(nr)
+
                 eventRepository.push(
                         Event(Scope.fromId(nr++), Action.ASSIGN_PLAYER_NUMBER, 0, player.id))
+            }
+
+        players_.value = joined.sortedBy { it.scope.ordinal }
     }
 
     fun joinPlayer(randomNumber: Int) {
@@ -154,9 +164,9 @@ constructor(protected var desk: Desk,
         player.reset()
         player.allowToDrawTreasureCards(AMOUNT_OF_HAND_CARDS)
 
-        players_.value += player
+        joined += player
 
-        if (players_.value.size == amountOfPlayers) {
+        if (joined.size == amountOfPlayers) {
             state = State.NAMING
 
             current = evaluateHost()
@@ -203,7 +213,7 @@ constructor(protected var desk: Desk,
     }
 
     fun areAllInitialCardsDrawn(): Boolean {
-        return players_.value.all{ !it.isAllowedToDrawTreasureCard.value!! }
+        return joined.all{ !it.isAllowedToDrawTreasureCard.value!! }
     }
 
     protected fun emitHandOverToken(scope: Scope, player: Player, displayMessage: Boolean = false) {
@@ -263,17 +273,11 @@ constructor(protected var desk: Desk,
     }
 
     fun assignPlayerNumber(playerNr: Int, randomNumber: Int) {
-        var allScopesAssigned = true
+        joined.find { it.id == randomNumber }
+                ?.scope = Scope.fromId(playerNr)
 
-        for (player in players_.value) {
-            if (player.id == randomNumber)
-                player.scope = Scope.fromId(playerNr)
-            if (player.scope === Scope.GAME)
-                allScopesAssigned = false
-        }
-
-        if (allScopesAssigned)
-            players_.value = players_.value.sortedBy{ it.scope.ordinal }
+        if (joined.all { it.scope != Scope.GAME })
+            players_.value = joined.sortedBy { it.scope.ordinal }
     }
 
     fun namePlayer(playerNr: Int, name: String) {
@@ -401,7 +405,7 @@ constructor(protected var desk: Desk,
         }
 
         if (player.getLevel().value!! >= WIN_LEVEL) {
-            result_.value = MatchResult(name = player.getName().value!!, level = player.getLevel().value!!)
+            result_.value = MatchFinishedResult(name = player.getName().value!!, level = player.getLevel().value!!)
         } else {
             getPlayer(scope).allowToDrawTreasureCards(cardsToDraw)
 
@@ -471,7 +475,7 @@ constructor(protected var desk: Desk,
     companion object {
         protected val AMOUNT_OF_HAND_CARDS = 2
         protected val MAX_AMOUNT_OF_HAND_CARDS = 4
-        protected val WIN_LEVEL = 2
+        protected val WIN_LEVEL = 6
 
         protected val TAG = Match::class.java.simpleName
     }

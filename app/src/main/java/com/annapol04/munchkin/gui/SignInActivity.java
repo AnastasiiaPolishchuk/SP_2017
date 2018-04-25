@@ -35,6 +35,8 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void startMainActivity() {
+        viewModel.pause();
+
         startActivity(new Intent(this, MainActivity.class));
     }
 
@@ -42,14 +44,14 @@ public class SignInActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        viewModel.login(this);
+        viewModel.resume(this);
     }
 
     @Override
     protected void onPause() {
-    //    viewModel.logout();
-
         super.onPause();
+
+        viewModel.pause();
     }
 
     @Override

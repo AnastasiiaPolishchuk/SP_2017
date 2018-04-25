@@ -93,7 +93,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
                 Button moveToPlayed = dialog.findViewById(R.id.move_to_played_button);
                 moveToPlayed.setVisibility(setup == ButtonSetup.HAND ? View.VISIBLE : View.INVISIBLE);
-                moveToPlayed.setEnabled(setup == ButtonSetup.HAND ? true : false);
+                moveToPlayed.setEnabled(setup == ButtonSetup.HAND && viewModel.isMyself().getValue() == true);
                 moveToPlayed.setOnClickListener(v2 -> {
                     Card selected = handAdapter.getSelected();
                     if (selected != null) {
@@ -126,7 +126,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 */
                 Button dropTheCard = dialog.findViewById(R.id.move_to_passive_card_deck);
                 dropTheCard.setVisibility(setup == ButtonSetup.HAND ? View.VISIBLE : View.INVISIBLE);
-                viewModel.getCanDropCard().observeForever(dropTheCard::setEnabled);
+                viewModel.getCanDropCard().observeForever(canDropCard -> {
+                    dropTheCard.setEnabled(canDropCard == true && viewModel.isMyself().getValue() == true);
+                });
 
                 dialog.show();
 

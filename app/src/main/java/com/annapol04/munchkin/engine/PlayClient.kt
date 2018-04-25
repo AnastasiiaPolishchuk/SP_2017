@@ -3,13 +3,26 @@ package com.annapol04.munchkin.engine
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import com.annapol04.munchkin.network.GooglePlayClient
 
 import java.util.Arrays
 
 abstract class PlayClient {
+    val TAG = PlayClient::class.java.simpleName
 
     var matchStateChangedListener: OnMatchStateChangedListener? = null
     var messageReceivedListener: OnMessageReceivedListener? = null
+
+    var matchState = MatchState.LOGGED_OUT
+        protected set(value) {
+            if (field != value) {
+                field = value
+
+                Log.i(TAG, "MATCH_STATE=" + value.toString())
+
+                matchStateChangedListener?.onMatchStateChanged(value)
+            }
+        }
 
     abstract val isLoggedIn: Boolean
 
@@ -18,6 +31,7 @@ abstract class PlayClient {
     enum class MatchState {
         LOGGED_OUT,
         LOGGED_IN,
+        MATCHMAKING,
         STARTED,
         ABORTED,
         DISCONNECTED
@@ -31,14 +45,8 @@ abstract class PlayClient {
         fun onMessageReceived(data: ByteArray)
     }
 
-    protected fun changeMatchState(state: MatchState) {
-        if (matchStateChangedListener != null)
-            matchStateChangedListener!!.onMatchStateChanged(state)
-    }
-
     protected fun messageReceived(data: ByteArray) {
-        if (messageReceivedListener != null)
-            messageReceivedListener!!.onMessageReceived(data)
+        messageReceivedListener?.onMessageReceived(data)
     }
 
     abstract fun setActivity(activity: Activity?)

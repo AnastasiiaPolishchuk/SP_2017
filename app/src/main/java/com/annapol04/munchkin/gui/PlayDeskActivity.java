@@ -38,8 +38,10 @@ import android.widget.TextView;
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.di.ViewModelFactory;
 import com.annapol04.munchkin.engine.Card;
+import com.annapol04.munchkin.engine.MatchFinishedResult;
 import com.annapol04.munchkin.engine.Monster;
 import com.annapol04.munchkin.engine.Player;
+import com.annapol04.munchkin.gui.PlayDeskViewModel.OnAbortedListener;
 
 import java.util.List;
 
@@ -48,7 +50,7 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 
 public class PlayDeskActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnAbortedListener {
 
     @Inject
     ToastManager toastManager;
@@ -61,6 +63,7 @@ public class PlayDeskActivity extends AppCompatActivity
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
     private ObjectAnimator animator;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,7 @@ public class PlayDeskActivity extends AppCompatActivity
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
@@ -104,31 +107,35 @@ public class PlayDeskActivity extends AppCompatActivity
         Activity activity = this;
         viewModel.getMatchResult().observe(this, result -> {
             if (result != null) {
-                final Dialog dialog = new Dialog(activity);
-                dialog.setContentView(R.layout.finish);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                if (result instanceof MatchFinishedResult) {
+                    final Dialog dialog = new Dialog(activity);
+                    dialog.setContentView(R.layout.finish);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-                TextView finischText = dialog.findViewById(R.id.finish_text);
-                ObjectAnimator.ofObject(
-                        finischText, // Object to animating
-                        "textColor", // Property to animate
-                        new ArgbEvaluator(), // Interpolation function
-                        Color.DKGRAY, // Start color
-                        Color.RED // End color
-                ).setDuration(5000).start();
+                    TextView finischText = dialog.findViewById(R.id.finish_text);
+                    finischText.setText(finischText.getText().toString()
+                            .replace("%player%", ((MatchFinishedResult)result).getName()));
+                    ObjectAnimator.ofObject(
+                            finischText, // Object to animating
+                            "textColor", // Property to animate
+                            new ArgbEvaluator(), // Interpolation function
+                            Color.DKGRAY, // Start color
+                            Color.RED // End color
+                    ).setDuration(5000).start();
 
-                ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 1.2f, 1f, 1.2f,
-                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                scaleAnimation.setInterpolator(new LinearInterpolator());
-                scaleAnimation.setDuration(2800);
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 1.2f, 1f, 1.2f,
+                            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    scaleAnimation.setInterpolator(new LinearInterpolator());
+                    scaleAnimation.setDuration(2800);
 
-                finischText.startAnimation(scaleAnimation);
+                    finischText.startAnimation(scaleAnimation);
 
-                Button okButton = dialog.findViewById(R.id.finish_ok);
-                okButton.setOnClickListener(v -> {
-                    activity.finish();
-                });
-                dialog.show();
+                    Button okButton = dialog.findViewById(R.id.finish_ok);
+                    okButton.setOnClickListener(v -> {
+                        activity.finish();
+                    });
+                    dialog.show();
+                }
             }
         });
 
@@ -165,7 +172,7 @@ public class PlayDeskActivity extends AppCompatActivity
     @Override
      protected void onResume() {
         super.onResume();
-        viewModel.resume(this);
+        viewModel.resume(this, this);
         toastManager.resume(this);
     }
 
@@ -178,11 +185,12 @@ public class PlayDeskActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
+            finish();
         }
     }
 
@@ -331,13 +339,17 @@ public class PlayDeskActivity extends AppCompatActivity
         Activity activity = this;
 
         ImageButton doorButton = findViewById(R.id.deck_doors);
-        viewModel.getCanDrawDoorCard().observe(this, doorButton::setEnabled);
+        viewModel.getCanDrawDoorCard().observe(this, canDrawDoorCard -> {
+            doorButton.setEnabled(viewModel.isMyself().getValue() == true && canDrawDoorCard == true);
+        });
         doorButton.setOnClickListener(v -> {
             viewModel.drawDoorCard();
         });
 
         ImageButton treasureButton = findViewById(R.id.deck_treasure);
-        viewModel.getCanDrawTreasureCard().observe(this, treasureButton::setEnabled);
+        viewModel.getCanDrawTreasureCard().observe(this, canDrawCard -> {
+            treasureButton.setEnabled(viewModel.isMyself().getValue() == true && canDrawCard == true);
+        });
         treasureButton.setOnClickListener((v -> {
             viewModel.drawTreasureCard();
         }));
@@ -348,7 +360,9 @@ public class PlayDeskActivity extends AppCompatActivity
         });
 
         Button fightButton = findViewById(R.id.fight_button);
-        viewModel.getCanStartCombat().observe(this, fightButton::setEnabled);
+        viewModel.getCanStartCombat().observe(this, canStartCombat -> {
+            fightButton.setEnabled(viewModel.isMyself().getValue() == true && canStartCombat == true);
+        });
         fightButton.setOnClickListener(v -> {
             viewModel.startCombat();
 
@@ -391,11 +405,17 @@ public class PlayDeskActivity extends AppCompatActivity
         });
 
         Button nextPlayerButton = findViewById(R.id.next_player_button);
-        viewModel.getCanFinishRound().observe(this, nextPlayerButton::setEnabled);
+        viewModel.getCanFinishRound().observe(this, canFinishRound -> {
+            nextPlayerButton.setEnabled(viewModel.isMyself().getValue() == true && canFinishRound == true);
+        });
         nextPlayerButton.setOnClickListener(v -> {
             viewModel.finishRound();
         });
 
     }
 
+    @Override
+    public void onAborted() {
+        finish();
+    }
 }

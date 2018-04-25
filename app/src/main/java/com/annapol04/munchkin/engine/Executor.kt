@@ -20,31 +20,25 @@ constructor(private val match: Match, private val desk: Desk, private val reposi
     }
 
     override fun onNewEvent(event: Event) {
-        val player = if (event.scope == Scope.GAME || event.action == Action.ASSIGN_PLAYER_NUMBER) null else match.getPlayer(event.scope)
+        val player = if (event.scope == Scope.GAME || event.action == Action.ASSIGN_PLAYER_NUMBER)
+            null
+        else
+            match.getPlayer(event.scope)
+
         val anonymized = isAnonymized(player, event.action)
 
-        if (Arrays.equals(repository.topHash, event.getPreviousHash())) {
-            Log.d(TAG, "executing: " + event.toString(messageBook, player, anonymized))
+        Log.d(TAG, "executing: " + event.toString(messageBook, player, anonymized))
 
-            repository.topHash = event.hash!!
+        logMessage(event, player, anonymized)
 
-            logMessage(event, player, anonymized)
+        try {
+            event.execute(match, desk)
+        } catch (exception: IllegalEngineStateException) {
+            match.undoLog()
 
-            try {
-                event.execute(match, desk)
-            } catch (exception: IllegalEngineStateException) {
-                match.undoLog()
+            errorCount++
 
-                errorCount++
-
-                Log.e(TAG, "ERROR: " + exception.message)
-            }
-
-        } else {
-            val msg = "failed to execute: " + event.toString(messageBook, player, anonymized) + " because of wrong hash value"
-
-            Log.e(TAG, msg)
-            throw IllegalStateException(msg)
+            Log.e(TAG, "ERROR: " + exception.message)
         }
     }
 
