@@ -3,8 +3,9 @@ package com.annapol04.munchkin.network
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
+import com.annapol04.munchkin.R
+import com.annapol04.munchkin.engine.MessageBook
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,19 +14,12 @@ import com.annapol04.munchkin.engine.PlayClient
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.GamesActivityResultCodes
 import com.google.android.gms.games.GamesCallbackStatusCodes
-import com.google.android.gms.games.RealTimeMultiplayerClient
-import com.google.android.gms.games.multiplayer.Participant
 import com.google.android.gms.games.multiplayer.realtime.*
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.common.api.ApiException
-
 
 
 @Singleton
@@ -41,13 +35,13 @@ constructor(private val application: Application) : PlayClient() {
             field = value
 
             when (matchState) {
-                in arrayOf(MatchState.ABORTED, MatchState.LOGGED_OUT, MatchState.DISCONNECTED) -> {
+                in arrayOf(ClientState.ABORTED, ClientState.LOGGED_OUT, ClientState.DISCONNECTED) -> {
                     if (value != null)
-                        matchState = MatchState.LOGGED_IN
+                        matchState = ClientState.LOGGED_IN
                 }
-                in arrayOf(MatchState.LOGGED_IN, MatchState.STARTED, MatchState.MATCHMAKING) -> {
+                in arrayOf(ClientState.LOGGED_IN, ClientState.STARTED, ClientState.MATCHMAKING) -> {
                     if (value == null)
-                        matchState = MatchState.LOGGED_OUT
+                        matchState = ClientState.LOGGED_OUT
                 }
                 else -> Error("Case not implemented")
             }
@@ -78,7 +72,7 @@ constructor(private val application: Application) : PlayClient() {
                 showWaitingRoom(room, MIN_PLAYERS)
             } else {
                 Log.w(TAG, "Error creating room: ${CommonStatusCodes.getStatusCodeString(code)}")
-                matchState = MatchState.ABORTED
+                leaveRoom(ClientState.DISCONNECTED, R.string.abort_reason_can_not_create_room)
             }
         }
 
@@ -88,12 +82,14 @@ constructor(private val application: Application) : PlayClient() {
                 Log.d(TAG, "Room " + room.roomId + " joined.")
             } else {
                 Log.w(TAG, "Error joining room: $code")
-                matchState = MatchState.ABORTED
+                leaveRoom(ClientState.DISCONNECTED, R.string.abort_reason_can_not_create_room)
             }
         }
 
         override fun onLeftRoom(code: Int, roomId: String) {
             Log.d(TAG, "Left room$roomId")
+
+   //         leaveRoom(ClientState.ABORTED, R.string.abort)
         }
 
         override fun onRoomConnected(code: Int, room: Room?) {
@@ -101,45 +97,47 @@ constructor(private val application: Application) : PlayClient() {
                 Log.d(TAG, "Room " + room.roomId + " connected.")
             } else {
                 Log.w(TAG, "Error connecting to room: $code")
-                matchState = MatchState.ABORTED
+                leaveRoom(ClientState.DISCONNECTED, R.string.abort_reason_can_not_create_room)
             }
         }
     }
 
-    // are we already playing?
-    internal var mPlaying = false
-
     private val mRoomStatusCallbackHandler = object : RoomStatusUpdateCallback() {
         override fun onRoomConnecting(room: Room?) {
             // Update the UI status since we are in the process of connecting to a specific room.
+            Log.i(TAG, "Room is connecting")
         }
 
         override fun onRoomAutoMatching(room: Room?) {
             // Update the UI status since we are in the process of matching other players.
+            Log.i(TAG, "Room ist auto matching")
         }
 
         override fun onPeerInvitedToRoom(room: Room?, list: List<String>) {
             // Update the UI status since we are in the process of matching other players.
+            Log.i(TAG, "Peer invited to room")
         }
 
         override fun onPeerDeclined(room: Room?, list: List<String>) {
+            Log.i(TAG, "Peer declined invitation")
             // Peer declined invitation, see if desk should be canceled
-            if (!mPlaying && shouldCancelGame(room))
-                leaveRoom()
+            leaveRoom(ClientState.DISCONNECTED, R.string.abort_reason_opponent_lost_connection)
         }
 
         override fun onPeerJoined(room: Room?, list: List<String>) {
-            // Update UI status indicating new players have joined!
+            Log.i(TAG, "Peer joined")
         }
 
         override fun onPeerLeft(room: Room?, list: List<String>) {
             // Peer left, see if desk should be canceled.
-            if (!mPlaying && shouldCancelGame(room))
-                leaveRoom()
+            Log.i(TAG, "Peer left")
+            leaveRoom(ClientState.DISCONNECTED, R.string.abort_reason_player_left)
         }
 
         override fun onConnectedToRoom(room: Room?) {
             // Connected to room, record the room Id.
+            Log.i(TAG, "Connected to room")
+
             mRoom = room
             Games.getPlayersClient(application, GoogleSignIn.getLastSignedInAccount(application)!!)
                     .currentPlayerId.addOnSuccessListener { playerId -> mMyParticipantId = mRoom!!.getParticipantId(playerId) }
@@ -148,34 +146,31 @@ constructor(private val application: Application) : PlayClient() {
         override fun onDisconnectedFromRoom(room: Room?) {
             // This usually happens due to a network error, leave the desk
             // show error message and return to main screen
-            matchState = MatchState.DISCONNECTED
+            Log.i(TAG, "Disconnected from room")
+
+       //     leaveRoom(ClientState.DISCONNECTED, R.string.abort_reason_lost_connection)
         }
 
         override fun onPeersConnected(room: Room?, list: List<String>) {
-            if (mPlaying) {
-                // add new player to an ongoing desk
-            } else if (shouldStartGame(room)) {
-                // start desk!
-            }
+            Log.i(TAG, "Peer connected")
         }
 
         override fun onPeersDisconnected(room: Room?, list: List<String>) {
-            if (mPlaying) {
-                // do desk-specific handling of this -- remove player's avatar
-                // from the screen, etc. If not enough players are left for
-                // the desk to go on, end the desk and leave the room.
-            } else if (shouldCancelGame(room)) {
-                // cancel the desk
-                matchState = MatchState.ABORTED
-            }
+            Log.i(TAG, "Peer disconnected")
+
+            leaveRoom(ClientState.DISCONNECTED, R.string.abort_reason_opponent_lost_connection)
         }
 
         override fun onP2PConnected(participantId: String) {
             // Update status due to new peer to peer connection.
+            Log.i(TAG, "P2P connected")
         }
 
         override fun onP2PDisconnected(participantId: String) {
             // Update status due to  peer to peer connection being disconnected.
+            Log.i(TAG, "P2P disconnected")
+
+            leaveRoom(ClientState.DISCONNECTED, R.string.abort_reason_opponent_lost_connection)
         }
     }
 
@@ -211,17 +206,16 @@ constructor(private val application: Application) : PlayClient() {
             }
 
             if (resultCode == Activity.RESULT_OK) {
-                matchState = MatchState.STARTED
+                matchState = ClientState.STARTED
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // Waiting room was dismissed with the back button. The meaning of this
                 // action is up to the desk. You may choose to leave the room and cancel the
                 // match, or do something else like minimize the waiting room and
                 // continue to connect in the background.
-                leaveRoom()
-                matchState = MatchState.ABORTED
+                leaveRoom(ClientState.ABORTED, R.string.ev_empty)
             } else if (resultCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                 // player wants to leave the room.
-                matchState = MatchState.ABORTED
+                leaveRoom(ClientState.ABORTED, R.string.ev_empty)
             }
         }
     }
@@ -252,7 +246,7 @@ constructor(private val application: Application) : PlayClient() {
     }
 
     private fun showWaitingRoom(room: Room?, maxPlayersToStartGame: Int) {
-        matchState = MatchState.MATCHMAKING
+        matchState = ClientState.MATCHMAKING
 
         Games.getRealTimeMultiplayerClient(application, account!!)
                 .getWaitingRoomIntent(room!!, maxPlayersToStartGame)
@@ -260,8 +254,13 @@ constructor(private val application: Application) : PlayClient() {
     }
 
     override fun startQuickGame() {
-        if (mRoom != null)
-            throw IllegalStateException("There is already a desk started")
+        if (mRoom != null) {
+            Games.getRealTimeMultiplayerClient(application, account!!)
+                    .leave(mJoinedRoomConfig!!, mRoom!!.roomId)
+
+            mRoom = null
+            mJoinedRoomConfig = null
+        }
 
         // auto-match criteria to invite one random automatch opponent.
         // You can also specify more opponents (up to 3).
@@ -282,37 +281,20 @@ constructor(private val application: Application) : PlayClient() {
                 .create(roomConfig)
     }
 
+    override fun leaveGame() {
+        leaveRoom(ClientState.ABORTED, R.string.ev_empty)
+    }
+
     override fun sendToAll(message: ByteArray) {
-        Games.getRealTimeMultiplayerClient(application, account!!)
-                .sendUnreliableMessageToOthers(message, mRoom!!.roomId)
-                .addOnCompleteListener { _ ->
-                    messageReceived(message)
-                    // Keep track of which messages are sent, if desired.
-                    //     recordMessageToken(task.getResult());
-                }
+        if (account != null)
+            Games.getRealTimeMultiplayerClient(application, account!!)
+                    .sendUnreliableMessageToOthers(message, mRoom!!.roomId)
+                    .addOnCompleteListener { _ ->
+                        messageReceived(message)
+                    }
     }
 
-    // returns whether there are enough players to start the desk
-    internal fun shouldStartGame(room: Room?): Boolean {
-        var connectedPlayers = 0
-        for (p in room!!.participants) {
-            if (p.isConnectedToRoom) {
-                ++connectedPlayers
-            }
-        }
-        return connectedPlayers >= MIN_PLAYERS
-    }
-
-    // Returns whether the room is in a state where the desk should be canceled.
-    internal fun shouldCancelGame(room: Room?): Boolean {
-        // TODO: Your desk-specific cancellation logic here. For example, you might decide to
-        // cancel the desk if enough people have declined the invitation or left the room.
-        // You can check a participant's status with Participant.getStatus().
-        // (Also, your UI should have a Cancel button that cancels the desk too)
-        return true
-    }
-
-    private fun leaveRoom() {
+    private fun leaveRoom(matchState: ClientState, reason: Int) {
         if (mRoom != null && mJoinedRoomConfig != null) {
             Games.getRealTimeMultiplayerClient(application, account!!)
                     .leave(mJoinedRoomConfig!!, mRoom!!.roomId)
@@ -321,6 +303,9 @@ constructor(private val application: Application) : PlayClient() {
             mRoom = null
             mJoinedRoomConfig = null
         }
+
+        this.errorReason = reason
+        this.matchState = matchState
     }
 
     companion object {

@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.di.ViewModelFactory;
 import com.annapol04.munchkin.engine.Card;
+import com.annapol04.munchkin.engine.MatchAbortedResult;
 import com.annapol04.munchkin.engine.MatchFinishedResult;
 import com.annapol04.munchkin.engine.Monster;
 import com.annapol04.munchkin.engine.Player;
@@ -107,14 +109,16 @@ public class PlayDeskActivity extends AppCompatActivity
         Activity activity = this;
         viewModel.getMatchResult().observe(this, result -> {
             if (result != null) {
-                if (result instanceof MatchFinishedResult) {
-                    final Dialog dialog = new Dialog(activity);
-                    dialog.setContentView(R.layout.finish);
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                final Dialog dialog = new Dialog(activity);
+                dialog.setContentView(R.layout.finish);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-                    TextView finischText = dialog.findViewById(R.id.finish_text);
+                TextView finischText = dialog.findViewById(R.id.finish_text);
+
+                if (result instanceof MatchFinishedResult) {
                     finischText.setText(finischText.getText().toString()
-                            .replace("%player%", ((MatchFinishedResult)result).getName()));
+                            .replace("%player%", ((MatchFinishedResult) result).getName()));
+
                     ObjectAnimator.ofObject(
                             finischText, // Object to animating
                             "textColor", // Property to animate
@@ -129,17 +133,21 @@ public class PlayDeskActivity extends AppCompatActivity
                     scaleAnimation.setDuration(2800);
 
                     finischText.startAnimation(scaleAnimation);
-
-                    Button okButton = dialog.findViewById(R.id.finish_ok);
-                    okButton.setOnClickListener(v -> {
-                        activity.finish();
-                    });
-                    dialog.show();
+                } else {
+                    finischText.setText(((MatchAbortedResult) result).getReason());
+                    finischText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32);
                 }
+
+                Button okButton = dialog.findViewById(R.id.finish_ok);
+                okButton.setOnClickListener(v -> {
+                    dialog.dismiss();
+                    viewModel.reset();
+                    activity.finish();
+                });
+                dialog.show();
             }
         });
 
-//
         ImageView headgear_ = findViewById(R.id.man_head);
         viewModel.getIsHeadgearEquiped().observe(this, equiped -> {
             headgear_.setVisibility(equiped ? View.VISIBLE : View.INVISIBLE);
@@ -190,6 +198,7 @@ public class PlayDeskActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
 
+            viewModel.quitGame();
             finish();
         }
     }
@@ -233,6 +242,8 @@ public class PlayDeskActivity extends AppCompatActivity
             case R.id.action_exit:
                 // User chose the "Favorite" action, mark the current item
                 // as a favorite...
+                viewModel.quitGame();
+                finish();
                 return true;
 
             default:
@@ -292,7 +303,7 @@ public class PlayDeskActivity extends AppCompatActivity
         logView.setMovementMethod(new ScrollingMovementMethod());
         viewModel.getLog().observe(this, log -> {
             logView.setText(log);
-            logScroll.scrollBy(0, 20);
+            logScroll.scrollBy(0, 50);
         });
 
 
@@ -361,8 +372,13 @@ public class PlayDeskActivity extends AppCompatActivity
 
         Button fightButton = findViewById(R.id.fight_button);
         viewModel.getCanStartCombat().observe(this, canStartCombat -> {
-            fightButton.setEnabled(viewModel.isMyself().getValue() == true && canStartCombat == true);
+            fightButton.setEnabled(viewModel.isMyself().getValue() == true && canStartCombat == true && viewModel.getIsMyRound().getValue() == true);
         });
+        viewModel.getIsMyRound().observe(this, isMyRound -> {
+            fightButton.setEnabled(viewModel.isMyself().getValue() == true && isMyRound == true && viewModel.getCanStartCombat().getValue() == true);
+        });
+
+
         fightButton.setOnClickListener(v -> {
             viewModel.startCombat();
 
@@ -406,7 +422,10 @@ public class PlayDeskActivity extends AppCompatActivity
 
         Button nextPlayerButton = findViewById(R.id.next_player_button);
         viewModel.getCanFinishRound().observe(this, canFinishRound -> {
-            nextPlayerButton.setEnabled(viewModel.isMyself().getValue() == true && canFinishRound == true);
+            nextPlayerButton.setEnabled(viewModel.isMyself().getValue() == true && canFinishRound == true && viewModel.getIsMyRound().getValue() == true);
+        });
+        viewModel.getIsMyRound().observe(this, isMy -> {
+            nextPlayerButton.setEnabled(viewModel.isMyself().getValue() == true && viewModel.getCanFinishRound().getValue() == true && isMy == true);
         });
         nextPlayerButton.setOnClickListener(v -> {
             viewModel.finishRound();

@@ -26,8 +26,8 @@ constructor(protected var desk: Desk,
     protected val players_ by lazy { NonNullMutableLiveData<List<Player>>(emptyList()) }
     val players: NonNullLiveData<List<Player>> get() = players_
 
-    protected val currentPlayer_ by lazy { NonNullMutableLiveData(myself) }
-    val currentPlayer: NonNullLiveData<Player> get() = currentPlayer_
+    protected val currentPlayer_ by lazy { MutableLiveData<Player>() }
+    val currentPlayer: LiveData<Player> get() = currentPlayer_
 
     protected val canFinishRound_ by lazy { NonNullMutableLiveData(false) }
     val canFinishRound: NonNullLiveData<Boolean> get() = canFinishRound_
@@ -81,7 +81,9 @@ constructor(protected var desk: Desk,
         reset()
     }
 
-    protected fun reset() {
+    fun reset() {
+        currentPlayer_.value = myself
+        result_.value = null
         joined = emptyList()
         players_.value = emptyList()
         Log.e(TAG, "Cleared players")
@@ -130,6 +132,12 @@ constructor(protected var desk: Desk,
         this.amountOfPlayers = amountOfPlayers
 
         eventRepository.push(Event(Scope.GAME, Action.JOIN_PLAYER, 0, myself.id), ignoreHash = true)
+    }
+
+    fun stop(reason: String) {
+        reset()
+
+        result_.value = MatchAbortedResult(reason)
     }
 
     protected fun evaluateHost(): Player {
@@ -256,6 +264,9 @@ constructor(protected var desk: Desk,
             State.STARTED -> {
                 if (areAllInitialCardsDrawn()) {
                     state = State.RUNNING
+
+                    if (current == myself)
+                        emitMessage(current.scope, R.string.ev_hand_over_token, 1)
 
                     playRound()
                 }

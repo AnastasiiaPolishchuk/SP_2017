@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/button_margin"
             android:background="@drawable/style_button"
-            android:text="Move to Played" />
+            android:text="@string/move_to_equip" />
 
         <!--Button
             android:id="@+id/move_to_hand_button"

@@ -53,7 +53,7 @@ public class SignInViewModel extends AndroidViewModel implements PlayClient.OnMa
     }
 
     @Override
-    public void onMatchStateChanged(PlayClient.MatchState state) {
+    public void onMatchStateChanged(PlayClient.ClientState state) {
         switch (state) {
             case LOGGED_OUT:
                 isLoggedIn.setValue(false);

@@ -15,9 +15,10 @@
 - Bob hat seinen Spielzug beendet!
 !!! Nun ist Alice dran!"</string>
 
+    <string name="abort_reason_can_not_create_room">Can not create a google play games match</string>
     <string name="abort_reason_player_left">Your oppponent has given up and left the game!</string>
-    <string name="abort_reason_player_disconnected">You won the match. Your opponent has lost the connection to the game</string>
     <string name="abort_reason_lost_connection">The match is aborted, because you lost the connection to the game.</string>
+    <string name="abort_reason_opponent_lost_connection">The match is aborted, because your opponent lost the connection to the game.</string>
 
     <string name="title_activity_sign_in">SignInActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -386,5 +387,6 @@
     <string name="flaming_poison_potion">Flaming Poison Potion</string>
     <string name="flaming_poison_potion_desc"></string>
     <string name="won">%player% WON !</string>
+    <string name="move_to_equip">Equip</string>
 
 </resources>

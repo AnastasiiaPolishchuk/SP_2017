@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.annapol04.munchkin.data.EventRepository;
 import com.annapol04.munchkin.engine.Desk;
+import com.annapol04.munchkin.engine.MessageBook;
 import com.annapol04.munchkin.engine.PlayClient;
 import com.annapol04.munchkin.engine.Player;
 import com.annapol04.munchkin.network.GooglePlayClient;

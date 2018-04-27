@@ -3,9 +3,6 @@ package com.annapol04.munchkin.engine
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import com.annapol04.munchkin.network.GooglePlayClient
-
-import java.util.Arrays
 
 abstract class PlayClient {
     val TAG = PlayClient::class.java.simpleName
@@ -13,7 +10,7 @@ abstract class PlayClient {
     var matchStateChangedListener: OnMatchStateChangedListener? = null
     var messageReceivedListener: OnMessageReceivedListener? = null
 
-    var matchState = MatchState.LOGGED_OUT
+    var matchState = ClientState.LOGGED_OUT
         protected set(value) {
             if (field != value) {
                 field = value
@@ -24,11 +21,13 @@ abstract class PlayClient {
             }
         }
 
+    var errorReason: Int? = null
+
     abstract val isLoggedIn: Boolean
 
     abstract val amountOfPlayers: Int
 
-    enum class MatchState {
+    enum class ClientState {
         LOGGED_OUT,
         LOGGED_IN,
         MATCHMAKING,
@@ -38,7 +37,7 @@ abstract class PlayClient {
     }
 
     interface OnMatchStateChangedListener {
-        fun onMatchStateChanged(state: MatchState)
+        fun onMatchStateChanged(state: ClientState)
     }
 
     interface OnMessageReceivedListener {
@@ -56,6 +55,8 @@ abstract class PlayClient {
     abstract fun processActivityResults(requestCode: Int, resultCode: Int, data: Intent?)
 
     abstract fun startQuickGame()
+
+    abstract fun leaveGame()
 
     abstract fun sendToAll(message: ByteArray)
 }

@@ -4,18 +4,17 @@ import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.annapol04.munchkin.R;
 import com.annapol04.munchkin.data.EventRepository;
 import com.annapol04.munchkin.engine.Card;
 import com.annapol04.munchkin.engine.Executor;
 import com.annapol04.munchkin.engine.Desk;
 import com.annapol04.munchkin.engine.Match;
 import com.annapol04.munchkin.engine.MatchResult;
+import com.annapol04.munchkin.engine.MessageBook;
 import com.annapol04.munchkin.engine.Player;
 import com.annapol04.munchkin.engine.PlayClient;
 import com.annapol04.munchkin.util.NonNullLiveData;
@@ -63,6 +62,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     private LiveData<Boolean> isMyself;
     private MutableLiveData<Boolean> isStarted = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isMyRound = new MutableLiveData<>();
 
     private boolean isStartingAlready = false;
     private Player myself;
@@ -72,6 +72,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     private Match match;
     private EventRepository eventRepository;
     private Executor executor;
+    private MessageBook messageBook;
 
     private OnAbortedListener abortedListener = null;
 
@@ -82,7 +83,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
                              Match match,
                              Desk desk,
                              EventRepository eventRepository,
-                             Executor executor) {
+                             Executor executor,
+                             MessageBook messageBook) {
         super(application);
         this.myself = myself;
 
@@ -91,11 +93,16 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         this.match = match;
         this.eventRepository = eventRepository;
         this.executor = executor;
+        this.messageBook = messageBook;
 
         client.setMatchStateChangedListener(this);
         isStarted.setValue(false);
 
         visiblePlayer = new NonNullMutableLiveData<>(myself);
+
+        match.getCurrentPlayer().observeForever(player -> {
+            isMyRound.setValue(player == myself);
+        });
 
         isMyself = Transformations.map(visiblePlayer, player -> player == myself);
         playerName = Transformations.switchMap(visiblePlayer, Player::getName);
@@ -135,6 +142,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
 
     public void processActivityResults(int requestCode, int resultCode, Intent data) {
         client.processActivityResults(requestCode, resultCode, data);
+    }
+
+    public LiveData<Boolean> getIsMyRound() {
+        return isMyRound;
     }
 
     public LiveData<Boolean> getIsHeadgearEquiped() {
@@ -238,7 +249,8 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     public void quitGame() {
-    //    throw new UnsupportedOperationException("Not implemented");
+        match.reset();
+        client.leaveGame();
     }
 
     public void resume(Activity fromActivity, OnAbortedListener abortedListener) {
@@ -255,6 +267,10 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
         client.setActivity(null);
     }
 
+    public void reset() {
+        match.reset();
+    }
+
     private void startGameIfPossible() {
         if (!getGameStarted().getValue() && !isStartingAlready) {
             isStartingAlready = true;
@@ -264,7 +280,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
     }
 
     @Override
-    public void onMatchStateChanged(PlayClient.MatchState state) {
+    public void onMatchStateChanged(PlayClient.ClientState state) {
         switch (state) {
             case LOGGED_IN:
                 startGameIfPossible();
@@ -282,6 +298,7 @@ public class PlayDeskViewModel extends AndroidViewModel implements PlayClient.On
                     abortedListener.onAborted();
                 break;
             case DISCONNECTED:
+                match.stop(messageBook.find(client.getErrorReason()));
                 isStarted.setValue(false);
                 isStartingAlready = false;
                 break;
